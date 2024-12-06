@@ -10,6 +10,10 @@ import ProfileScreen from '../asserts/components/ProfileScreen';
 import { State } from 'react-native-gesture-handler';
 import TutorialScreen from '../asserts/components/TutorialScreen';
 import HowToPlayScreen from '../asserts/screens/HowToPlayScreens';
+import LetsLearnScreen from '../asserts/screens/LetsLearnScreen';
+import WackyWordWheelScreen from '../asserts/screens/WackyWordWheelScreen';
+import FillInTheBlankScreen from '../asserts/screens/FillInTheBlankScreen';
+import MakeYourownScreen from '../asserts/screens/MakeYourownScreen';
 
 const Drawer = createStackNavigator();
 const Stack = createStackNavigator();
@@ -101,6 +105,10 @@ function MainNavigator() {
             <Stack.Screen name='Progress' component={PlayScreen} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="TutorialScreen" component={TutorialScreen} />
+            <Stack.Screen name='LetsLearnScreen' component={LetsLearnScreen} />
+            <Stack.Screen name='WackWordArtScreen' component={WackyWordWheelScreen} />
+            <Stack.Screen name='FillInTheBlankScreen' component={FillInTheBlankScreen} />
+            <Stack.Screen name='MakeYourOwnScreen' component={MakeYourownScreen} />
         </Stack.Navigator>
     </NavigationContainer>
   )

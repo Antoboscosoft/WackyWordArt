@@ -28,7 +28,7 @@ function HowToPlayScreen({ navigation }) {
                         style={styles.cloudImage}
                         resizeMode="contain"
                     >
-                        <Text style={styles.cloudText}>CLick on the game to learn how to play!</Text>
+                        <Text style={styles.cloudText}>Click on the game to learn how to play!</Text>
                     </FastImage>
                 </View>
 

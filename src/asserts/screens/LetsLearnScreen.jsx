@@ -1,21 +1,27 @@
-// import Icon from '@react-native-vector-icons/material-icons';
+import React, { useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FastImage from 'react-native-fast-image';
-// import { Text, View } from 'react-native-reanimated/lib/typescript/Animated'
+import { Dropdown } from 'react-native-element-dropdown';
 
-function PlayScreen({ navigation }) {
+function LetsLearnScreen() {
+  const [value, setValue] = useState(null);
+
+  const data = [
+    { label: 'Apple', value: 'apple' },
+    { label: 'Banana', value: 'banana' },
+    { label: 'Orange', value: 'orange' },
+  ];
+
   return (
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <View style={styles.circle}>
-            {/* <Ionicons name="menu" size={24} color="#333" /> */}
+            <Ionicons name="menu" size={24} color="#333" />
           </View>
         </TouchableOpacity>
         <Text style={styles.headerTitle}> Play </Text>
@@ -36,29 +42,26 @@ function PlayScreen({ navigation }) {
         </View>
 
         <View style={styles.contentWrapper}>
-        
+
           {/* Buttons */}
-          <View style={styles.buttonColumn}>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LetsLearnScreen')}>
-              <Text style={styles.buttonText}> Let's Learn </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}> Wackey Word Wheel </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}> ― Fill in the blank </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}> ✍🏻 Make Your Own </Text>
-            </TouchableOpacity>
+          <View style={styles.sentenceRow}>
+            <View>
+              <Text style={styles.sentenceText}>I would like to eat a  </Text>
+              <Dropdown
+                data={data}
+                labelField="label"
+                valueField="value"
+                placeholder="Select a fruit"
+                value={value}
+                onChange={(item) => setValue(item.value)}
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholder}
+                selectedTextStyle={styles.selectedText}
+                inputSearchStyle={styles.inputSearch}
+              />
+            </View>
           </View>
 
-          {/* Zebra Image */}
-          <FastImage
-            source={require('../images/zebrabg.png')} // Replace with your zebra image
-            style={styles.zebraImage}
-            resizeMode="contain"
-          />
         </View>
       </View>
 
@@ -155,6 +158,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+
+  sentenceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '90%',
+  },
+  sentenceText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+
+
   buttonColumn: {
     flex: 1,
     // marginRight: 20,
@@ -208,4 +225,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlayScreen
+
+export default LetsLearnScreen
