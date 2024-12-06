@@ -4,7 +4,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import HomeScreen from '../asserts/components/HomeScreen';
 import GameScreen from '../asserts/components/GameScreen';
-import ProgressScreen from '../asserts/components/ProgressScreen';
+import PlayScreen from '../asserts/screens/PlayScreen';
 import SettingsScreen from '../asserts/components/SettingsScreen';
 import ProfileScreen from '../asserts/components/ProfileScreen';
 import { State } from 'react-native-gesture-handler';
@@ -98,7 +98,7 @@ function MainNavigator() {
             <Stack.Screen name='Game' component={GameScreen} />
             <Stack.Screen name='HowToPlayScreen' component={HowToPlayScreen} />
             <Stack.Screen name='Profile' component={ProfileScreen} />
-            <Stack.Screen name='Progress' component={ProgressScreen} />
+            <Stack.Screen name='Progress' component={PlayScreen} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="TutorialScreen" component={TutorialScreen} />
         </Stack.Navigator>

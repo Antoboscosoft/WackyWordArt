@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; 
-import FastImage from 'react-native-fast-image'; 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import FastImage from 'react-native-fast-image';
 
 function HowToPlayScreen({ navigation }) {
     return (
@@ -14,8 +14,8 @@ function HowToPlayScreen({ navigation }) {
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}> How to Play </Text>
-                    <Icon name="emoji-objects" size={22} color="#FF69B4" style={styles.bulbIcon} />
-                
+                <Icon name="emoji-objects" size={22} color="#FF69B4" style={styles.bulbIcon} />
+
                 {/* <View style={{ width: 24 }} /> Spacer for alignment */}
             </View>
 
@@ -23,7 +23,13 @@ function HowToPlayScreen({ navigation }) {
             <View style={styles.centerContent}>
                 {/* Cloud-like Design */}
                 <View style={styles.cloud}>
-                    <Text style={styles.cloudText}>Learn the game rules easily!</Text>
+                    <FastImage
+                        source={require('../images/Cloud.png')} // Replace with your cloud image
+                        style={styles.cloudImage}
+                        resizeMode="contain"
+                    >
+                        <Text style={styles.cloudText}>CLick on the game to learn how to play!</Text>
+                    </FastImage>
                 </View>
 
                 <View style={styles.contentWrapper}>
@@ -139,15 +145,15 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     cloud: {
-        width: '80%',
+        // width: '80%',
         padding: 20,
-        backgroundColor: '#f9f9f9',
-        borderRadius: 50,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 5,
+        // backgroundColor: '#f9f9f9',
+        // borderRadius: 50,
+        // shadowColor: '#000',
+        // shadowOffset: { width: 0, height: 4 },
+        // shadowOpacity: 0.2,
+        // shadowRadius: 5,
+        // elevation: 5,
         marginBottom: 20,
     },
     cloudContainer: {
@@ -155,15 +161,20 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     cloudImage: {
-        width: 200,
-        height: 100,
+        width: 350,
+        height: 200,
+        resizeMode: 'contain',
+        right: 10
     },
     cloudText: {
         fontSize: 16,
+        width: '50%',
         textAlign: 'center',
         color: '#555',
         fontWeight: 'bold',
-        position: 'absolute'
+        position: 'absolute',
+        top: 70,
+        left: 75
     },
     contentWrapper: {
         flexDirection: 'row',
