@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
         flex: 1,
         // flexDirection: 'column',
         // alignItems: 'center',
+        zIndex: 1
     },
     buttonGroup: {
         flexDirection: 'row',

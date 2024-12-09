@@ -46,6 +46,7 @@ function FillInTheBlankScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="place"
+            placeholderTextColor={'#ccc'}
             value={place}
             onChangeText={setPlace}
           />
@@ -53,6 +54,7 @@ function FillInTheBlankScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="adjective"
+            placeholderTextColor={'#ccc'}
             value={adjective}
             onChangeText={setAdjective}
           />
@@ -60,6 +62,7 @@ function FillInTheBlankScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="friend or pet"
+            placeholderTextColor={'#ccc'}
             value={friendOrPet}
             onChangeText={setFriendOrPet}
           />
@@ -67,6 +70,7 @@ function FillInTheBlankScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="noun"
+            placeholderTextColor={'#ccc'}
             value={noun}
             onChangeText={setNoun}
           />
@@ -74,6 +78,7 @@ function FillInTheBlankScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="verb"
+            placeholderTextColor={'#ccc'}
             value={verb}
             onChangeText={setVerb}
           />
@@ -81,6 +86,7 @@ function FillInTheBlankScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="thing"
+            placeholderTextColor={'#ccc'}
             value={thing}
             onChangeText={setThing}
           />
@@ -88,6 +94,7 @@ function FillInTheBlankScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="adjective"
+            placeholderTextColor={'#ccc'}
             value={weatherAdjective}
             onChangeText={setWeatherAdjective}
           />
@@ -175,7 +182,7 @@ const styles = StyleSheet.create({
   },
   input: {
       borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#bbb',
     marginHorizontal: 5,
     paddingHorizontal: 5,
     fontSize: 16,
