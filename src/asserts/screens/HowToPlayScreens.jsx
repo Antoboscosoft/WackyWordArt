@@ -14,7 +14,7 @@ function HowToPlayScreen({ navigation }) {
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}> How to Play </Text>
-                <Icon name="emoji-objects" size={22} color="#FF69B4" style={styles.bulbIcon} />
+                <Icon name="emoji-objects" size={35} color="#FF69B4" style={styles.bulbIcon} />
 
                 {/* <View style={{ width: 24 }} /> Spacer for alignment */}
             </View>
@@ -35,23 +35,23 @@ function HowToPlayScreen({ navigation }) {
                 <View style={styles.contentWrapper}>
                     {/* Buttons */}
                     <View style={styles.buttonColumn}>
-                        <TouchableOpacity style={styles.button}>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LetsLearnScreen')}>
                             <Text style={styles.buttonText}> Let's Learn </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('WackWordArtScreen')}>
                             <Text style={styles.buttonText}> Wackey Word Wheel </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
                             <Text style={styles.buttonText}> ― Fill in the blank </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
                             <Text style={styles.buttonText}> ✍🏻 Make Your Own </Text>
                         </TouchableOpacity>
                     </View>
 
                     {/* Zebra Image */}
                     <FastImage
-                        source={require('../images/zebrabg.png')} // Replace with your zebra image
+                        source={require('../images/zebraY.png')} // Replace with your zebra image
                         style={styles.zebraImage}
                         resizeMode="contain"
                     />
@@ -217,10 +217,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     zebraImage: {
-        width: 180,
-        height: 180,
+        width: 280,
+        height: 280,
         position: 'absolute',
-        right: -30,
+        right: -80,
         bottom: 20,
 
         // width: 150,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     adText: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#ff0000',
         marginBottom: 5,
     },
     adImage: {

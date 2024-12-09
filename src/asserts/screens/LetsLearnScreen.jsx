@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FastImage from 'react-native-fast-image';
 import { Dropdown } from 'react-native-element-dropdown';
 
-function LetsLearnScreen() {
+function LetsLearnScreen({ navigation }) {
   const [value, setValue] = useState(null);
 
   const data = [
@@ -21,31 +21,16 @@ function LetsLearnScreen() {
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <View style={styles.circle}>
-            <Ionicons name="menu" size={24} color="#333" />
+            <Ionicons name="arrow-back" size={24} color="#333" />
           </View>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}> Play </Text>
-        <Icon name="emoji-objects" size={22} color="#FF69B4" style={styles.bulbIcon} />
+        <Text style={styles.headerTitle}> Let's Learn  </Text>
       </View>
 
       {/* Center Content Section */}
-      <View style={styles.centerContent}>
-        {/* Cloud-like Design */}
-        <View style={styles.cloud}>
-          <FastImage
-            source={require('../images/Cloud.png')} // Replace with your cloud image
-            style={styles.cloudImage}
-            resizeMode="contain"
-          >
-            <Text style={styles.cloudText}> let's play!</Text>
-          </FastImage>
-        </View>
-
-        <View style={styles.contentWrapper}>
-
+      <View style={styles.content}>
+        <View style={styles.sentenceRow}>
           {/* Buttons */}
-          <View style={styles.sentenceRow}>
-            <View>
               <Text style={styles.sentenceText}>I would like to eat a  </Text>
               <Dropdown
                 data={data}
@@ -57,11 +42,8 @@ function LetsLearnScreen() {
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholder}
                 selectedTextStyle={styles.selectedText}
-                inputSearchStyle={styles.inputSearch}
+                // inputSearchStyle={styles.inputSearch}
               />
-            </View>
-          </View>
-
         </View>
       </View>
 
@@ -89,9 +71,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     backgroundColor: '#f0f0f0',
     paddingHorizontal: 15,
+    gap: 100,
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderColor: '#ddd',
@@ -108,102 +91,53 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-  },
-  bulbIcon: {
-    marginLeft: 5,
+    // marginLeft: 50, 
   },
 
-  // Center content styles
-  centerContent: {
+  // Content styles
+  content: {
     flex: 1,
-    justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 50,
   },
-  cloud: {
-    padding: 20,
-    marginBottom: 20,
-  },
-  cloudContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  cloudImage: {
-    width: 350,
-    height: 200,
-    resizeMode: 'contain',
-    right: 10,
-    alignSelf: 'flex-start',
-  },
-  cloudText: {
-    fontSize: 16,
-    width: '50%',
-    textAlign: 'center',
-    color: '#555',
-    fontWeight: 'bold',
-    position: 'absolute',
-    top: 70,
-    left: 75
-  },
-  contentWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-
   sentenceRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     width: '90%',
   },
   sentenceText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
+    marginRight: 10,
   },
-
-
-  buttonColumn: {
-    flex: 1,
-    // marginRight: 20,
-  },
-  buttonGroup: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
-    marginBottom: 20,
-  },
-  button: {
-    width: '65%',
-    height: 50,
-    backgroundColor: '#3b9a67',
-    borderRadius: 25,
+  dropdown: {
+    width: 150,
+    height: 40,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    paddingHorizontal: 10,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-    alignSelf: 'flex-end',
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  placeholder: {
+    fontSize: 14,
+    color: '#aaa',
   },
-  zebraImage: {
-    width: 180,
-    height: 180,
-    position: 'absolute',
-    left: -30,
-    bottom: 20,
+  selectedText: {
+    fontSize: 14,
+    color: '#333',
   },
+
   // Advertisement section styles
   adContainer: {
     width: '100%',
