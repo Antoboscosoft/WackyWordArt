@@ -5,6 +5,8 @@ import { DrawerLayout } from 'react-native-gesture-handler';
 // import { Text, View } from 'react-native-reanimated/lib/typescript/Animated'
 import PageIcon from 'react-native-vector-icons/SimpleLineIcons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // For drawer items
+import BulbIcon from 'react-native-vector-icons/MaterialIcons';
+
 
 function HomeScreen({ navigation }) {
     const drawerRef = useRef(null);
@@ -88,15 +90,15 @@ function HomeScreen({ navigation }) {
                 <View style={styles.topBar}>
                     {/* Menu Icon */}
                     <TouchableOpacity onPress={() => drawerRef.current.openDrawer()}>
-                        <Text style={styles.homeheadicon}>☰</Text>
-                        {/* <PageIcon name="menu" size={28} color="#3b5a9a" /> */}
+                        {/* <Text style={styles.homeheadicon}>☰</Text> */}
+                        <PageIcon name="menu" size={28} color="#3b5a9a" />
                     </TouchableOpacity>
                     {/* Menu */}
                     <Text style={styles.title}>Home</Text>
                     {/* Settings Icon */}
                     <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-                        <Text style={styles.homeheadicon}>⚙️</Text>
-                        {/* <PageIcon name="settings" size={28} color="#3b5a9a" /> */}
+                        {/* <Text style={styles.homeheadicon}>⚙️</Text> */}
+                        <PageIcon name="settings" size={28} color="#3b5a9a" />
                     </TouchableOpacity>
                 </View>
 
@@ -108,16 +110,18 @@ function HomeScreen({ navigation }) {
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => navigation.navigate('HowToPlayScreen')}>
-                        <Text style={styles.buttonText}> 💡 How to Play </Text>
+                <BulbIcon name="emoji-objects" size={35} color="#FF69B4" style={styles.bulbIcon} />
+
+                        <Text style={styles.buttonText}> How to Play </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.button}
+                        style={[styles.button, { backgroundColor: '#146edd' }]}
                         onPress={() => navigation.navigate('Progress')}>
                         <Text style={styles.buttonText}> Play   ▶   </Text>
                     </TouchableOpacity>
                     <FastImage
                         style={[styles.zebraImage]}
-                        source={require('../images/zebrabg.png')}
+                        source={require('../images/zebraY.png')}
                     />
                 </View>
 
@@ -190,6 +194,8 @@ const styles = StyleSheet.create({
         marginRight: 220,
         width: '40%',
         alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     buttonText: {
         color: '#fff',
@@ -200,11 +206,11 @@ const styles = StyleSheet.create({
     // zebra
     zebraImage: {
         width: 280,
-        height: 250,
+        height: 380,
         resizeMode: 'contain',
         position: 'absolute',
         marginLeft: 10,
-        right: -50
+        right: -30
     },
 
     // Drawer styles
