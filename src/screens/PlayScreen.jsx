@@ -27,7 +27,7 @@ function PlayScreen({ navigation }) {
         {/* Cloud-like Design */}
         <View style={styles.cloud}>
           <FastImage
-            source={require('../images/Cloud.png')} // Replace with your cloud image
+            source={require('../assets/images/Cloud.png')} // Replace with your cloud image
             style={styles.cloudImage}
             resizeMode="contain"
           >
@@ -55,7 +55,7 @@ function PlayScreen({ navigation }) {
 
           {/* Zebra Image */}
           <FastImage
-            source={require('../images/zebraY.png')} // Replace with your zebra image
+            source={require('../assets/images/zebraY.png')} // Replace with your zebra image
             style={styles.zebraImage}
             resizeMode="contain"
           />

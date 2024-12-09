@@ -40,7 +40,7 @@ function GameScreen({ navigation }) {
         {/* Cloud-like Design */}
         <View style={styles.cloud}>
         <FastImage
-          source={require('../images/Cloud.png')}
+          source={require('../assets/images/Cloud.png')}
           style={styles.cloudImage}
           resizeMode="contain"
         />
@@ -66,7 +66,7 @@ function GameScreen({ navigation }) {
 
         {/* Zebra Image */}
         <FastImage
-          source={require('../images/zebrabg.png')}
+          source={require('../assets/images/zebrabg.png')}
           style={styles.zebraImage}
           resizeMode="contain"
         />

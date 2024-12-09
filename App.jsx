@@ -1,10 +1,16 @@
 import React from 'react'
-import { Text, View } from 'react-native';
-import MainNavigator from './src/pages/MainNavigator';
+import { NavigationContainer } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import MainNavigator from './src/navigations/MainNavigator';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function App() {
   return (
-    <MainNavigator /> 
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <MainNavigator />
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   )
 }
 

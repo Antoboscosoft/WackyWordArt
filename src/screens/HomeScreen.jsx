@@ -121,7 +121,7 @@ function HomeScreen({ navigation }) {
                     </TouchableOpacity>
                     <FastImage
                         style={[styles.zebraImage]}
-                        source={require('../images/zebraY.png')}
+                        source={require('../assets/images/zebraY.png')}
                     />
                 </View>
 
