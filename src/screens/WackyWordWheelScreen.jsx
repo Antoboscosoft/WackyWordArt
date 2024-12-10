@@ -14,7 +14,7 @@ function WackyWordWheelScreen({ navigation }) {
   const [spinning, setSpinning] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
   const thornShake = useRef(new Animated.Value(0)).current;
-  const insets = useSafeAreaInsets(); 
+  const insets = useSafeAreaInsets();
 
   // Sentence template
   const sentenceTemplate = 'Every morning, I [verb] to start my day.';
@@ -136,7 +136,7 @@ function WackyWordWheelScreen({ navigation }) {
   return (
     <View style={[styles.container]}>
       {/* Header Section */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <View style={styles.circle}>
             <Ionicons name="arrow-back" size={24} color="#333" />
@@ -151,19 +151,28 @@ function WackyWordWheelScreen({ navigation }) {
         {/* <Text style={styles.sentenceText}>
           {sentenceTemplate.replace('[verb]', displayedSentence || '_____')}
         </Text> */}
-        <Text style={styles.sentenceText}>
-          Every morning, I {' '} 
+        {/* <Text style={styles.sentenceText}>
+          Every morning, I {' '}
           <Text>
-          {displayedSentence || '_____'} 
+            {displayedSentence || '_____'}
           </Text>
           {' '}to start my day.
-        </Text>
+        </Text> */}
+        <View style={styles.sentenceContainer}>
+          <Text style={styles.sentenceText}>
+            Every morning, I{' '}
+            <Text style={displayedSentence ? styles.highlight : styles.underline  }>
+              {displayedSentence || '_____'}
+            </Text>{' '}
+            to start my day.
+          </Text>
+        </View>
 
         {/* Spinning Wheel */}
         <View style={styles.wheelContainer}>
           {/* Thorn positioned statically */}
           {/* <View style={styles.thorn} /> */}
-          <Animated.View 
+          <Animated.View
             style={[
               styles.thorn,
               {
@@ -261,6 +270,28 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginBottom: 10,
   },
+
+  sentenceContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  sentenceText: {
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  underline: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#ff5722', // Custom underline color
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  highlight: {
+    backgroundColor: '#ff803b', // Custom highlight color
+    paddingHorizontal: 5,
+    fontWeight: 'bold',
+    borderRadius: 5,
+  },
+
   wheelContainer: {
     width: 300,
     height: 300,
