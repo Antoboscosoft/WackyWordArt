@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 30,
     fontWeight: 'bold',
-    fontFamily: 'cursive',
+    // fontFamily: 'cursive',
     textShadowColor: 'rgba(0, 0, 0, 0.5)',
     textShadowOffset: {width: 2, height: 2},
     textShadowRadius: 5,
