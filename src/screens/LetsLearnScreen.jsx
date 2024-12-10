@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FastImage from 'react-native-fast-image';
 import { Dropdown } from 'react-native-element-dropdown';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import FastImage from 'react-native-fast-image';
 
 function LetsLearnScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const [value, setValue] = useState(null);
 
   const data = [
@@ -16,46 +17,42 @@ function LetsLearnScreen({ navigation }) {
   ];
 
   return (
-    <View style={styles.container}>
-      {/* Header Section */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <View style={styles.circle}>
-            <Ionicons name="arrow-back" size={24} color="#333" />
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}> Let's Learn  </Text>
-      </View>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <ImageBackground source={require('../assets/images/bg1.png')} style={styles.backgroundImage}>
 
-      {/* Center Content Section */}
-      <View style={styles.content}>
-        <View style={styles.sentenceRow}>
-          {/* Buttons */}
-              <Text style={styles.sentenceText}>I would like to eat a  </Text>
-              <Dropdown
-                data={data}
-                labelField="label"
-                valueField="value"
-                placeholder="Select a fruit"
-                value={value}
-                onChange={(item) => setValue(item.value)}
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholder}
-                selectedTextStyle={styles.selectedText}
-                // inputSearchStyle={styles.inputSearch}
-              />
+        {/* Header Section */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <View style={styles.circle}>
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            </View>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}> Let's Learn  </Text>
+          <View />
         </View>
-      </View>
 
-      {/* Advertisement Section */}
-      <View style={styles.adContainer}>
-        <Text style={styles.adText}>Advertisement</Text>
-        <FastImage
-          source={{ uri: 'https://via.placeholder.com/300x100' }} // Replace with your ad image or SDK
-          style={styles.adImage}
-          resizeMode="contain"
-        />
-      </View>
+        {/* Center Content Section */}
+        <View style={styles.content}>
+          <View style={styles.sentenceRow}>
+            {/* Buttons */}
+            <Text style={styles.sentenceText}>I would like to eat a</Text>
+            <Dropdown
+              data={data}
+              labelField="label"
+              valueField="value"
+              placeholder="Select a fruit"
+              value={value}
+              onChange={(item) => setValue(item.value)}
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholder}
+              selectedTextStyle={styles.selectedText}
+              containerStyle={styles.dropdownContainer}
+            // inputSearchStyle={styles.inputSearch}
+            />
+          </View>
+          <FastImage source={require('../assets/images/zebraY.png')} style={{ width: 300, height: 300, marginTop: 50 }} />
+        </View>
+      </ImageBackground>
     </View>
   )
 }
@@ -64,98 +61,88 @@ function LetsLearnScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffeedd',
+    backgroundColor: '#fff',
   },
 
   // Header styles
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: '#f0f0f0',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
     paddingHorizontal: 15,
-    gap: 100,
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderColor: '#ddd',
   },
-  backButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   circle: {
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
     borderRadius: 20,
-    backgroundColor: '#ddd',
+    backgroundColor: '#f18927',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   headerTitle: {
-    fontSize: 18,
+    color: '#04acb8',
     fontWeight: 'bold',
-    color: '#333',
-    // marginLeft: 50, 
+    fontSize: 25,
+    fontWeight: 'bold',
+    textShadowColor: '#d8d6d6',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 1,
+    letterSpacing: 1,
   },
 
   // Content styles
   content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 20,
-    paddingVertical: 50,
+    marginTop: 200,
   },
   sentenceRow: {
+    flexWrap: 'wrap',
+    rowGap: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
+    backgroundColor: '#ffffffdb',
+    borderRadius: 8,
+    padding: 15,
   },
   sentenceText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginRight: 10,
   },
   dropdown: {
     width: 150,
-    height: 40,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    borderBottomWidth: 1,
+    borderColor: '#f18927',
     paddingHorizontal: 10,
-    justifyContent: 'center',
   },
   placeholder: {
     fontSize: 14,
+    fontWeight: 'bold',
     color: '#aaa',
+    textAlign: 'center',
   },
   selectedText: {
     fontSize: 14,
-    color: '#333',
-  },
-
-  // Advertisement section styles
-  adContainer: {
-    width: '100%',
-    paddingVertical: 10,
-    backgroundColor: '#f2f2f2',
-    borderTopWidth: 1,
-    borderColor: '#ddd',
-    alignItems: 'center',
-  },
-  adText: {
-    fontSize: 16,
     fontWeight: 'bold',
-    color: '#ff0000',
-    marginBottom: 5,
+    color: '#f18927',
+    textAlign: 'center',
   },
-  adImage: {
-    width: 300,
-    height: 60,
+  dropdownContainer: {
+    borderRadius: 8,
+    marginTop: -35,
+  },
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
 });
 

@@ -1,9 +1,8 @@
 import React, { useRef } from 'react';
 import { ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import { DrawerLayout } from 'react-native-gesture-handler';
 import MatirialIcon from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // For drawer items
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlayIcon from 'react-native-vector-icons/AntDesign';
 import MenuIcon from 'react-native-vector-icons/Entypo';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -22,92 +21,33 @@ function HomeScreen({ navigation }) {
       </Pressable>
       <TouchableOpacity style={styles.drawerItem} onPress={() => {
         drawerRef.current.closeDrawer();
-        navigation.navigate('Profile');
       }}>
         <Icon name="account" size={24} color="#3b5a9a" style={styles.drawerItemIcon} />
         <Text style={styles.drawerItemText}>Profile</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.drawerItem} onPress={() => {
         drawerRef.current.closeDrawer();
-        navigation.navigate('Game');
       }}>
-        <Icon
-          name="gamepad-variant"
-          size={24}
-          color="#3b5a9a"
-          style={styles.drawerItemIcon}
-        />
-        <Text style={styles.drawerItemText}>Games</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.drawerItem}
-        onPress={() => {
-          drawerRef.current.closeDrawer();
-          navigation.navigate('TutorialScreen');
-        }}>
-        <Icon
-          name="book-open-variant"
-          size={24}
-          color="#3b5a9a"
-          style={styles.drawerItemIcon}
-        />
-        <Text style={styles.drawerItemText}>Tutorial Screen</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.drawerItem}
-        onPress={() => {
-          drawerRef.current.closeDrawer();
-          navigation.navigate('Progress');
-        }}>
-        <Icon
-          name="chart-bar"
-          size={24}
-          color="#3b5a9a"
-          style={styles.drawerItemIcon}
-        />
+        <Icon name="chart-bar" size={24} color="#3b5a9a" style={styles.drawerItemIcon} />
         <Text style={styles.drawerItemText}>Progress</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.drawerItem}
-        onPress={() => {
-          drawerRef.current.closeDrawer();
-          navigation.navigate('Settings');
-        }}>
-        <Icon
-          name="cog"
-          size={24}
-          color="#3b5a9a"
-          style={styles.drawerItemIcon}
-        />
-        <Text style={styles.drawerItemText}>Settings</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.drawerItem}
-        onPress={() => {
-          drawerRef.current.closeDrawer();
-          navigation.navigate('Home');
-        }}>
-        <Icon
-          name="logout"
-          size={24}
-          color="#3b5a9a"
-          style={styles.drawerItemIcon}
+      
+      <TouchableOpacity style={styles.drawerItem} onPress={() => {
+        drawerRef.current.closeDrawer();
+        navigation.navigate('Home');
+      }}>
+        <Icon name="logout" size={24} color="#3b5a9a" style={styles.drawerItemIcon}
         />
         <Text style={styles.drawerItemText}>Logout</Text>
       </TouchableOpacity>
     </View>
-    // );
   );
-  // }
 
   return (
-    <DrawerLayout
-      ref={drawerRef}
-      drawerWidth={250}
-      drawerPosition="left"
-      renderNavigationView={renderDrawerContent}
-      drawerType="slide">
+    <DrawerLayout ref={drawerRef} drawerWidth={250} drawerPosition="left" renderNavigationView={renderDrawerContent} drawerType="slide">
       <View style={[styles.container, { paddingTop: insets.top }]}>
+        
         {/* Top bar */}
         <View style={[styles.topBar, { paddingTop: 0 }]}>
           <TouchableOpacity onPress={() => drawerRef.current.openDrawer()}>
@@ -136,11 +76,6 @@ function HomeScreen({ navigation }) {
             </View>
           </View>
         </ImageBackground>
-
-        {/* Bottom section */}
-        <View style={styles.adContainer}>
-          <FastImage style={styles.adImage} resizeMode="stretch" source={require('../assets/images/ads.jpeg')}   />
-        </View>
       </View>
     </DrawerLayout>
   );
@@ -148,7 +83,7 @@ function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,  
+    flex: 1,
     backgroundColor: '#fff',
   },
   topBar: {
@@ -188,7 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#04acb8',
+    backgroundColor: '#f18927',
     borderRadius: 30,
     padding: 10,
   },
@@ -216,7 +151,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f18927',
+    backgroundColor: '#04acb8',
     borderRadius: 30,
     width: 130,
     padding: 10,
@@ -253,18 +188,6 @@ const styles = StyleSheet.create({
   drawerItemText: {
     fontSize: 18,
     color: '#567100',
-  },
-
-  // Advertisement styles
-  adContainer: {
-    width: '100%',
-    height: 75,
-    position: 'absolute',
-    bottom: 0
-  },
-  adImage: {
-    width: '100%',
-    height: 100,
   },
 });
 
