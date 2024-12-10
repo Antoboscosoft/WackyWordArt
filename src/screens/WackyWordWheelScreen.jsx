@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing, ImageBackground } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { G, Path, Polygon, Text as SvgText } from 'react-native-svg';
+import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Header from '../components/Header';
+import Background from '../components/Background';
 
 
 function WackyWordWheelScreen({ navigation }) {
@@ -134,76 +135,59 @@ function WackyWordWheelScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       {/* Header Section */}
-      <View style={[styles.header, { paddingTop: insets.top }]}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <View style={styles.circle}>
-            <Ionicons name="arrow-back" size={24} color="#333" />
+      <Header title="Wacky Word Wheel" navigation={navigation} />
+      <Background>
+        {/* Center Content Section */}
+        <View style={styles.content}>
+          <View style={styles.sentenceContainer}>
+            <Text style={styles.sentenceText}>
+              Every morning, I{' '}
+              <Text style={displayedSentence ? styles.highlight : styles.underline}>
+                {displayedSentence || '_____'}
+              </Text>{' '}
+              to start my day.
+            </Text>
           </View>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}> Wacky Word Wheel </Text>
-      </View>
 
-      {/* Center Content Section */}
-      <View style={styles.content}>
-        {/* Buttons */}
-        {/* <Text style={styles.sentenceText}>
-          {sentenceTemplate.replace('[verb]', displayedSentence || '_____')}
-        </Text> */}
-        {/* <Text style={styles.sentenceText}>
-          Every morning, I {' '}
-          <Text>
-            {displayedSentence || '_____'}
-          </Text>
-          {' '}to start my day.
-        </Text> */}
-        <View style={styles.sentenceContainer}>
-          <Text style={styles.sentenceText}>
-            Every morning, I{' '}
-            <Text style={displayedSentence ? styles.highlight : styles.underline  }>
-              {displayedSentence || '_____'}
-            </Text>{' '}
-            to start my day.
-          </Text>
-        </View>
-
-        {/* Spinning Wheel */}
-        <View style={styles.wheelContainer}>
-          {/* Thorn positioned statically */}
-          {/* <View style={styles.thorn} /> */}
-          <Animated.View
-            style={[
-              styles.thorn,
-              {
+          {/* Spinning Wheel */}
+          <View style={styles.wheelContainer}>
+            {/* Thorn positioned statically */}
+            {/* <View style={styles.thorn} /> */}
+            <Animated.View
+              style={[
+                styles.thorn,
+                {
+                  transform: [
+                    {
+                      translateX: thornShake
+                    },
+                  ],
+                },
+              ]}
+            />
+            <Animated.View
+              style={{
                 transform: [
                   {
-                    translateX: thornShake
+                    rotate: rotation.interpolate({
+                      inputRange: [0, 360],
+                      outputRange: ['0deg', '360deg'],
+                    }),
                   },
                 ],
-              },
-            ]}
-          />
-          <Animated.View
-            style={{
-              transform: [
-                {
-                  rotate: rotation.interpolate({
-                    inputRange: [0, 360],
-                    outputRange: ['0deg', '360deg'],
-                  }),
-                },
-              ],
-            }}
-          >
-            {renderWheel()}
-          </Animated.View>
-          {/* Spin Button at the center */}
-          <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
-            <Text style={styles.spinButtonText}> {spinning ? 'Spin...' : 'Spin'} </Text>
-          </TouchableOpacity>
+              }}
+            >
+              {renderWheel()}
+            </Animated.View>
+            {/* Spin Button at the center */}
+            <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
+              <Text style={styles.spinButtonText}> {spinning ? 'Spin...' : 'Spin'} </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </Background>
     </View>
   );
 }
@@ -213,40 +197,8 @@ function WackyWordWheelScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffeedd',
+    backgroundColor: '#ffffff',
   },
-
-  // Header styles
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: '#f0f0f0',
-    paddingHorizontal: 15,
-    gap: 75,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-  },
-  backButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  circle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#ddd',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-
   // Content styles
   content: {
     flex: 1,
@@ -274,6 +226,9 @@ const styles = StyleSheet.create({
   sentenceContainer: {
     marginTop: 20,
     alignItems: 'center',
+    backgroundColor: '#ffffffe8',
+    borderRadius: 8,
+    padding: 15,
   },
   sentenceText: {
     fontSize: 18,

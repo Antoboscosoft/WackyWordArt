@@ -5,6 +5,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
+import Header from '../components/Header';
+import Background from '../components/Background';
 
 function LetsLearnScreen({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -18,19 +20,9 @@ function LetsLearnScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <ImageBackground source={require('../assets/images/bg1.png')} style={styles.backgroundImage}>
-
-        {/* Header Section */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <View style={styles.circle}>
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
-            </View>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}> Let's Learn  </Text>
-          <View />
-        </View>
-
+      {/* Header Section */}
+      <Header title="Let's Learn" navigation={navigation} />
+      <Background>
         {/* Center Content Section */}
         <View style={styles.content}>
           <View style={styles.sentenceRow}>
@@ -52,7 +44,7 @@ function LetsLearnScreen({ navigation }) {
           </View>
           <FastImage source={require('../assets/images/zebraY.png')} style={{ width: 300, height: 300, marginTop: 50 }} />
         </View>
-      </ImageBackground>
+      </Background>
     </View>
   )
 }
@@ -62,37 +54,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-
-  // Header styles
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-  },
-  circle: {
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-    backgroundColor: '#f18927',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  headerTitle: {
-    color: '#04acb8',
-    fontWeight: 'bold',
-    fontSize: 25,
-    fontWeight: 'bold',
-    textShadowColor: '#d8d6d6',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 1,
-    letterSpacing: 1,
   },
 
   // Content styles
@@ -138,11 +99,6 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     borderRadius: 8,
     marginTop: -35,
-  },
-  backgroundImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
   },
 });
 

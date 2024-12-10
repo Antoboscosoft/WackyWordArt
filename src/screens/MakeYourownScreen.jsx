@@ -8,25 +8,20 @@ import { StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { TextInput } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Header from '../components/Header';
+import Background from '../components/Background';
 
 function MakeYourownScreen({ navigation }) {
-  const insets= useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
 
   const [text, setText] = useState('');
 
   return (
-    <View style={[styles.container,{ paddingTop: insets.top}]}>
-      <ImageBackground source={require('../assets/images/bg1.png')} style={styles.backgroundImage}>
-        {/* Header Section */}
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <View style={styles.circle}>
-              <Ionicons name="arrow-back" size={24} color="#fff" />
-            </View>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}> Make Your Own </Text>
-          <View />
-        </View>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      {/* Header Section */}
+      <Header title="Make Your Own" navigation={navigation} />
+
+      <Background>
 
         {/* Center Content Section */}
         <View style={styles.content}>
@@ -39,8 +34,8 @@ function MakeYourownScreen({ navigation }) {
             textAlignVertical="top"
           />
         </View>
-        <FastImage source={require('../assets/images/zebraY.png')} style={{position: 'absolute', bottom: 200, width: 300, height: 300}} />
-      </ImageBackground>
+        <FastImage source={require('../assets/images/zebraY.png')} style={{ position: 'absolute', left: 100, bottom: 200, width: 300, height: 300 }} />
+      </Background>
     </View>
   )
 }
@@ -52,37 +47,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-
-  // Header styles
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-  },
-  circle: {
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-    backgroundColor: '#f18927',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  headerTitle: {
-    color: '#04acb8',
-    fontWeight: 'bold',
-    fontSize: 25,
-    fontWeight: 'bold',
-    textShadowColor: '#d8d6d6',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 1,
-    letterSpacing: 1,
   },
 
   // Content styles
@@ -105,11 +69,6 @@ const styles = StyleSheet.create({
     color: '#333',
     backgroundColor: '#ffffffe6',
     marginTop: 50
-  },
-  backgroundImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
   },
 });
 

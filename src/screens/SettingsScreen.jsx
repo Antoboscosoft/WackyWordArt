@@ -1,18 +1,17 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Header from '../components/Header';
+import Background from '../components/Background';
 
-function SettingsScreen({navigation}) {
-    const insets= useSafeAreaInsets();
+function SettingsScreen({ navigation }) {
+    const insets = useSafeAreaInsets();
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                <View style={styles.circle}>
-                    <Ionicons name="arrow-back" size={24} color="#333" />
-                </View>
-            </TouchableOpacity>
-            <Text style={styles.text}>Settings Page</Text>
+            <Header title="Settings" navigation={navigation} />
+            <Background>
+
+            </Background>
         </View>
     )
 }
@@ -20,7 +19,7 @@ function SettingsScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffefdd',
+        backgroundColor: '#ffffff',
     },
     backButton: {
         padding: 10

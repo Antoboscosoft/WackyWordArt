@@ -1,11 +1,13 @@
 import React, { useRef } from 'react';
-import { ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DrawerLayout } from 'react-native-gesture-handler';
-import MatirialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlayIcon from 'react-native-vector-icons/AntDesign';
 import MenuIcon from 'react-native-vector-icons/Entypo';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Header from '../components/Header';
+import { common } from '../utills/Utils';
+import Background from '../components/Background';
 
 function HomeScreen({ navigation }) {
   const drawerRef = useRef(null);
@@ -16,7 +18,7 @@ function HomeScreen({ navigation }) {
     // return (
     <View style={styles.drawerContainer}>
       <Pressable style={styles.drawerHeader} hitslop={20} onPress={() => drawerRef.current.closeDrawer()}>
-        <MenuIcon name="menu" style={{ color: '#3b5a9a', fontSize: 24 }} />
+        <MenuIcon name="menu" style={{ color: common.color.primary, fontSize: 24 }} />
         <Text style={styles.drawerTitle}>Menu</Text>
       </Pressable>
       <TouchableOpacity style={styles.drawerItem} onPress={() => {
@@ -32,7 +34,7 @@ function HomeScreen({ navigation }) {
         <Icon name="chart-bar" size={24} color="#3b5a9a" style={styles.drawerItemIcon} />
         <Text style={styles.drawerItemText}>Progress</Text>
       </TouchableOpacity>
-      
+
       <TouchableOpacity style={styles.drawerItem} onPress={() => {
         drawerRef.current.closeDrawer();
         navigation.navigate('Home');
@@ -47,20 +49,12 @@ function HomeScreen({ navigation }) {
   return (
     <DrawerLayout ref={drawerRef} drawerWidth={250} drawerPosition="left" renderNavigationView={renderDrawerContent} drawerType="slide">
       <View style={[styles.container, { paddingTop: insets.top }]}>
-        
-        {/* Top bar */}
-        <View style={[styles.topBar, { paddingTop: 0 }]}>
-          <TouchableOpacity onPress={() => drawerRef.current.openDrawer()}>
-            <MenuIcon name="menu" style={styles.menu} />
-          </TouchableOpacity>
-          <Text style={styles.title}>Home</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-            <MatirialIcon name="settings" style={styles.menu} />
-          </TouchableOpacity>
-        </View>
+
+        {/* Header */}
+        <Header drawerRef={drawerRef} title={'Home'} navigation={navigation} secondIcon={'settings'} secondIconPress={() => navigation.navigate('Settings')} />
 
         {/* Main section */}
-        <ImageBackground source={require('../assets/images/homebg.jpeg')} style={styles.backgroundImage}>
+        <Background homeSrc={require('../assets/images/homebg.jpeg')}>
           <View>
             <View style={styles.button}>
               <TouchableOpacity style={styles.combineButton} onPress={() => navigation.navigate('HowToPlayScreen')}>
@@ -75,7 +69,7 @@ function HomeScreen({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-        </ImageBackground>
+        </Background>
       </View>
     </DrawerLayout>
   );
@@ -85,27 +79,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#fff',
-  },
-  menu: {
-    color: '#f18927',
-    fontSize: 32,
-  },
-  homeheadicon: {
-    fontSize: 30,
-    color: '#3b5a9a',
-  },
-  welcomeText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#3b5a9a',
-    marginBottom: 20,
   },
   backgroundImage: {
     width: '100%',
@@ -123,7 +96,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f18927',
+    backgroundColor: common.color.primary,
     borderRadius: 30,
     padding: 10,
   },
@@ -132,30 +105,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     fontWeight: 'bold',
-    // fontFamily: 'cursive',
     textShadowColor: 'rgba(0, 0, 0, 0.5)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 5,
-  },
-  title: {
-    color: '#04acb8',
-    fontWeight: 'bold',
-    fontSize: 25,
-    fontWeight: 'bold',
-    textShadowColor: '#d8d6d6',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 1,
-    letterSpacing: 1,
   },
   combineButton1: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#04acb8',
+    backgroundColor: common.color.secondary,
     borderRadius: 30,
     width: 130,
     padding: 10,
   },
+
   // Drawer styles
   drawerContainer: {
     flex: 1,
@@ -172,7 +135,7 @@ const styles = StyleSheet.create({
     columnGap: 10,
   },
   drawerTitle: {
-    color: '#3b5a9a',
+    color: common.color.secondary,
     fontSize: 22,
     fontWeight: 'bold',
   },
@@ -184,10 +147,11 @@ const styles = StyleSheet.create({
   },
   drawerItemIcon: {
     marginRight: 10,
+    color: common.color.secondary
   },
   drawerItemText: {
     fontSize: 18,
-    color: '#567100',
+    color: common.color.primary,
   },
 });
 

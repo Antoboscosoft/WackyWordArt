@@ -3,62 +3,56 @@ import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FastImage from 'react-native-fast-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Header from '../components/Header';
+import Background from '../components/Background';
 
 function HowToPlayScreen({ navigation }) {
-    const insets= useSafeAreaInsets();
+    const insets = useSafeAreaInsets();
     return (
-        <View style={[styles.container,{ paddingTop: insets.top}]}>
-            <ImageBackground source={require('../assets/images/bg1.png')} style={styles.backgroundImage}>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
             {/* Header Section */}
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                    <View style={styles.circle}>
-                        <Icon name="arrow-back" size={24} color="#fff" />
-                    </View>
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}> How to Play </Text>
-                <Icon name="emoji-objects" size={40} color="#f18927" style={styles.bulbIcon} />
-            </View>
+            <Header title="How to Play" navigation={navigation} />
 
-            {/* Center Content Section */}
-            <View style={styles.centerContent}>
-                {/* Cloud-like Design */}
-                <View style={styles.cloud}>
-                    <FastImage
-                        source={require('../assets/images/cloud1.png')} // Replace with your cloud image
-                        style={styles.cloudImage}
-                        resizeMode="contain"
-                    >
-                        <Text style={styles.cloudText}>Click on the game to learn how to play!</Text>
-                    </FastImage>
-                </View>
-
-                <View style={styles.contentWrapper}>
-                    {/* Buttons */}
-                    <View style={styles.buttonColumn}>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LetsLearnScreen')}>
-                            <Text style={styles.buttonText}> Let's Learn </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('WackWordArtScreen')}>
-                            <Text style={styles.buttonText}> Wackey Word Wheel </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
-                            <Text style={styles.buttonText}> ― Fill in the blank </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
-                            <Text style={styles.buttonText}> ✍🏻 Make Your Own </Text>
-                        </TouchableOpacity>
+            <Background>
+                {/* Center Content Section */}
+                <View style={styles.centerContent}>
+                    {/* Cloud-like Design */}
+                    <View style={styles.cloud}>
+                        <FastImage
+                            source={require('../assets/images/cloud1.png')} // Replace with your cloud image
+                            style={styles.cloudImage}
+                            resizeMode="contain"
+                        >
+                            <Text style={styles.cloudText}>Click on the game to learn how to play!</Text>
+                        </FastImage>
                     </View>
 
-                    {/* Zebra Image */}
-                    <FastImage
-                        source={require('../assets/images/zebraY.png')} // Replace with your zebra image
-                        style={styles.zebraImage}
-                        resizeMode="contain"
-                    />
+                    <View style={styles.contentWrapper}>
+                        {/* Buttons */}
+                        <View style={styles.buttonColumn}>
+                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LetsLearnScreen')}>
+                                <Text style={styles.buttonText}> Let's Learn </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('WackWordArtScreen')}>
+                                <Text style={styles.buttonText}> Wackey Word Wheel </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
+                                <Text style={styles.buttonText}> ― Fill in the blank </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
+                                <Text style={styles.buttonText}> ✍🏻 Make Your Own </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* Zebra Image */}
+                        <FastImage
+                            source={require('../assets/images/zebraY.png')} // Replace with your zebra image
+                            style={styles.zebraImage}
+                            resizeMode="contain"
+                        />
+                    </View>
                 </View>
-            </View>
-        </ImageBackground>
+            </Background>
         </View>
     );
 }
@@ -68,11 +62,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    backgroundImage: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-      },
+
     // Header styles
     header: {
         flexDirection: 'row',
@@ -106,13 +96,13 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         textShadowColor: '#d8d6d6',
-        textShadowOffset: {width: 2, height: 2},
+        textShadowOffset: { width: 2, height: 2 },
         textShadowRadius: 1,
         letterSpacing: 1,
     },
     bulbIcon: {
         marginLeft: 5,
-        opacity:0
+        opacity: 0
     },
     // Center content styles
     centerContent: {
@@ -135,7 +125,8 @@ const styles = StyleSheet.create({
         width: 320,
         height: 180,
         resizeMode: 'contain',
-        right: 10
+        right: 10,
+        zIndex: 1
     },
     cloudText: {
         fontSize: 19,
@@ -183,13 +174,13 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: {width: 2, height: 2},
-    textShadowRadius: 5,
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textShadowColor: 'rgba(0, 0, 0, 0.5)',
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 5,
     },
     zebraImage: {
         width: 280,
