@@ -129,7 +129,7 @@ function HomeScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.button}>
-              <TouchableOpacity style={styles.combineButton1} onPress={() => navigation.navigate('HowToPlayScreen')}>
+              <TouchableOpacity style={styles.combineButton1} onPress={() => navigation.navigate('PlayScreen')}>
                 <PlayIcon name="play" size={35} color="white" />
                 <Text style={styles.buttonText}> Play </Text>
               </TouchableOpacity>

@@ -53,7 +53,7 @@ function MainNavigator() {
         <Stack.Screen name='Game' component={GameScreen} />
         <Stack.Screen name='HowToPlayScreen' component={HowToPlayScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
-        <Stack.Screen name='Progress' component={PlayScreen} />
+        <Stack.Screen name='PlayScreen' component={PlayScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="TutorialScreen" component={TutorialScreen} />
         <Stack.Screen name='LetsLearnScreen' component={LetsLearnScreen} />

@@ -1,25 +1,26 @@
-// import Icon from '@react-native-vector-icons/material-icons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
 
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FastImage from 'react-native-fast-image';
-// import { Text, View } from 'react-native-reanimated/lib/typescript/Animated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function PlayScreen({ navigation }) {
+  const insets= useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{ paddingTop: insets.top}]}>
+    <ImageBackground source={require('../assets/images/bg1.png')} style={styles.backgroundImage}>
       {/* Header Section */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <View style={styles.circle}>
-            <Ionicons name="arrow-back" size={24} color="#333" />
+          <Icon name="arrow-back" size={24} color="#fff" />
           </View>
         </TouchableOpacity>
         <Text style={styles.headerTitle}> Play </Text>
-        <Icon name="emoji-objects" size={35} color="#FF69B4" style={styles.bulbIcon} />
+        <TouchableOpacity onPress={() => navigation.navigate('HowToPlayScreen')}>
+        <Icon name="emoji-objects" size={40} color="#f18927" style={styles.bulbIcon} />
+        </TouchableOpacity>
       </View>
 
       {/* Center Content Section */}
@@ -27,7 +28,7 @@ function PlayScreen({ navigation }) {
         {/* Cloud-like Design */}
         <View style={styles.cloud}>
           <FastImage
-            source={require('../assets/images/Cloud.png')} // Replace with your cloud image
+            source={require('../assets/images/cloud1.png')} // Replace with your cloud image
             style={styles.cloudImage}
             resizeMode="contain"
           >
@@ -42,13 +43,13 @@ function PlayScreen({ navigation }) {
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LetsLearnScreen')}>
               <Text style={styles.buttonText}> Let's Learn </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('WackWordArtScreen')}>
+            <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('WackWordArtScreen')}>
               <Text style={styles.buttonText}> Wackey Word Wheel </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
               <Text style={styles.buttonText}> ― Fill in the blank </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
+            <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
               <Text style={styles.buttonText}> ✍🏻 Make Your Own </Text>
             </TouchableOpacity>
           </View>
@@ -61,16 +62,7 @@ function PlayScreen({ navigation }) {
           />
         </View>
       </View>
-
-      {/* Advertisement Section */}
-      <View style={styles.adContainer}>
-        <Text style={styles.adText}>Advertisement</Text>
-        <FastImage
-          source={{ uri: 'https://via.placeholder.com/300x100' }} // Replace with your ad image or SDK
-          style={styles.adImage}
-          resizeMode="contain"
-        />
-      </View>
+      </ImageBackground>
     </View>
   )
 }
@@ -79,15 +71,19 @@ function PlayScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffeedd',
+    backgroundColor: '#fff',
   },
-
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
   // Header styles
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderBottomWidth: 1,
@@ -98,10 +94,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   circle: {
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
     borderRadius: 20,
-    backgroundColor: '#ddd',
+    backgroundColor: '#f18927',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -110,9 +106,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 18,
+    color: '#04acb8',
     fontWeight: 'bold',
-    color: '#333',
+    fontSize: 25,
+    fontWeight: 'bold',
+    textShadowColor: '#d8d6d6',
+    textShadowOffset: {width: 2, height: 2},
+    textShadowRadius: 1,
+    letterSpacing: 1,
   },
   bulbIcon: {
     marginLeft: 5,
@@ -127,28 +128,30 @@ const styles = StyleSheet.create({
   },
   cloud: {
     padding: 20,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   cloudContainer: {
     alignItems: 'center',
     marginBottom: 20,
   },
   cloudImage: {
-    width: 350,
-    height: 200,
+    width: 200,
+    height: 150,
     resizeMode: 'contain',
-    right: 10,
+    left:70,
     alignSelf: 'flex-start',
+    transform:[{rotateY:'180deg'}]
   },
   cloudText: {
-    fontSize: 16,
+    fontSize: 19,
     width: '50%',
     textAlign: 'center',
-    color: '#555',
+    color: '#058c96',
     fontWeight: 'bold',
     position: 'absolute',
-    top: 70,
-    left: 75
+    top: 50,
+    left: 55,
+    transform:[{rotateY:'180deg'}]
   },
   contentWrapper: {
     flexDirection: 'row',
@@ -168,17 +171,31 @@ const styles = StyleSheet.create({
   button: {
     width: '65%',
     height: 50,
-    backgroundColor: '#3b9a67',
+    backgroundColor: '#f18927',
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
     alignSelf: 'flex-end',
   },
+  button1: {
+    width: '65%',
+    height: 50,
+    backgroundColor: '#04acb8',
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    alignSelf: 'flex-end',
+},
   buttonText: {
     color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: {width: 2, height: 2},
+    textShadowRadius: 5,
   },
   zebraImage: {
     width: 280,
@@ -186,6 +203,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: -80,
     bottom: 20,
+    transform:[{rotateY:'180deg'}]
   },
   // Advertisement section styles
   adContainer: {

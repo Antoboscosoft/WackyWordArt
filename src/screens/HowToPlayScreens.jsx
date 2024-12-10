@@ -1,22 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FastImage from 'react-native-fast-image';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function HowToPlayScreen({ navigation }) {
+    const insets= useSafeAreaInsets();
     return (
-        <View style={styles.container}>
+        <View style={[styles.container,{ paddingTop: insets.top}]}>
+            <ImageBackground source={require('../assets/images/bg1.png')} style={styles.backgroundImage}>
             {/* Header Section */}
             <View style={styles.header}>
                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                     <View style={styles.circle}>
-                        <Icon name="arrow-back" size={24} color="#333" />
+                        <Icon name="arrow-back" size={24} color="#fff" />
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}> How to Play </Text>
-                <Icon name="emoji-objects" size={35} color="#FF69B4" style={styles.bulbIcon} />
-
-                {/* <View style={{ width: 24 }} /> Spacer for alignment */}
+                <Icon name="emoji-objects" size={40} color="#f18927" style={styles.bulbIcon} />
             </View>
 
             {/* Center Content Section */}
@@ -24,7 +25,7 @@ function HowToPlayScreen({ navigation }) {
                 {/* Cloud-like Design */}
                 <View style={styles.cloud}>
                     <FastImage
-                        source={require('../assets/images/Cloud.png')} // Replace with your cloud image
+                        source={require('../assets/images/cloud1.png')} // Replace with your cloud image
                         style={styles.cloudImage}
                         resizeMode="contain"
                     >
@@ -38,13 +39,13 @@ function HowToPlayScreen({ navigation }) {
                         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LetsLearnScreen')}>
                             <Text style={styles.buttonText}> Let's Learn </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('WackWordArtScreen')}>
+                        <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('WackWordArtScreen')}>
                             <Text style={styles.buttonText}> Wackey Word Wheel </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
                             <Text style={styles.buttonText}> ― Fill in the blank </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
+                        <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
                             <Text style={styles.buttonText}> ✍🏻 Make Your Own </Text>
                         </TouchableOpacity>
                     </View>
@@ -56,40 +57,8 @@ function HowToPlayScreen({ navigation }) {
                         resizeMode="contain"
                     />
                 </View>
-
-                {/* Four Buttons */}
-                {/* <View style={styles.buttonGroup}>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Rule 1</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Rule 2</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Tips</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Tricks</Text>
-                    </TouchableOpacity>
-                </View> */}
-
-                {/* Zebra Image */}
-                {/* <FastImage
-                    source={require('../assets/images/zebrabg.png')}
-                    style={styles.zebraImage}
-                    resizeMode="contain"
-                /> */}
             </View>
-
-            {/* Advertisement Section */}
-            <View style={styles.adContainer}>
-                <Text style={styles.adText}>Advertisement</Text>
-                <FastImage
-                    source={{ uri: 'https://via.placeholder.com/300x100' }} // Replace with your ad image or SDK
-                    style={styles.adImage}
-                    resizeMode="contain"
-                />
-            </View>
+        </ImageBackground>
         </View>
     );
 }
@@ -97,14 +66,19 @@ function HowToPlayScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffeedd',
+        backgroundColor: '#fff',
     },
+    backgroundImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+      },
     // Header styles
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#fff',
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderBottomWidth: 1,
@@ -115,10 +89,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     circle: {
-        width: 40,
-        height: 40,
+        width: 35,
+        height: 35,
         borderRadius: 20,
-        backgroundColor: '#ddd',
+        backgroundColor: '#f18927',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -127,13 +101,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerTitle: {
-        fontSize: 18,
+        color: '#04acb8',
         fontWeight: 'bold',
-        color: '#333',
-        // flexDirection: 'row',
+        fontSize: 25,
+        fontWeight: 'bold',
+        textShadowColor: '#d8d6d6',
+        textShadowOffset: {width: 2, height: 2},
+        textShadowRadius: 1,
+        letterSpacing: 1,
     },
     bulbIcon: {
         marginLeft: 5,
+        opacity:0
     },
     // Center content styles
     centerContent: {
@@ -145,36 +124,28 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     cloud: {
-        // width: '80%',
         padding: 20,
-        // backgroundColor: '#f9f9f9',
-        // borderRadius: 50,
-        // shadowColor: '#000',
-        // shadowOffset: { width: 0, height: 4 },
-        // shadowOpacity: 0.2,
-        // shadowRadius: 5,
-        // elevation: 5,
-        marginBottom: 20,
+        marginBottom: 10,
     },
     cloudContainer: {
         alignItems: 'center',
         marginBottom: 20,
     },
     cloudImage: {
-        width: 350,
-        height: 200,
+        width: 320,
+        height: 180,
         resizeMode: 'contain',
         right: 10
     },
     cloudText: {
-        fontSize: 16,
+        fontSize: 19,
         width: '50%',
         textAlign: 'center',
-        color: '#555',
+        color: '#058c96',
         fontWeight: 'bold',
         position: 'absolute',
-        top: 70,
-        left: 75
+        top: 50,
+        left: 85
     },
     contentWrapper: {
         flexDirection: 'row',
@@ -183,8 +154,6 @@ const styles = StyleSheet.create({
     },
     buttonColumn: {
         flex: 1,
-        // flexDirection: 'column',
-        // alignItems: 'center',
         zIndex: 1
     },
     buttonGroup: {
@@ -193,19 +162,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         marginBottom: 20,
     },
-    // button: {
-    //     width: 100,
-    //     height: 50,
-    //     backgroundColor: '#3b9a67',
-    //     borderRadius: 25,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     margin: 10,
-    // },
     button: {
         width: '65%',
         height: 50,
-        backgroundColor: '#3b9a67',
+        backgroundColor: '#f18927',
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
+        alignSelf: 'flex-start',
+    },
+    button1: {
+        width: '65%',
+        height: 50,
+        backgroundColor: '#04acb8',
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
@@ -213,9 +183,13 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: {width: 2, height: 2},
+    textShadowRadius: 5,
     },
     zebraImage: {
         width: 280,
