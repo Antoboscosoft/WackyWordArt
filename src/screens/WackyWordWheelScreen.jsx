@@ -1,25 +1,137 @@
 import React, { useRef, useState } from 'react';
-import { StyleSheet, Touchable, TouchableOpacity } from 'react-native';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { G, Path, Polygon, Text as SvgText } from 'react-native-svg';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 function WackyWordWheelScreen({ navigation }) {
   // List of verbs for the wheel
   const verbs = ['Dance', 'Walk', 'Jog', 'Run', 'Read', 'Eat', 'Sing', 'Play'];
-
   // State to manage the selected verb
-  const [selectedVerb, setSelectedVerb] = useState('');
+  const [displayedSentence, setDisplayedSentence] = useState('');
+  const [spinning, setSpinning] = useState(false);
+  const rotation = useRef(new Animated.Value(0)).current;
+  const thornShake = useRef(new Animated.Value(0)).current;
+  const insets = useSafeAreaInsets(); 
 
   // Sentence template
   const sentenceTemplate = 'Every morning, I [verb] to start my day.';
 
-  // Callback when the wheel stops
-  const onWheelFinish = (winner) => {
-    setSelectedVerb(winner); // Update the selected verb
+  const startSpin = () => {
+    if (spinning) return;
+
+    setSpinning(true);
+    startThornShake();
+    const randomDegree = Math.floor(3600 + Math.random() * 360);
+    const selectedIndex = Math.floor((360 - (randomDegree % 360)) / (360 / verbs.length)) % verbs.length;
+
+    Animated.timing(rotation, {
+      toValue: randomDegree,
+      duration: 5000,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: true,
+    }).start(() => {
+      const selectedVerb = verbs[selectedIndex];
+      setDisplayedSentence(selectedVerb);
+      setSpinning(false);
+      stopThornShake();
+      rotation.setValue(randomDegree % 360);
+    })
   };
 
+  const renderWheel = () => {
+    const segments = verbs.length;
+    const angle = 360 / segments;
+    const radius = 150;
+
+    return (
+      <Svg width={2 * radius} height={2 * radius} viewBox={`0 0 ${2 * radius} ${2 * radius}`}>
+        <G rotation={-90} origin={`${radius}, ${radius}`}>
+          {verbs.map((verb, index) => {
+            const startAngle = angle * index;
+            const endAngle = startAngle + angle;
+            {/* const x1 = radius * Math.cos(startAngle * Math.PI / 180); */ }
+            const x1 = radius + radius * Math.cos((Math.PI * startAngle) / 180);
+            const y1 = radius + radius * Math.sin((Math.PI * startAngle) / 180);
+            const x2 = radius + radius * Math.cos((Math.PI * endAngle) / 180);
+            const y2 = radius + radius * Math.sin((Math.PI * endAngle) / 180);
+
+            // Text positioning
+            const textAngle = startAngle + (angle / 2);
+            const textX = radius + radius * 0.6 * Math.cos((Math.PI * textAngle) / 180);
+            const textY = radius + radius * 0.6 * Math.sin((Math.PI * textAngle) / 180);
+            {/* const textRotation = textAngle > 90 && textAngle < 270 ? -90 : 90; */ }
+            const textRotation = textAngle > 90 && textAngle < 270 ? textAngle + 180 : textAngle;
+
+            return (
+              <G key={index}>
+                <Path
+                  d={`M${radius},${radius} L${x1},${y1} A${radius},${radius} 0 0,1 ${x2},${y2} z`}
+                  fill={index % 2 === 0 ? '#bdaf5e' : '#00ff59'}
+                  stroke="#fff"
+                  strokeWidth={2}
+                />
+                <SvgText
+                  x={radius + radius * 0.6 * Math.cos((Math.PI * (startAngle + angle / 2)) / 180)}
+                  y={radius + radius * 0.6 * Math.sin((Math.PI * (startAngle + angle / 2)) / 180)}
+                  // x={textX}
+                  // y={textY}
+                  fill="#fff"
+                  fontSize={16}
+                  fontWeight="bold"
+                  textAnchor="middle"
+                  alignmentBaseline="middle"
+                  rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
+                // delayLongPress={1000}
+                >
+                  {verb}
+                </SvgText>
+              </G>
+            );
+          })}
+        </G>
+        {/* Thorn indicator */}
+        {/* <Polygon
+          points={`${radius - 10}, 0 ${radius + 10},0 ${radius},15`}
+          fill="#f00"
+        /> */}
+      </Svg>
+    );
+  };
+
+  // Start the thorn shaking animation
+  const startThornShake = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(thornShake, {
+          toValue: 10, // Move right
+          duration: 200,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }),
+        Animated.timing(thornShake, {
+          toValue: -10, // Move left
+          duration: 200,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }),
+        Animated.timing(thornShake, {
+          toValue: 0, // Back to center
+          duration: 200,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
+
+  // Stop the thorn shake after spinning ends
+  const stopThornShake = () => {
+    thornShake.stopAnimation();
+  };
 
   return (
     <View style={[styles.container]}>
@@ -35,26 +147,56 @@ function WackyWordWheelScreen({ navigation }) {
 
       {/* Center Content Section */}
       <View style={styles.content}>
-        <View style={styles.sentenceRow}>
-          {/* Buttons */}
-          <Text style={styles.sentenceText}>
-            Inprogress
+        {/* Buttons */}
+        {/* <Text style={styles.sentenceText}>
+          {sentenceTemplate.replace('[verb]', displayedSentence || '_____')}
+        </Text> */}
+        <Text style={styles.sentenceText}>
+          Every morning, I {' '} 
+          <Text>
+          {displayedSentence || '_____'} 
           </Text>
-         
+          {' '}to start my day.
+        </Text>
+
+        {/* Spinning Wheel */}
+        <View style={styles.wheelContainer}>
+          {/* Thorn positioned statically */}
+          {/* <View style={styles.thorn} /> */}
+          <Animated.View 
+            style={[
+              styles.thorn,
+              {
+                transform: [
+                  {
+                    translateX: thornShake
+                  },
+                ],
+              },
+            ]}
+          />
+          <Animated.View
+            style={{
+              transform: [
+                {
+                  rotate: rotation.interpolate({
+                    inputRange: [0, 360],
+                    outputRange: ['0deg', '360deg'],
+                  }),
+                },
+              ],
+            }}
+          >
+            {renderWheel()}
+          </Animated.View>
+          {/* Spin Button at the center */}
+          <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
+            <Text style={styles.spinButtonText}> {spinning ? 'Spin...' : 'Spin'} </Text>
+          </TouchableOpacity>
         </View>
       </View>
-
-      {/* Advertisement Section */}
-      <View style={styles.adContainer}>
-        <Text style={styles.adText}>Advertisement</Text>
-        <FastImage
-          source={{ uri: 'https://via.placeholder.com/300x100' }} // Replace with your ad image or SDK
-          style={styles.adImage}
-          resizeMode="contain"
-        />
-      </View>
     </View>
-  )
+  );
 }
 
 
@@ -103,6 +245,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 20,
     paddingVertical: 50,
+    gap: 20,
   },
   sentenceRow: {
     flexWrap: 'wrap',
@@ -112,39 +255,58 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   sentenceText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
     marginRight: 5,
+    marginBottom: 10,
   },
-  input: {
-    borderBottomWidth: 1,
-    borderColor: '#bbb',
-    marginHorizontal: 5,
-    paddingHorizontal: 5,
-    fontSize: 16,
-    color: '#333',
-    minWidth: 10,
-    maxWidth: 120,
-    textAlign: 'left',
-  },
-  dropdown: {
-    width: 150,
-    height: 40,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    paddingHorizontal: 10,
+  wheelContainer: {
+    width: 300,
+    height: 300,
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  placeholder: {
-    fontSize: 14,
-    color: '#aaa',
+  spinButton: {
+    position: 'absolute',
+    width: 80,
+    height: 80,
+    backgroundColor: '#69b9ff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 40,
+    zIndex: 1,
+    // paddingVertical: 15,
+    paddingHorizontal: 10,
   },
-  selectedText: {
-    fontSize: 14,
-    color: '#333',
+  spinButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  // Wheel Modal Overlay
+  wheelOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  thorn: {
+    position: 'absolute',
+    top: -15,
+    left: '50%',
+    transform: [{ translateX: -10 }],
+    width: 20,
+    height: 20,
+    backgroundColor: 'transparent',
+    borderLeftWidth: 10,
+    borderRightWidth: 10,
+    borderBottomWidth: 15,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: '#ff0000',
+    zIndex: 1,
+    // clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)',
   },
 
   // Advertisement section styles
