@@ -21,7 +21,7 @@ import FastImage from 'react-native-fast-image';
 const Splash = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <FastImage source={require('../assets/images/splash.png')} resizeMode='cover' style={{ width: '100%', height: '100%' }} />
+      <FastImage source={require('../assets/images/splash.gif')} resizeMode='cover' style={{ width: '100%', height: '100%' }} />
     </View>
   );
 }
