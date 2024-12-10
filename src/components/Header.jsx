@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 15,
         backgroundColor: '#fff',
+        borderBottomColor: common.color.primary,
+        borderBottomWidth: 3,
     },
     menu: {
         color: common.color.primary,
