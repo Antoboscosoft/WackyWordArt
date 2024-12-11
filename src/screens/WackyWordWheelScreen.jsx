@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
-
+import Sound from 'react-native-sound';
+// import audio1 from '../assets/audios/barbie-girl.mp3';
 
 function WackyWordWheelScreen({ navigation }) {
   // List of verbs for the wheel
@@ -17,8 +18,55 @@ function WackyWordWheelScreen({ navigation }) {
   const thornShake = useRef(new Animated.Value(0)).current;
   const insets = useSafeAreaInsets();
 
+  const soundRef = useRef(
+    new Sound('puzzle-game.mp3', Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log('failed to load the sound', error);
+      } else {
+        console.log('sound loaded successfully');
+      }
+    })
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      soundRef.release();
+    };
+  }, []);
+  console.log('soundRef', soundRef, "Spinning : ----", spinning);
+  
+// when entering ino the page it will play the sound:
+  // useEffect(() => {
+  //   const sound = new Sound('barbie_girl.mp3', Sound.MAIN_BUNDLE, (error) => {
+  //     if (error) {
+  //       console.error('Error loading sound:', error);
+  //     } else {
+  //       sound.play((success) => {
+  //         if (!success) {
+  //           console.error('Playback error');
+  //         }
+  //       });
+  //     }
+  //   });
+  
+  //   return () => {
+  //     sound.release();
+  //   };
+  // }, []);
+
   const startSpin = () => {
     if (spinning) return;
+    console.log('Attempting to play sound...');
+
+    soundRef.setCurrentTime(0);
+
+    soundRef.play((succuss) => {
+      if(!succuss){
+        console.log("Playback failed due to audio decoding errors");
+      } else {
+        console.log('Playback successful');
+      }
+    });
 
     setSpinning(true);
     startThornShake();
@@ -27,7 +75,7 @@ function WackyWordWheelScreen({ navigation }) {
 
     Animated.timing(rotation, {
       toValue: randomDegree,
-      duration: 5000,
+      duration: 15000,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
     }).start(() => {
@@ -35,6 +83,7 @@ function WackyWordWheelScreen({ navigation }) {
       setDisplayedSentence(selectedVerb);
       setSpinning(false);
       stopThornShake();
+      soundRef.pause();
       rotation.setValue(randomDegree % 360);
     })
   };

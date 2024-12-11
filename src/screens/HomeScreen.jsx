@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { DrawerLayout } from 'react-native-gesture-handler';
+import { DrawerLayout, Switch } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlayIcon from 'react-native-vector-icons/AntDesign';
 import MenuIcon from 'react-native-vector-icons/Entypo';
@@ -9,10 +9,71 @@ import Header from '../components/Header';
 import { common } from '../utills/Utils';
 import Background from '../components/Background';
 import { FadeAnime } from '../components/Animations';
+import { useFocusEffect } from '@react-navigation/native';
+import Sound from 'react-native-sound';
 
 function HomeScreen({ navigation }) {
   const drawerRef = useRef(null);
   const insets = useSafeAreaInsets();
+  const soundRef = useRef(null); // Reuse the sound object
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Load sound when screen is focused if not already loaded
+      if (!soundRef.current) {
+        soundRef.current = new Sound('home_music.mp3', Sound.MAIN_BUNDLE, (error) => {
+          if (error) {
+            // console.log("failed to load the sound", error);
+          }
+        });
+      }
+
+      return () => {
+        // Release sound when screen is unfocused
+        if (soundRef.current) {
+          soundRef.current.stop(() => {});
+          soundRef.current.release();
+          soundRef.current = null;
+        }
+      };
+    }, [])
+  );
+
+  const toggleMusic = () => {
+    if (isMusicPlaying) {
+      // Stop music if it's playing
+      soundRef.current?.stop(() => {});
+      setIsMusicPlaying(false);
+    } else {
+      // Start playing the music if it's stopped
+      soundRef.current?.play((success) => {
+        if (!success) {
+          // console.log("Playback failed due to audio decoding errors");
+        }
+      });
+      setIsMusicPlaying(true);
+    }
+  };
+
+  // Initialize sound bar menu
+  const menuSound = useRef(
+    new Sound('menu.mp3', Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.error('Error loading sound:', error);
+      }
+    })
+  );
+
+  // Play the menu sound
+  const playMenuSound = () => {
+    menuSound.current.stop(() => {
+      menuSound.current.play((success) => {
+        // if (!success) console.log('Playback failed');
+      });
+    });
+  };
+
 
   // Drawer Content with Icons
   const renderDrawerContent = () => (
@@ -44,6 +105,18 @@ function HomeScreen({ navigation }) {
         />
         <Text style={styles.drawerItemText}>Logout</Text>
       </TouchableOpacity>
+
+
+      {/* Toggle button for music */}
+      <View style={styles.drawerItem}>
+        <Text style={styles.drawerItemText}>Music</Text>
+        <Switch
+          value={isMusicPlaying}
+          onValueChange={toggleMusic}
+          thumbColor={isMusicPlaying ? common.color.secondary : '#ccc'}
+          trackColor={{ false: '#ccc', true: common.color.primary }}
+        />
+      </View>
     </View>
   );
 
@@ -155,6 +228,10 @@ const styles = StyleSheet.create({
   drawerItemText: {
     fontSize: 18,
     color: common.color.primary,
+  },
+  musicToggleContainer: {
+    marginTop: 20,
+    justifyContent: 'space-between',
   },
 });
 
