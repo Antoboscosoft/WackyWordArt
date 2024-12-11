@@ -17,7 +17,7 @@ function PlayScreen({ navigation }) {
         <View style={styles.centerContent}>
           <View style={styles.cloud}>
             <FastImage
-              source={require('../assets/images/cloud1.png')} // Replace with your cloud image
+              source={require('../assets/images/cloud2.png')} // Replace with your cloud image
               style={styles.cloudImage}
               resizeMode="contain"
             >
@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     left: 70,
     alignSelf: 'flex-start',
-    transform: [{ rotateY: '180deg' }]
   },
   cloudText: {
     fontSize: 19,
@@ -90,7 +89,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 50,
     left: 55,
-    transform: [{ rotateY: '180deg' }]
   },
   contentWrapper: {
     flexDirection: 'row',

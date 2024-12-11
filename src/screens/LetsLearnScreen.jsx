@@ -1,22 +1,21 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Dropdown } from 'react-native-element-dropdown';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 function LetsLearnScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const [value, setValue] = useState(null);
-
-  const data = [
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState();
+  const [items, setItems] = useState([
     { label: 'Apple', value: 'apple' },
     { label: 'Banana', value: 'banana' },
     { label: 'Orange', value: 'orange' },
-  ];
-
+  ]);
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       {/* Header Section */}
@@ -26,19 +25,23 @@ function LetsLearnScreen({ navigation }) {
         <View style={styles.content}>
           <View style={styles.sentenceRow}>
             {/* Buttons */}
-            <Text style={styles.sentenceText}>I would like to eat a</Text>
-            <Dropdown
-              data={data}
-              labelField="label"
-              valueField="value"
-              placeholder="Select a fruit"
+            <Text style={styles.sentenceText}>I would like to eat a </Text>
+            <DropDownPicker
+              open={open}
               value={value}
-              onChange={(item) => setValue(item.value)}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              multiple={false}
+              maxHeight={300}
+              containerStyle={styles.containerStyle}
+              dropDownContainerStyle={styles.dropdownContainer}
               style={styles.dropdown}
-              placeholderStyle={styles.placeholder}
-              selectedTextStyle={styles.selectedText}
-              containerStyle={styles.dropdownContainer}
-            // inputSearchStyle={styles.inputSearch}
+              selectedItemLabelStyle={{ color: common.color.primary }}
+              labelStyle={{ color: common.color.primary }}
+              placeholder="Select a fruit"
+              placeholderStyle={{ fontSize: 16 }}
             />
           </View>
           <FastImage source={common.Zebra} style={{ width: 300, height: 300, marginTop: 50 }} />
@@ -78,27 +81,18 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   dropdown: {
-    width: 150,
+    borderWidth:0,
+    backgroundColor:"transparent",
     borderBottomWidth: 1,
     borderColor: common.color.primary,
-    paddingHorizontal: 10,
-  },
-  placeholder: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#aaa',
-    textAlign: 'center',
-  },
-  selectedText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: common.color.primary,
-    textAlign: 'center',
   },
   dropdownContainer: {
-    borderRadius: 8,
-    marginTop: -35,
+    borderColor: common.color.primary,
   },
+  containerStyle:{
+    borderRadius: 8,
+    width: 200
+  }
 });
 
 
