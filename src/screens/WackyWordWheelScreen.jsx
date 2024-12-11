@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing, ImageBackground } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Header from '../components/Header';
 import Background from '../components/Background';
+import { common } from '../utills/Utils';
 
 
 function WackyWordWheelScreen({ navigation }) {
@@ -16,9 +16,6 @@ function WackyWordWheelScreen({ navigation }) {
   const rotation = useRef(new Animated.Value(0)).current;
   const thornShake = useRef(new Animated.Value(0)).current;
   const insets = useSafeAreaInsets();
-
-  // Sentence template
-  const sentenceTemplate = 'Every morning, I [verb] to start my day.';
 
   const startSpin = () => {
     if (spinning) return;
@@ -53,7 +50,6 @@ function WackyWordWheelScreen({ navigation }) {
           {verbs.map((verb, index) => {
             const startAngle = angle * index;
             const endAngle = startAngle + angle;
-            {/* const x1 = radius * Math.cos(startAngle * Math.PI / 180); */ }
             const x1 = radius + radius * Math.cos((Math.PI * startAngle) / 180);
             const y1 = radius + radius * Math.sin((Math.PI * startAngle) / 180);
             const x2 = radius + radius * Math.cos((Math.PI * endAngle) / 180);
@@ -63,7 +59,6 @@ function WackyWordWheelScreen({ navigation }) {
             const textAngle = startAngle + (angle / 2);
             const textX = radius + radius * 0.6 * Math.cos((Math.PI * textAngle) / 180);
             const textY = radius + radius * 0.6 * Math.sin((Math.PI * textAngle) / 180);
-            {/* const textRotation = textAngle > 90 && textAngle < 270 ? -90 : 90; */ }
             const textRotation = textAngle > 90 && textAngle < 270 ? textAngle + 180 : textAngle;
 
             return (
@@ -77,15 +72,12 @@ function WackyWordWheelScreen({ navigation }) {
                 <SvgText
                   x={radius + radius * 0.6 * Math.cos((Math.PI * (startAngle + angle / 2)) / 180)}
                   y={radius + radius * 0.6 * Math.sin((Math.PI * (startAngle + angle / 2)) / 180)}
-                  // x={textX}
-                  // y={textY}
                   fill="#fff"
                   fontSize={16}
                   fontWeight="bold"
                   textAnchor="middle"
                   alignmentBaseline="middle"
                   rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
-                // delayLongPress={1000}
                 >
                   {verb}
                 </SvgText>
@@ -93,11 +85,6 @@ function WackyWordWheelScreen({ navigation }) {
             );
           })}
         </G>
-        {/* Thorn indicator */}
-        {/* <Polygon
-          points={`${radius - 10}, 0 ${radius + 10},0 ${radius},15`}
-          fill="#f00"
-        /> */}
       </Svg>
     );
   };
@@ -154,7 +141,6 @@ function WackyWordWheelScreen({ navigation }) {
           {/* Spinning Wheel */}
           <View style={styles.wheelContainer}>
             {/* Thorn positioned statically */}
-            {/* <View style={styles.thorn} /> */}
             <Animated.View
               style={[
                 styles.thorn,
@@ -236,12 +222,12 @@ const styles = StyleSheet.create({
   },
   underline: {
     borderBottomWidth: 2,
-    borderBottomColor: '#ff5722', // Custom underline color
+    borderBottomColor: common.color.primary,
     fontWeight: 'bold',
     fontSize: 18,
   },
   highlight: {
-    backgroundColor: '#ff803b', // Custom highlight color
+    backgroundColor: common.color.primary,
     paddingHorizontal: 5,
     fontWeight: 'bold',
     borderRadius: 5,
@@ -257,7 +243,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 80,
     height: 80,
-    backgroundColor: '#69b9ff',
+    backgroundColor: common.color.secondary,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 40,
@@ -292,27 +278,6 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderBottomColor: '#ff0000',
     zIndex: 1,
-    // clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)',
-  },
-
-  // Advertisement section styles
-  adContainer: {
-    width: '100%',
-    paddingVertical: 10,
-    backgroundColor: '#f2f2f2',
-    borderTopWidth: 1,
-    borderColor: '#ddd',
-    alignItems: 'center',
-  },
-  adText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#ff0000',
-    marginBottom: 5,
-  },
-  adImage: {
-    width: 300,
-    height: 60,
   },
 });
 

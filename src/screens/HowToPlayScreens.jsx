@@ -1,10 +1,10 @@
 import React from 'react';
-import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import Background from '../components/Background';
+import { common } from '../utills/Utils';
 
 function HowToPlayScreen({ navigation }) {
     const insets = useSafeAreaInsets();
@@ -46,7 +46,7 @@ function HowToPlayScreen({ navigation }) {
 
                         {/* Zebra Image */}
                         <FastImage
-                            source={require('../assets/images/zebraY.png')} // Replace with your zebra image
+                            source={common.Zebra} // Replace with your zebra image
                             style={styles.zebraImage}
                             resizeMode="contain"
                         />
@@ -62,54 +62,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-
-    // Header styles
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: '#fff',
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-    },
-    backButton: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    circle: {
-        width: 35,
-        height: 35,
-        borderRadius: 20,
-        backgroundColor: '#f18927',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerTitleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    headerTitle: {
-        color: '#04acb8',
-        fontWeight: 'bold',
-        fontSize: 25,
-        fontWeight: 'bold',
-        textShadowColor: '#d8d6d6',
-        textShadowOffset: { width: 2, height: 2 },
-        textShadowRadius: 1,
-        letterSpacing: 1,
-    },
-    bulbIcon: {
-        marginLeft: 5,
-        opacity: 0
-    },
     // Center content styles
     centerContent: {
         flex: 1,
-        // alignItems: 'center',
         justifyContent: 'center',
-        // position: 'relative',
         paddingHorizontal: 20,
         paddingVertical: 10,
     },
@@ -132,7 +88,7 @@ const styles = StyleSheet.create({
         fontSize: 19,
         width: '50%',
         textAlign: 'center',
-        color: '#058c96',
+        color: common.color.secondary,
         fontWeight: 'bold',
         position: 'absolute',
         top: 50,
@@ -156,7 +112,7 @@ const styles = StyleSheet.create({
     button: {
         width: '65%',
         height: 50,
-        backgroundColor: '#f18927',
+        backgroundColor: common.color.primary,
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
@@ -166,7 +122,7 @@ const styles = StyleSheet.create({
     button1: {
         width: '65%',
         height: 50,
-        backgroundColor: '#04acb8',
+        backgroundColor: common.color.secondary,
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
@@ -188,29 +144,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: -80,
         bottom: 20,
-
-        // width: 150,
-        // height: 150,
-        // marginLeft: 10,
-    },
-    // Advertisement section styles
-    adContainer: {
-        width: '100%',
-        paddingVertical: 10,
-        backgroundColor: '#f2f2f2',
-        borderTopWidth: 1,
-        borderColor: '#ddd',
-        alignItems: 'center',
-    },
-    adText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#ff0000',
-        marginBottom: 5,
-    },
-    adImage: {
-        width: 300,
-        height: 60,
     },
 });
 

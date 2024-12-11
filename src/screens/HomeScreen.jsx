@@ -24,14 +24,14 @@ function HomeScreen({ navigation }) {
       <TouchableOpacity style={styles.drawerItem} onPress={() => {
         drawerRef.current.closeDrawer();
       }}>
-        <Icon name="account" size={24} color="#3b5a9a" style={styles.drawerItemIcon} />
+        <Icon name="account" size={24} style={styles.drawerItemIcon} />
         <Text style={styles.drawerItemText}>Profile</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.drawerItem} onPress={() => {
         drawerRef.current.closeDrawer();
       }}>
-        <Icon name="chart-bar" size={24} color="#3b5a9a" style={styles.drawerItemIcon} />
+        <Icon name="chart-bar" size={24} style={styles.drawerItemIcon} />
         <Text style={styles.drawerItemText}>Progress</Text>
       </TouchableOpacity>
 
@@ -39,7 +39,7 @@ function HomeScreen({ navigation }) {
         drawerRef.current.closeDrawer();
         navigation.navigate('Home');
       }}>
-        <Icon name="logout" size={24} color="#3b5a9a" style={styles.drawerItemIcon}
+        <Icon name="logout" size={24} style={styles.drawerItemIcon}
         />
         <Text style={styles.drawerItemText}>Logout</Text>
       </TouchableOpacity>
@@ -79,11 +79,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  backgroundImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
   },
   button: {
     flexDirection: 'row',

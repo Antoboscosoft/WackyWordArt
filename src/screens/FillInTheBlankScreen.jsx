@@ -1,13 +1,12 @@
 import React from 'react'
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Text, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { TextInput } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import Background from '../components/Background';
+import { common } from '../utills/Utils';
 
 function FillInTheBlankScreen({ navigation }) {
 
@@ -116,16 +115,16 @@ const styles = StyleSheet.create({
   sentenceText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#04acb8',
+    color: common.color.secondary,
     marginRight: 5,
   },
   input: {
     borderBottomWidth: 1,
-    borderColor: '#f18927',
+    borderColor: common.color.primary,
     marginHorizontal: 5,
     paddingHorizontal: 5,
     fontSize: 16,
-    color: '#f18927',
+    color: common.color.primary,
     minWidth: 10,
     maxWidth: 120,
     textAlign: 'left',

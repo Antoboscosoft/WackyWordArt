@@ -21,23 +21,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ffffff',
     },
-    backButton: {
-        padding: 10
-    },
-    circle: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: '#ddd',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    text: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#3b5a9a',
-        textAlign: 'center',
-    },
 })
 
 export default SettingsScreen

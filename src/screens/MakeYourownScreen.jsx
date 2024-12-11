@@ -1,8 +1,5 @@
 import React from 'react'
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native'
-
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {View } from 'react-native'
 import FastImage from 'react-native-fast-image';
 import { StyleSheet } from 'react-native';
 import { useState } from 'react';
@@ -10,6 +7,7 @@ import { TextInput } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import Background from '../components/Background';
+import { common } from '../utills/Utils';
 
 function MakeYourownScreen({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -34,7 +32,7 @@ function MakeYourownScreen({ navigation }) {
             textAlignVertical="top"
           />
         </View>
-        <FastImage source={require('../assets/images/zebraY.png')} style={{ position: 'absolute', left: 100, bottom: 200, width: 300, height: 300 }} />
+        <FastImage source={common.Zebra} style={{ position: 'absolute', left: 100, bottom: 200, width: 300, height: 300 }} />
       </Background>
     </View>
   )

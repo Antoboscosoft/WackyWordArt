@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { StyleSheet, Text, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
+import { common } from '../utills/Utils';
 
 function LetsLearnScreen({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -42,7 +41,7 @@ function LetsLearnScreen({ navigation }) {
             // inputSearchStyle={styles.inputSearch}
             />
           </View>
-          <FastImage source={require('../assets/images/zebraY.png')} style={{ width: 300, height: 300, marginTop: 50 }} />
+          <FastImage source={common.Zebra} style={{ width: 300, height: 300, marginTop: 50 }} />
         </View>
       </Background>
     </View>
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
   dropdown: {
     width: 150,
     borderBottomWidth: 1,
-    borderColor: '#f18927',
+    borderColor: common.color.primary,
     paddingHorizontal: 10,
   },
   placeholder: {
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
   selectedText: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#f18927',
+    color: common.color.primary,
     textAlign: 'center',
   },
   dropdownContainer: {

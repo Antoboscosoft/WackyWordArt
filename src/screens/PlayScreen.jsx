@@ -4,6 +4,7 @@ import FastImage from 'react-native-fast-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import Background from '../components/Background';
+import { common } from '../utills/Utils';
 
 function PlayScreen({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -44,7 +45,7 @@ function PlayScreen({ navigation }) {
 
             {/* Zebra Image */}
             <FastImage
-              source={require('../assets/images/zebraY.png')} // Replace with your zebra image
+              source={common.Zebra} // Replace with your zebra image
               style={styles.zebraImage}
               resizeMode="contain"
             />
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     width: '50%',
     textAlign: 'center',
-    color: '#058c96',
+    color: common.color.secondary,
     fontWeight: 'bold',
     position: 'absolute',
     top: 50,
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   button: {
     width: '65%',
     height: 50,
-    backgroundColor: '#f18927',
+    backgroundColor: common.color.primary,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   button1: {
     width: '65%',
     height: 50,
-    backgroundColor: '#04acb8',
+    backgroundColor: common.color.secondary,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
