@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import { common } from '../utills/Utils';
 import Background from '../components/Background';
+import { FadeAnime } from '../components/Animations';
 
 function HomeScreen({ navigation }) {
   const drawerRef = useRef(null);
@@ -48,29 +49,31 @@ function HomeScreen({ navigation }) {
 
   return (
     <DrawerLayout ref={drawerRef} drawerWidth={250} drawerPosition="left" renderNavigationView={renderDrawerContent} drawerType="slide">
-      <View style={[styles.container, { paddingTop: insets.top }]}>
+      <FadeAnime>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
 
-        {/* Header */}
-        <Header drawerRef={drawerRef} title={'Home'} navigation={navigation} secondIcon={'settings'} secondIconPress={() => navigation.navigate('Settings')} />
+          {/* Header */}
+          <Header drawerRef={drawerRef} title={'Home'} navigation={navigation} secondIcon={'settings'} secondIconPress={() => navigation.navigate('Settings')} />
 
-        {/* Main section */}
-        <Background homeSrc={require('../assets/images/homebg.jpeg')}>
-          <View>
-            <View style={styles.button}>
-              <TouchableOpacity style={styles.combineButton} onPress={() => navigation.navigate('HowToPlayScreen')}>
-                <PlayIcon name="questioncircle" size={35} color="white" />
-                <Text style={styles.buttonText}> How to Play </Text>
-              </TouchableOpacity>
+          {/* Main section */}
+          <Background homeSrc={require('../assets/images/homebg.jpeg')}>
+            <View>
+              <View style={styles.button}>
+                <TouchableOpacity style={styles.combineButton} onPress={() => navigation.navigate('HowToPlayScreen')}>
+                  <PlayIcon name="questioncircle" size={30} color="white" />
+                  <Text style={styles.buttonText}> How to Play </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.button}>
+                <TouchableOpacity style={styles.combineButton1} onPress={() => navigation.navigate('PlayScreen')}>
+                  <PlayIcon name="play" size={30} color="white" />
+                  <Text style={styles.buttonText}> Play </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.button}>
-              <TouchableOpacity style={styles.combineButton1} onPress={() => navigation.navigate('PlayScreen')}>
-                <PlayIcon name="play" size={35} color="white" />
-                <Text style={styles.buttonText}> Play </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Background>
-      </View>
+          </Background>
+        </View>
+      </FadeAnime>
     </DrawerLayout>
   );
 }
@@ -92,8 +95,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: common.color.primary,
-    borderRadius: 30,
-    padding: 10,
+    borderRadius: 25,
+    padding: 7,
+    borderColor: "#ffffffaf",
+    borderWidth: 4,
+    borderTopWidth: 1
   },
   buttonText: {
     color: '#fff',
@@ -106,12 +112,14 @@ const styles = StyleSheet.create({
   },
   combineButton1: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: common.color.secondary,
-    borderRadius: 30,
+    borderRadius: 25,
     width: 130,
-    padding: 10,
+    padding: 7,
+    borderColor: "#ffffffaf",
+    borderWidth: 4,
+    borderTopWidth: 1,
+    columnGap: 10
   },
 
   // Drawer styles

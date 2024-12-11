@@ -14,15 +14,7 @@ import FillInTheBlankScreen from '../screens/FillInTheBlankScreen';
 import MakeYourownScreen from '../screens/MakeYourownScreen';
 
 import { common } from '../utills/Utils';
-
-
-const Splash = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <FastImage source={require('../assets/images/splash.gif')} resizeMode='cover' style={{ width: '100%', height: '100%' }} />
-    </View>
-  );
-}
+import SplashScreen from '../screens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,7 +40,7 @@ function MainNavigator() {
           animation: 'fade',
           navigationBarHidden: true
         }}>
-          <Stack.Screen name='Home' component={isLoading ? Splash : HomeScreen} />
+          <Stack.Screen name='Home' component={ isLoading ? SplashScreen : HomeScreen } />
           <Stack.Screen name='HowToPlayScreen' component={HowToPlayScreen} />
           <Stack.Screen name='PlayScreen' component={PlayScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
@@ -75,8 +67,8 @@ const styles = StyleSheet.create({
   adContainer: {
     width: '100%',
     height: 80,
-    position: 'absolute',
-    bottom: 0,
+    // position: 'absolute',
+    // bottom: 0,
     borderTopWidth: 2,
     borderColor: common.color.primary
   },
