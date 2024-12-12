@@ -1,12 +1,20 @@
 import Zebra from '../assets/images/zebraY.png';
 
-const color= {
+const color = {
     primary: '#f18927',
     secondary: '#04acb8',
 }
 
-const font={
+const font = {
     primary: "Ribeye-Regular"
 }
 
-export const common= { color, Zebra, font };
+const style = {
+    border: {
+        borderColor: "#ffffffaf",
+        borderWidth: 4,
+        borderTopWidth: 1
+    }
+}
+
+export const common = { color, Zebra, font, style };

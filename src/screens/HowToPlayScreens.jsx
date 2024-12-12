@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
+import LottieView from 'lottie-react-native';
 
 function HowToPlayScreen({ navigation }) {
 
@@ -14,44 +15,36 @@ function HowToPlayScreen({ navigation }) {
                 {/* Header Section */}
                 <Header title="How to Play" navigation={navigation} />
 
-                {/* Center Content Section */}
-                <View style={styles.centerContent}>
-                    {/* Cloud-like Design */}
-                    <View style={styles.cloud}>
-                        <FastImage
-                            source={require('../assets/images/cloud1.png')} // Replace with your cloud image
-                            style={styles.cloudImage}
-                            resizeMode="contain"
-                        >
-                            <Text style={styles.cloudText}>Click on the game to learn how to play!</Text>
-                        </FastImage>
-                    </View>
-
-                    <View style={styles.contentWrapper}>
-                        {/* Buttons */}
-                        <View style={styles.buttonColumn}>
-                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LetsLearnScreen')}>
-                                <Text style={styles.buttonText}> Let's Learn </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('WackWordArtScreen')}>
-                                <Text style={styles.buttonText}> Wackey Word Wheel </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
-                                <Text style={styles.buttonText}> ― Fill in the blank </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
-                                <Text style={styles.buttonText}> ✍🏻 Make Your Own </Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        {/* Zebra Image */}
-                        <FastImage
-                            source={common.Zebra} // Replace with your zebra image
-                            style={styles.zebraImage}
-                            resizeMode="contain"
-                        />
-                    </View>
+                {/* Cloud-like Design */}
+                <View style={styles.cloud}>
+                    <FastImage source={require('../assets/images/cloud1.png')} style={styles.cloudImage} resizeMode="contain" >
+                        <Text style={styles.cloudText}>Click on the game to learn how to play!</Text>
+                    </FastImage>
                 </View>
+
+                {/* Center Content Section */}
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={[styles.button, { columnGap: 15,paddingLeft: 10,}]} onPress={() => navigation.navigate('LetsLearnScreen')}>
+                        <LottieView autoPlay loop={false} source={require('../assets/lottie/learn.json')} style={{ width: 50, height: 50 }} />
+                        <Text style={styles.buttonText}>Let's Learn </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, columnGap: 0, paddingLeft: 0, }]} onPress={() => navigation.navigate('WackWordArtScreen')}>
+                        <LottieView autoPlay loop={false} source={require('../assets/lottie/spin.json')} style={{ width: 50, height: 50 }} />
+                        <Text style={styles.buttonText}>Wackey Word Wheel </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
+                        <LottieView autoPlay loop={false} source={require('../assets/lottie/fillTheBlank.json')} style={{ width: 50, height: 50 }} />
+                        <Text style={styles.buttonText}>Fill in the blank </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary }]} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
+                        <LottieView autoPlay loop={false} source={require('../assets/lottie/makeOwn.json')} style={{ width: 60, height: 70 }} />
+                        <Text style={styles.buttonText}>Make Your Own </Text>
+                    </TouchableOpacity>
+                </View>
+                <FastImage source={require("../assets/images/zebra_left.png")} style={styles.zebraImage} />
             </Background>
         </View>
     );
@@ -63,85 +56,55 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    centerContent: {
-        flex:1, 
-        padding: 20
-    },
     cloud: {
-        padding: 20,
+        paddingVertical: 20,
         marginBottom: 10,
-    },
-    cloudContainer: {
-        alignItems: 'center',
-        marginBottom: 20,
     },
     cloudImage: {
         width: 320,
         height: 180,
         resizeMode: 'contain',
-        right: 10,
         zIndex: 1
     },
     cloudText: {
-        fontSize: 19,
+        fontSize: 17,
+        fontFamily: common.font.primary,
         width: '50%',
         textAlign: 'center',
         color: common.color.secondary,
-        fontWeight: 'bold',
         position: 'absolute',
         top: 50,
         left: 85
     },
-    contentWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    buttonColumn: {
+
+    buttonContainer: {
         flex: 1,
-        zIndex: 1
-    },
-    buttonGroup: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-evenly',
-        marginBottom: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+
     },
     button: {
         width: '65%',
         height: 50,
         backgroundColor: common.color.primary,
         borderRadius: 25,
-        justifyContent: 'center',
+        flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
-        alignSelf: 'flex-start',
-    },
-    button1: {
-        width: '65%',
-        height: 50,
-        backgroundColor: common.color.secondary,
-        borderRadius: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 10,
-        alignSelf: 'flex-start',
+        marginBottom: 15,
+        ...common.style.border
     },
     buttonText: {
         color: '#fff',
-        fontWeight: 'bold',
         fontSize: 18,
-        fontWeight: 'bold',
-        textShadowColor: 'rgba(0, 0, 0, 0.5)',
-        textShadowOffset: { width: 2, height: 2 },
-        textShadowRadius: 5,
+        fontFamily: common.font.primary,
     },
     zebraImage: {
-        width: 280,
-        height: 280,
         position: 'absolute',
-        right: -80,
-        bottom: 20,
+        right: -10,
+        bottom: "50%",
+        width: 150,
+        height: 200,
+        transform: [{ rotate: "-45deg" }],
     },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -34,7 +34,7 @@ function MainNavigator() {
 
   return (
     <View style={styles.container}>
-      <NavigationContainer>
+      <NavigationContainer theme={DarkTheme}>
         <Stack.Navigator initialRouteName='Home' screenOptions={{
           headerShown: false,
           animation: 'fade',
@@ -61,7 +61,7 @@ function MainNavigator() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffefdd',
+    backgroundColor: '#000000',
   },
   // Advertisement styles
   adContainer: {

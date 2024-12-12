@@ -15,6 +15,7 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
             navigation.goBack();
         }
     }
+    let secondIconStyle = (secondIcon || checkHome) ? {} : { backgroundColor: 'transparent', borderWidth: 0 }
     return (
         <View style={[styles.topBar, { paddingTop: insets.top }]}>
             <TouchableOpacity onPress={onChange} >
@@ -26,9 +27,9 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
             </TouchableOpacity>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={secondIconPress}>
-               {(secondIcon || checkHome) && <View style={[styles.circle, { borderRadius: checkHome ? 10 : 35, backgroundColor: common.color.secondary }]}>
+                <View style={[styles.circle, secondIconStyle, { borderRadius: checkHome ? 10 : 35 }]}>
                     <MatirialIcon name={secondIcon || 'settings'} style={[styles.menu, { opacity: secondIcon ? 1 : 0 }]} />
-                </View>}
+                </View>
             </TouchableOpacity>
         </View>
     )
@@ -58,8 +59,8 @@ const styles = StyleSheet.create({
         backgroundColor: common.color.primary,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth:2,
-        borderTopWidth:1,
+        borderWidth: 2,
+        borderTopWidth: 1,
         borderColor: '#ffffff83'
     },
 })

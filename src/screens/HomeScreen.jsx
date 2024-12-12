@@ -4,16 +4,15 @@ import { DrawerLayout } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlayIcon from 'react-native-vector-icons/AntDesign';
 import MenuIcon from 'react-native-vector-icons/Entypo';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import { common } from '../utills/Utils';
 import Background from '../components/Background';
 import { FadeAnime } from '../components/Animations';
 import FastImage from 'react-native-fast-image';
+import LottieView from 'lottie-react-native';
 
 function HomeScreen({ navigation }) {
   const drawerRef = useRef(null);
-  const insets = useSafeAreaInsets();
 
   // Drawer Content with Icons
   const renderDrawerContent = () => (
@@ -50,7 +49,7 @@ function HomeScreen({ navigation }) {
   return (
     <DrawerLayout ref={drawerRef} drawerWidth={250} drawerPosition="left" renderNavigationView={renderDrawerContent} drawerType="slide">
       <FadeAnime>
-        <View style={[styles.container, {}]}>
+        <View style={styles.container}>
           <Background homeSrc={require('../assets/images/homebg.jpeg')} >
 
             {/* Header */}
@@ -59,13 +58,15 @@ function HomeScreen({ navigation }) {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <View style={styles.button}>
                 <TouchableOpacity style={styles.combineButton} onPress={() => navigation.navigate('HowToPlayScreen')}>
-                  <PlayIcon name="questioncircle" size={30} color="white" />
+                  {/* <PlayIcon name="questioncircle" size={30} color="white" /> */}
+                  <LottieView autoPlay source={require('../assets/lottie/howToPlay.json')} style={{ width: 50, height: 50 }} />
                   <Text style={styles.buttonText}> How to Play </Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.button}>
-                <TouchableOpacity style={styles.combineButton1} onPress={() => navigation.navigate('PlayScreen')}>
-                  <PlayIcon name="play" size={30} color="white" />
+                <TouchableOpacity style={[styles.combineButton, { backgroundColor: common.color.primary }]} onPress={() => navigation.navigate('PlayScreen')}>
+                  {/* <PlayIcon name="play" size={30} color="white" /> */}
+                  <LottieView autoPlay source={require('../assets/lottie/play.json')} style={{ width: 50, height: 50 }} />
                   <Text style={styles.buttonText}> Play </Text>
                 </TouchableOpacity>
               </View>
@@ -90,28 +91,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: common.color.secondary,
-    borderRadius: 25,
-    padding: 7,
-    borderColor: "#ffffffaf",
-    borderWidth: 4,
-    borderTopWidth: 1
+    borderRadius: 35,
+    paddingHorizontal: 7,
+    ...common.style.border
   },
   buttonText: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: 20,
     fontFamily: common.font.primary,
   },
-  combineButton1: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: common.color.primary,
-    borderRadius: 25,
-    padding: 7,
-    borderColor: "#ffffffaf",
-    borderWidth: 4,
-    borderTopWidth: 1,
-  },
-
   // Drawer styles
   drawerContainer: {
     flex: 1,

@@ -8,11 +8,13 @@ const SplashScreen = () => {
 
     return (
         <ImageBackground source={require('../assets/images/splash.jpeg')} style={{ width: '100%', height: '100%', resizeMode: 'cover' }}>
-            <SlideAnime>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <FastImage source={require('../assets/images/logo.png')} resizeMode='contain' style={{ width: 300, height: 300 }} />
-                </View>
-            </SlideAnime>
+            <View style={{ flex: 1, backgroundColor: '#03040648' }}>
+                <SlideAnime>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <FastImage source={require('../assets/images/logo.png')} resizeMode='contain' style={{ width: 300, height: 300 }} />
+                    </View>
+                </SlideAnime>
+            </View>
         </ImageBackground>
     );
 };
