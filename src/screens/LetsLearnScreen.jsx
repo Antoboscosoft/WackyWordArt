@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
@@ -8,7 +7,6 @@ import { common } from '../utills/Utils';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 function LetsLearnScreen({ navigation }) {
-  const insets = useSafeAreaInsets();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState();
   const [items, setItems] = useState([
@@ -17,10 +15,10 @@ function LetsLearnScreen({ navigation }) {
     { label: 'Orange', value: 'orange' },
   ]);
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      {/* Header Section */}
-      <Header title="Let's Learn" navigation={navigation} />
+    <View style={styles.container}>
       <Background>
+        {/* Header Section */}
+      <Header title="Let's Learn" navigation={navigation} />
         {/* Center Content Section */}
         <View style={styles.content}>
           <View style={styles.sentenceRow}>
@@ -55,7 +53,6 @@ function LetsLearnScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
 
   // Content styles

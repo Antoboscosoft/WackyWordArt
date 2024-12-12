@@ -1,19 +1,16 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FastImage from 'react-native-fast-image';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
 
 function PlayScreen({ navigation }) {
-  const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      {/* Header Section */}
-      <Header title="Play" navigation={navigation} secondIcon="emoji-objects" secondIconPress={() => navigation.navigate('HowToPlayScreen')} />
-
+    <View style={styles.container}> 
       <Background>
+        {/* Header Section */}
+      <Header title="Play" navigation={navigation} secondIcon="emoji-objects" secondIconPress={() => navigation.navigate('HowToPlayScreen')} />
         <View style={styles.centerContent}>
           <View style={styles.cloud}>
             <FastImage
@@ -60,7 +57,6 @@ function PlayScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   // Center content styles
   centerContent: {

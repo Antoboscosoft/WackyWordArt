@@ -3,7 +3,6 @@ import { Text, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { TextInput } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
@@ -17,13 +16,11 @@ function FillInTheBlankScreen({ navigation }) {
   const [verb, setVerb] = useState('');
   const [thing, setThing] = useState('');
   const [weatherAdjective, setWeatherAdjective] = useState('');
-  const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      {/* Header Section */}
-      <Header title="Fill in the Blank" navigation={navigation} />
-
+    <View style={styles.container}>
       <Background>
+        {/* Header Section */}
+      <Header title="Fill in the Blank" navigation={navigation} />
         {/* Center Content Section */}
         <View style={styles.content}>
           <View style={styles.sentenceRow}>
@@ -93,7 +90,6 @@ export default FillInTheBlankScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   // Content styles
   content: {

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Header from '../components/Header';
 import Background from '../components/Background';
@@ -16,7 +15,6 @@ function WackyWordWheelScreen({ navigation }) {
   const [spinning, setSpinning] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
   const thornShake = useRef(new Animated.Value(0)).current;
-  const insets = useSafeAreaInsets();
 
   // const soundRef = useRef(
   //   new Sound('puzzle-game.mp3', Sound.MAIN_BUNDLE, (error) => {
@@ -171,10 +169,10 @@ function WackyWordWheelScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      {/* Header Section */}
-      <Header title="Wacky Word Wheel" navigation={navigation} />
+    <View style={styles.container}>
       <Background>
+        {/* Header Section */}
+      <Header title="Wacky Word Wheel" navigation={navigation} />
         {/* Center Content Section */}
         <View style={styles.content}>
           <View style={styles.sentenceContainer}>
@@ -232,7 +230,6 @@ function WackyWordWheelScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
   },
   // Content styles
   content: {
