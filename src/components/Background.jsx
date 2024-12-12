@@ -1,15 +1,26 @@
 import React from 'react'
-import { ImageBackground,View } from 'react-native'
+import { ImageBackground, StyleSheet, View } from 'react-native'
 
-function Background({ children, homeSrc }) {
+function Background({ children, style }) {
     return (
-        <View style={{ flex: 1, backgroundColor: '#a0ff92' }}>
-            <ImageBackground source={homeSrc || require('../assets/images/bg1.png')} style={{ width: '100%', height: '100%', resizeMode: 'cover' }}>
+        <ImageBackground source={require('../assets/images/splash.jpeg')} style={[styles.backgroundImage, { ...style }]}>
+            <View style={styles.container} >
                 {children}
-            </ImageBackground>
-        </View>
+            </View>
+        </ImageBackground>
     )
 }
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#0304065e',
+    },
+    backgroundImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+    }
+})
 
 export default Background

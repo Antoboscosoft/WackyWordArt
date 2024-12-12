@@ -1,12 +1,12 @@
-import { StyleSheet } from "react-native";
 import Zebra from '../assets/images/zebraY.png';
 
-const color= StyleSheet.create({
+const color= {
     primary: '#f18927',
     secondary: '#04acb8',
-})
-
-export const common= {
-    color,
-    Zebra,
 }
+
+const font={
+    primary: "Ribeye-Regular"
+}
+
+export const common= { color, Zebra, font };

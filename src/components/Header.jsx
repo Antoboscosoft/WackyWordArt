@@ -2,8 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MatirialIcon from 'react-native-vector-icons/MaterialIcons';
 import { common } from '../utills/Utils';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
+    const insets = useSafeAreaInsets();
+
     let checkHome = title === 'Home';
     const onChange = () => {
         if (checkHome) {
@@ -13,19 +16,19 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
         }
     }
     return (
-        <View style={[styles.topBar, { paddingTop: 0 }]}>
-            <TouchableOpacity onPress={onChange} style={{width: 35, height: 35}}>
-                {
-                    checkHome ?
-                    <MatirialIcon name="menu" style={styles.menu} /> :
-                    <View style={styles.circle}>
-                        <MatirialIcon name="arrow-back" style={[styles.menu, { color: '#fff'}]} />
-                    </View>
-                }
+        <View style={[styles.topBar, { paddingTop: insets.top }]}>
+            <TouchableOpacity onPress={onChange} >
+
+                <View style={[styles.circle, { borderRadius: checkHome ? 10 : 35 }]}>
+                    <MatirialIcon name={checkHome ? "menu" : "arrow-back"} style={styles.menu} />
+                </View>
+
             </TouchableOpacity>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={secondIconPress}>
-                <MatirialIcon name={secondIcon || 'settings'} style={[styles.menu, { opacity: secondIcon ? 1 : 0 }]} />
+               {(secondIcon || checkHome) && <View style={[styles.circle, { borderRadius: checkHome ? 10 : 35, backgroundColor: common.color.secondary }]}>
+                    <MatirialIcon name={secondIcon || 'settings'} style={[styles.menu, { opacity: secondIcon ? 1 : 0 }]} />
+                </View>}
             </TouchableOpacity>
         </View>
     )
@@ -36,31 +39,28 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        paddingTop: 10,
+        paddingHorizontal: 15,
         padding: 8,
-        backgroundColor: '#fff',
-        borderBottomColor: common.color.primary,
-        borderBottomWidth: 3,
     },
     menu: {
-        color: common.color.primary,
+        color: "#fff",
         fontSize: 30,
     },
     title: {
-        color: common.color.secondary,
-        fontWeight: 'bold',
-        fontSize: 25,
-        fontWeight: 'bold',
-        textShadowColor: '#d8d6d6',
-        textShadowOffset: { width: 2, height: 2 },
-        textShadowRadius: 1,
+        color: "#ffffff",
+        fontSize: 30,
+        fontFamily: common.font.primary,
     },
     circle: {
-        width: 35,
-        height: 35,
-        borderRadius: 20,
+        borderRadius: 10,
+        padding: 3,
         backgroundColor: common.color.primary,
         justifyContent: 'center',
         alignItems: 'center',
+        borderWidth:2,
+        borderTopWidth:1,
+        borderColor: '#ffffff83'
     },
 })
 

@@ -7,13 +7,13 @@ import Background from '../components/Background';
 import { common } from '../utills/Utils';
 
 function HowToPlayScreen({ navigation }) {
-    const insets = useSafeAreaInsets();
-    return (
-        <View style={[styles.container, { paddingTop: insets.top }]}>
-            {/* Header Section */}
-            <Header title="How to Play" navigation={navigation} />
 
+    return (
+        <View style={styles.container}>
             <Background>
+                {/* Header Section */}
+                <Header title="How to Play" navigation={navigation} />
+
                 {/* Center Content Section */}
                 <View style={styles.centerContent}>
                     {/* Cloud-like Design */}
@@ -60,14 +60,12 @@ function HowToPlayScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-    },
-    // Center content styles
-    centerContent: {
-        flex: 1,
+        alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
+    },
+    centerContent: {
+        flex:1, 
+        padding: 20
     },
     cloud: {
         padding: 20,

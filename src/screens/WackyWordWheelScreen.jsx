@@ -5,7 +5,7 @@ import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
-import Sound from 'react-native-sound';
+// import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
 
 function WackyWordWheelScreen({ navigation }) {
@@ -18,22 +18,22 @@ function WackyWordWheelScreen({ navigation }) {
   const thornShake = useRef(new Animated.Value(0)).current;
   const insets = useSafeAreaInsets();
 
-  const soundRef = useRef(
-    new Sound('puzzle-game.mp3', Sound.MAIN_BUNDLE, (error) => {
-      if (error) {
-        console.log('failed to load the sound', error);
-      } else {
-        console.log('sound loaded successfully');
-      }
-    })
-  ).current;
+  // const soundRef = useRef(
+  //   new Sound('puzzle-game.mp3', Sound.MAIN_BUNDLE, (error) => {
+  //     if (error) {
+  //       console.log('failed to load the sound', error);
+  //     } else {
+  //       console.log('sound loaded successfully');
+  //     }
+  //   })
+  // ).current;
 
-  useEffect(() => {
-    return () => {
-      soundRef.release();
-    };
-  }, []);
-  console.log('soundRef', soundRef, "Spinning : ----", spinning);
+  // useEffect(() => {
+  //   return () => {
+  //     soundRef.release();
+  //   };
+  // }, []);
+  // console.log('soundRef', soundRef, "Spinning : ----", spinning);
   
 // when entering ino the page it will play the sound:
   // useEffect(() => {
