@@ -7,13 +7,11 @@ import useMusicPlayer, { common } from '../utills/Utils';
 import LottieView from 'lottie-react-native';
 import { FadeAnime } from '../components/Animations';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import SoundPlayer from 'react-native-sound-player';
 
 function PlayScreen({ navigation }) {
   const isFocused = useIsFocused();
 
   const usePlayMusic = useMusicPlayer();
-  console.log("usePlayMusic", usePlayMusic);
   const { playMusic, stopMusic } = usePlayMusic;
 
 
@@ -39,21 +37,16 @@ function PlayScreen({ navigation }) {
         {/* Header Section */}
         <Header title="Play" navigation={navigation} secondIcon="emoji-objects" secondIconPress={() => navigation.navigate('HowToPlayScreen')} />
         <FadeAnime>
+        <FastImage source={require("../assets/images/play.png")} style={styles.cloudImage} resizeMode='contain' />
 
-          {/* Cloud-like Design */}
-          <View style={styles.cloud}>
-            <FastImage source={require('../assets/images/cloud2.png')} style={styles.cloudImage} resizeMode="contain" >
-              <Text style={styles.cloudText}>Let's Play!</Text>
-            </FastImage>
-          </View>
           {/* Center Content Section */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.button, { columnGap: 15, paddingLeft: 10, }]} onPress={() => {navigation.navigate('LetsLearnScreen'); stopMusic()}}>
+            <TouchableOpacity style={[styles.button, { columnGap: 15 }]} onPress={() => {navigation.navigate('LetsLearnScreen'); stopMusic()}}>
               <LottieView autoPlay loop={false} source={require('../assets/lottie/learn.json')} style={{ width: 50, height: 50 }} />
               <Text style={styles.buttonText}>Let's Learn </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, columnGap: 0, paddingLeft: 0, }]} onPress={() => {navigation.navigate('WackWordArtScreen'); stopMusic()}}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary,paddingLeft: 0 }]} onPress={() => {navigation.navigate('WackWordArtScreen'); stopMusic()}}>
               <LottieView autoPlay loop={false} source={require('../assets/lottie/spin.json')} style={{ width: 50, height: 50 }} />
               <Text style={styles.buttonText}>Wackey Word Wheel </Text>
             </TouchableOpacity>
@@ -63,7 +56,7 @@ function PlayScreen({ navigation }) {
               <Text style={styles.buttonText}>Fill in the blank </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary }]} onPress={() => {navigation.navigate('MakeYourOwnScreen'); stopMusic()}}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, paddingLeft: 0 }]} onPress={() => {navigation.navigate('MakeYourOwnScreen'); stopMusic()}}>
               <LottieView autoPlay loop={false} source={require('../assets/lottie/makeOwn.json')} style={{ width: 60, height: 70 }} />
               <Text style={styles.buttonText}>Make Your Own </Text>
             </TouchableOpacity>
@@ -79,34 +72,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  cloud: {
-    paddingVertical: 20,
-    marginBottom: 10,
-  },
   cloudImage: {
-    width: 320,
-    height: 180,
-    resizeMode: 'contain',
+    width: 400,
+    height: 300,
     zIndex: 1,
-    alignSelf: 'flex-end'
-
   },
-  cloudText: {
-    fontSize: 17,
-    fontFamily: common.font.primary,
-    width: '50%',
-    textAlign: 'center',
-    color: common.color.secondary,
-    position: 'absolute',
-    top: 50,
-    left: 85,
-  },
-
   buttonContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-
   },
   button: {
     width: '65%',
@@ -116,21 +89,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
+    paddingLeft: 5,
     ...common.style.border
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
     fontFamily: common.font.primary,
-  },
-  zebraImage: {
-    position: 'absolute',
-    left: -20,
-    bottom: "55%",
-    width: 150,
-    height: 180,
-    transform: [{ rotate: "40deg" }, { scaleX: -1 }],
-  },
+  }
 });
 
 export default PlayScreen;

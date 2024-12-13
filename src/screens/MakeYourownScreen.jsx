@@ -1,5 +1,5 @@
 import React from 'react'
-import {View } from 'react-native'
+import { View } from 'react-native'
 import FastImage from 'react-native-fast-image';
 import { StyleSheet } from 'react-native';
 import { useState } from 'react';
@@ -15,8 +15,8 @@ function MakeYourownScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Background>
-{/* Header Section */}
-<Header title="Make Your Own" navigation={navigation} />
+        {/* Header Section */}
+        <Header title="Make Your Own" navigation={navigation} />
         {/* Center Content Section */}
         <View style={styles.content}>
           <TextInput
@@ -30,7 +30,6 @@ function MakeYourownScreen({ navigation }) {
             placeholderTextColor={common.color.secondary}
           />
         </View>
-        <FastImage source={common.Zebra} style={{ position: 'absolute', left: 100, bottom: 200, width: 300, height: 300 }} />
       </Background>
     </View>
   )

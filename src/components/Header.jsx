@@ -1,15 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MatirialIcon from 'react-native-vector-icons/MaterialIcons';
-import useMusicPlayer, { common } from '../utills/Utils';
+import { common } from '../utills/Utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
     const insets = useSafeAreaInsets();
-
-    const usePlayMusic = useMusicPlayer();
-    console.log("usePlayMusic", usePlayMusic);
-    const { playMusic, stopMusic } = usePlayMusic;
 
     let checkHome = title === 'Home';
     const onChange = () => {
@@ -26,7 +22,7 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
             <TouchableOpacity onPress={onChange} >
 
                 <View style={[styles.circle, { borderRadius: checkHome ? 10 : 35 }]}>
-                    <MatirialIcon name={checkHome ? "menu" : "arrow-back"} style={styles.menu} />
+                    <MatirialIcon name={checkHome ? "notes" : "arrow-back"} style={styles.menu} />
                 </View>
 
             </TouchableOpacity>
@@ -57,6 +53,9 @@ const styles = StyleSheet.create({
         color: "#ffffff",
         fontSize: 26,
         fontFamily: common.font.primary,
+        backgroundColor: "#0000004d",
+        paddingHorizontal: 10,
+        borderRadius: 10
     },
     circle: {
         borderRadius: 10,

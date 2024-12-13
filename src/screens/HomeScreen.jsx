@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DrawerLayout } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import PlayIcon from 'react-native-vector-icons/AntDesign';
-import MenuIcon from 'react-native-vector-icons/Entypo';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import useMusicPlayer, { common } from '../utills/Utils';
 import Background from '../components/Background';
@@ -12,12 +11,14 @@ import FastImage from 'react-native-fast-image';
 import LottieView from 'lottie-react-native';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import SoundPlayer from 'react-native-sound-player';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 function HomeScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const drawerRef = useRef(null);
   const isFocused = useIsFocused();
   const usePlayMusic = useMusicPlayer();
-  console.log("usePlayMusic", usePlayMusic);
   const { playMusic, stopMusic } = usePlayMusic;
   // Use `useFocusEffect` to handle screen focus and blur events
   useFocusEffect(
@@ -29,49 +30,40 @@ function HomeScreen({ navigation }) {
     }, [isFocused])
   );
 
-  // useEffect(() => {
-  //   // Handle menu music playback and ensure home music resumes
-  //   // handleMusicCompletion(() => {
-  //   //   if(drawerRef.current){
-  //   //     playMusic("sakura_girl");
-  //   //   }
-  //   // });
-
-  //   return () => {
-  //     SoundPlayer?.removeEventListener('FinishedPlaying'); 
-  //   };
-  // }, []);
+  const menuClick = (navName) => {
+    drawerRef.current.closeDrawer();
+    navigation.navigate(navName);
+  };
 
   // Drawer Content with Icons
   const renderDrawerContent = () => (
     // return (
-    <View style={styles.drawerContainer}>
-      <Pressable style={styles.drawerHeader} hitslop={20} onPress={() => {drawerRef.current.closeDrawer(); playMusic("menu", false)}}>
-        <MenuIcon name="menu" style={{ color: common.color.primary, fontSize: 24 }} />
-        <Text style={styles.drawerTitle}>Menu</Text>
-      </Pressable>
-      <TouchableOpacity style={styles.drawerItem} onPress={() => {
-        drawerRef.current.closeDrawer();
-      }}>
-        <Icon name="account" size={24} style={styles.drawerItemIcon} />
-        <Text style={styles.drawerItemText}>Profile</Text>
-      </TouchableOpacity>
+    <Background>
+      <View style={[styles.drawerContainer, { paddingTop: insets.top }]}>
+        <Pressable style={styles.drawerHeader} hitslop={20} onPress={() => { drawerRef.current.closeDrawer(); playMusic("menu", false) }}>
+          <MaterialIcon name="notes" style={{ color: common.color.primary, fontSize: 30 }} />
+          <Text style={styles.drawerTitle}>Menu</Text>
+        </Pressable>
 
-      <TouchableOpacity style={styles.drawerItem} onPress={() => drawerRef.current.closeDrawer()}>
-        <Icon name="chart-bar" size={24} style={styles.drawerItemIcon} />
-        <Text style={styles.drawerItemText}>Progress</Text>
-      </TouchableOpacity>
+        <View style={{ padding: 20, rowGap: 20 }}>
 
-      <TouchableOpacity style={styles.drawerItem} onPress={() => {
-        drawerRef.current.closeDrawer();
-        navigation.navigate('Home');
-      }}>
-        <Icon name="logout" size={24} style={styles.drawerItemIcon}
-        />
-        <Text style={styles.drawerItemText}>Logout</Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => menuClick('ProfileScreen')}>
+            <Icon name="account" size={25} style={styles.drawerItemIcon} />
+            <Text style={styles.drawerItemText}>Profile</Text>
+          </TouchableOpacity>
 
-    </View>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => menuClick('ProgressScreen')}>
+            <Icon name="chart-bar" size={25} style={styles.drawerItemIcon} />
+            <Text style={styles.drawerItemText}>Progress</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerItem} onPress={() => { menuClick('Home') }}>
+            <Icon name="logout" size={25} style={styles.drawerItemIcon} />
+            <Text style={styles.drawerItemText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Background>
   );
 
   return (
@@ -79,8 +71,7 @@ function HomeScreen({ navigation }) {
       {isFocused &&
         <FadeAnime>
           <View style={styles.container}>
-            <Background homeSrc={require('../assets/images/homebg.jpeg')} >
-
+            <Background>
               {/* Header */}
               <Header drawerRef={drawerRef} title={'Home'} navigation={navigation} secondIcon={'settings'} secondIconPress={() => navigation.navigate('Settings')} />
               {/* Main section */}
@@ -133,36 +124,37 @@ const styles = StyleSheet.create({
   // Drawer styles
   drawerContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: 20,
   },
   drawerHeader: {
     backgroundColor: '#ffeedd',
-    marginBottom: 20,
-    padding: 10,
-    borderRadius: 10,
+    padding: 8,
+    paddingHorizontal: 30,
     flexDirection: 'row',
     alignItems: 'center',
-    columnGap: 10,
+    columnGap: 15,
   },
   drawerTitle: {
+    fontFamily: common.font.primary,
     color: common.color.secondary,
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 25,
   },
   drawerItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15,
-    marginLeft: 10,
+    backgroundColor: '#f1f1f1ca',
+    padding: 10,
+    borderRadius: 10,
+    ...common.style.border,
+    borderColor: common.color.secondary
   },
   drawerItemIcon: {
     marginRight: 10,
     color: common.color.secondary
   },
   drawerItemText: {
-    fontSize: 18,
+    fontSize: 19,
     color: common.color.primary,
+    fontFamily: common.font.primary
   },
   musicToggleContainer: {
     marginTop: 20,

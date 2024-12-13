@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   sentenceText: {
-    fontSize: 30,
+    fontSize: common.style.phraseSize,
     color: common.color.secondary,
     fontFamily: common.font.primary,
     marginHorizontal: 20,
@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     // maxWidth: 1000,
     textAlign: 'center',
     paddingHorizontal: 20,
+    paddingVertical: -20
   }
 });
 

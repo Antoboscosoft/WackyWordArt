@@ -127,9 +127,7 @@ const styles = StyleSheet.create({
     padding: 50,
   },
   sentenceText: {
-    fontSize: 30,
-    // fontWeight: 'bold',
-    // color: '#333',
+    fontSize: common.style.phraseSize,
     fontFamily: common.font.primary,
     color: common.color.secondary,
     textAlign: 'center'
@@ -144,7 +142,7 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   listLabel:{
-    fontSize: 30,
+    fontSize: common.style.phraseSize,
     color:"white",
     fontFamily: common.font.primary,
     backgroundColor: common.color.secondary,
@@ -156,7 +154,7 @@ const styles = StyleSheet.create({
   },
   answer:{
     color:"white",
-    fontSize: 30,
+    fontSize: common.style.phraseSize,
     fontFamily: common.font.primary,
     backgroundColor: common.color.primary,
     borderRadius: 5,
@@ -165,8 +163,8 @@ const styles = StyleSheet.create({
     marginTop:15
   },
   ansImg: {
-    width: 300,
-    height: 300,
+    width: "60%",
+    height: "40%",
     marginTop: 50,
     borderRadius: 15,
     borderColor:"white",

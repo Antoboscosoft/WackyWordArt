@@ -1,5 +1,4 @@
 import SoundPlayer from 'react-native-sound-player';
-import Zebra from '../assets/images/zebraY.png';
 import { useEffect } from 'react';
 
 const color = {
@@ -16,10 +15,11 @@ const style = {
         borderColor: "#ffffffaf",
         borderWidth: 4,
         borderTopWidth: 1
-    }
+    },
+    phraseSize: 23
 }
 
-export const common = { color, Zebra, font, style };
+export const common = { color, font, style };
 
 const useMusicPlayer = (onComplete) => {
 

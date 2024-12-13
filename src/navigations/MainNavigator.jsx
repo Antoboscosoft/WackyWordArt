@@ -15,6 +15,8 @@ import MakeYourownScreen from '../screens/MakeYourownScreen';
 
 import { common } from '../utills/Utils';
 import SplashScreen from '../screens/SplashScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import ProgressScreen from '../screens/ProgressScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,10 +51,13 @@ function MainNavigator() {
           <Stack.Screen name='WackWordArtScreen' component={WackyWordWheelScreen} />
           <Stack.Screen name='FillInTheBlankScreen' component={FillInTheBlankScreen} />
           <Stack.Screen name='MakeYourOwnScreen' component={MakeYourownScreen} />
+
+          <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
+          <Stack.Screen name='ProgressScreen' component={ProgressScreen} />
         </Stack.Navigator>
       </NavigationContainer>
       {isLoading === false && <View style={styles.adContainer}>
-        <FastImage style={styles.adImage} resizeMode="stretch" source={require('../assets/images/ads.jpeg')} />
+        <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} />
       </View>}
     </View>
   )
@@ -66,10 +71,8 @@ const styles = StyleSheet.create({
   // Advertisement styles
   adContainer: {
     width: '100%',
-    height: 80,
-    // position: 'absolute',
-    // bottom: 0,
-    borderTopWidth: 2,
+    height: 90,
+    borderTopWidth: 3,
     borderColor: common.color.primary
   },
   adImage: {

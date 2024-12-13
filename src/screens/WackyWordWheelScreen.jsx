@@ -18,7 +18,6 @@ function WackyWordWheelScreen({ navigation }) {
   const thornShake = useRef(new Animated.Value(0)).current;
 
   const usePlayMusic = useMusicPlayer();
-  console.log("usePlayMusic", usePlayMusic);
   const { playMusic, stopMusic } = usePlayMusic;
 
   // const soundRef = useRef(
@@ -59,7 +58,7 @@ function WackyWordWheelScreen({ navigation }) {
 
   const startSpin = () => {
     if (spinning) return;
-    console.log('Attempting to play sound...');
+    // console.log('Attempting to play sound...');
 
     // soundRef.setCurrentTime(0);
 
@@ -128,6 +127,7 @@ function WackyWordWheelScreen({ navigation }) {
                   y={radius + radius * 0.6 * Math.sin((Math.PI * (startAngle + angle / 2)) / 180)}
                   fill="#fff"
                   fontSize={16}
+                  fontFamily={common.font.primary}
                   fontWeight="bold"
                   textAnchor="middle"
                   alignmentBaseline="middle"
@@ -223,7 +223,7 @@ function WackyWordWheelScreen({ navigation }) {
             </Animated.View>
             {/* Spin Button at the center */}
             <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
-              <Text style={styles.spinButtonText}> {spinning ? 'Spin...' : 'Spin'} </Text>
+              <Text style={styles.spinButtonText}> {'Spin'} </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -231,8 +231,6 @@ function WackyWordWheelScreen({ navigation }) {
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -270,7 +268,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   sentenceText: {
-    fontSize: 30,
+    fontSize: common.style.phraseSize,
     textAlign: 'center',
     fontFamily: common.font.primary,
     color: common.color.secondary,
@@ -310,7 +308,7 @@ const styles = StyleSheet.create({
   spinButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: common.font.primary,
   },
   // Wheel Modal Overlay
   wheelOverlay: {
