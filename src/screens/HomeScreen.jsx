@@ -1,26 +1,36 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DrawerLayout } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlayIcon from 'react-native-vector-icons/AntDesign';
 import MenuIcon from 'react-native-vector-icons/Entypo';
 import Header from '../components/Header';
-import { common } from '../utills/Utils';
+import { common, playMusic, stopMusic } from '../utills/Utils';
 import Background from '../components/Background';
 import { FadeAnime } from '../components/Animations';
 import FastImage from 'react-native-fast-image';
 import LottieView from 'lottie-react-native';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 function HomeScreen({ navigation }) {
   const drawerRef = useRef(null);
   const isFocused = useIsFocused();
 
+  // Use `useFocusEffect` to handle screen focus and blur events
+  useFocusEffect(
+    useCallback(() => {
+      playMusic("sakura_girl");
+      return () => {
+        stopMusic();
+      };
+    })
+  );
+
   // Drawer Content with Icons
   const renderDrawerContent = () => (
     // return (
     <View style={styles.drawerContainer}>
-      <Pressable style={styles.drawerHeader} hitslop={20} onPress={() => drawerRef.current.closeDrawer()}>
+      <Pressable style={styles.drawerHeader} hitslop={20} onPress={() => {drawerRef.current.closeDrawer(); playMusic("menu")}}>
         <MenuIcon name="menu" style={{ color: common.color.primary, fontSize: 24 }} />
         <Text style={styles.drawerTitle}>Menu</Text>
       </Pressable>

@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
-import { common } from '../utills/Utils';
+import { common, playMusic, stopMusic } from '../utills/Utils';
 import LottieView from 'lottie-react-native';
 import { FadeAnime } from '../components/Animations';
+import { useFocusEffect } from '@react-navigation/native';
 
 function HowToPlayScreen({ navigation }) {
+
+    // Use `useFocusEffect` to handle screen focus and blur events
+  useFocusEffect(
+    useCallback(() => {
+      playMusic("sakura_girl");
+      return () => {
+        stopMusic();
+      };
+    })
+  )
 
     return (
         <View style={styles.container}>

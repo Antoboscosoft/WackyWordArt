@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MatirialIcon from 'react-native-vector-icons/MaterialIcons';
-import { common } from '../utills/Utils';
+import { common, playMusic } from '../utills/Utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
@@ -9,6 +9,7 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
 
     let checkHome = title === 'Home';
     const onChange = () => {
+        playMusic("menu");
         if (checkHome) {
             drawerRef.current.openDrawer()
         } else {

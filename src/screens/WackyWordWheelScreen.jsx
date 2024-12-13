@@ -3,7 +3,8 @@ import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing } from 'reac
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Header from '../components/Header';
 import Background from '../components/Background';
-import { common } from '../utills/Utils';
+import { common, playMusic, stopMusic } from '../utills/Utils';
+import SoundPlayer from 'react-native-sound-player';
 // import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
 
@@ -56,18 +57,19 @@ function WackyWordWheelScreen({ navigation }) {
     if (spinning) return;
     console.log('Attempting to play sound...');
 
-    soundRef.setCurrentTime(0);
+    // soundRef.setCurrentTime(0);
 
-    soundRef.play((succuss) => {
-      if(!succuss){
-        console.log("Playback failed due to audio decoding errors");
-      } else {
-        console.log('Playback successful');
-      }
-    });
-
+    // soundRef.play((succuss) => {
+    //   if(!succuss){
+    //     console.log("Playback failed due to audio decoding errors");
+    //   } else {
+    //     console.log('Playback successful');
+    //   }
+    // });
+    playMusic("puzzle_game");
     setSpinning(true);
     startThornShake();
+
     const randomDegree = Math.floor(3600 + Math.random() * 360);
     const selectedIndex = Math.floor((360 - (randomDegree % 360)) / (360 / verbs.length)) % verbs.length;
 
@@ -81,7 +83,8 @@ function WackyWordWheelScreen({ navigation }) {
       setDisplayedSentence(selectedVerb);
       setSpinning(false);
       stopThornShake();
-      soundRef.pause();
+      stopMusic();
+      // soundRef.pause();
       rotation.setValue(randomDegree % 360);
     })
   };
