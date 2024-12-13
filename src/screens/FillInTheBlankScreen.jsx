@@ -25,7 +25,7 @@ function FillInTheBlankScreen({ navigation }) {
         <View style={styles.content}>
           <View style={styles.sentenceRow}>
             {/* Buttons */}
-            <Text style={styles.sentenceText}>On a sunny afternoon, I walked to the</Text>
+            <Text style={styles.sentenceText}>On a sunny afternoon, I walked to the
             <TextInput
               style={styles.input}
               placeholder="place"
@@ -33,7 +33,7 @@ function FillInTheBlankScreen({ navigation }) {
               value={place}
               onChangeText={setPlace}
             />
-            <Text style={styles.sentenceText}> with my </Text>
+            with my 
             <TextInput
               style={styles.input}
               placeholder="adjective"
@@ -41,10 +41,9 @@ function FillInTheBlankScreen({ navigation }) {
               value={adjective}
               onChangeText={setAdjective}
             />
-            <Text style={styles.sentenceText}> </Text>
             <TextInput style={styles.input} placeholder="friend or pet" placeholderTextColor={'#fdd0a7'} value={friendOrPet} onChangeText={setFriendOrPet}
             />
-            <Text style={styles.sentenceText}> , carrying a </Text>
+             , carrying a 
             <TextInput
               style={styles.input}
               placeholder="noun"
@@ -52,7 +51,7 @@ function FillInTheBlankScreen({ navigation }) {
               value={noun}
               onChangeText={setNoun}
             />
-            <Text style={styles.sentenceText}> , and we decided to </Text>
+             , and we decided to 
             <TextInput
               style={styles.input}
               placeholder="verb"
@@ -60,7 +59,7 @@ function FillInTheBlankScreen({ navigation }) {
               value={verb}
               onChangeText={setVerb}
             />
-            <Text style={styles.sentenceText}> near the </Text>
+             near the 
             <TextInput
               style={styles.input}
               placeholder="thing"
@@ -68,7 +67,7 @@ function FillInTheBlankScreen({ navigation }) {
               value={thing}
               onChangeText={setThing}
             />
-            <Text style={styles.sentenceText}> , enjoying the </Text>
+             , enjoying the 
             <TextInput
               style={styles.input}
               placeholder="adjective"
@@ -76,7 +75,7 @@ function FillInTheBlankScreen({ navigation }) {
               value={weatherAdjective}
               onChangeText={setWeatherAdjective}
             />
-            <Text style={styles.sentenceText}> weather. </Text>
+             weather. </Text>
           </View>
         </View>
       </Background>
@@ -100,30 +99,31 @@ const styles = StyleSheet.create({
   },
   sentenceRow: {
     flexWrap: 'wrap',
+    columnGap: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     width: '100%',
     backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 15,
+    padding: 10,
   },
   sentenceText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 30,
     color: common.color.secondary,
-    marginRight: 5,
+    fontFamily: common.font.primary,
+    marginHorizontal: 20,
   },
   input: {
     borderBottomWidth: 1,
     borderColor: common.color.primary,
-    marginHorizontal: 5,
-    paddingHorizontal: 5,
-    fontSize: 16,
+    fontSize: 20,
+    fontFamily: common.font.primary,
     color: common.color.primary,
-    minWidth: 10,
-    maxWidth: 120,
-    textAlign: 'left',
+    // minWidth: 50,
+    // maxWidth: 1000,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   }
 });
 

@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState,useRef, useEffect } from 'react'
+import { StyleSheet, Text, View,  Animated} from 'react-native'
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
 import DropDownPicker from 'react-native-dropdown-picker';
+// import axios from 'axios';
 
 function LetsLearnScreen({ navigation }) {
   const [open, setOpen] = useState(false);
@@ -14,6 +15,40 @@ function LetsLearnScreen({ navigation }) {
     { label: 'Banana', value: 'banana' },
     { label: 'Orange', value: 'orange' },
   ]);
+  const animationValue = useRef(new Animated.Value(0)).current;
+  const positionValue = useRef(new Animated.Value(50)).current;
+
+  const handlePress = () => {
+    animationValue.setValue(0);
+    positionValue.setValue(50);
+    Animated.parallel([
+      Animated.timing(animationValue, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(positionValue, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  // const getText = () => {
+  //   console.log('get text');
+  //   axios({
+  //     method: 'GET',
+  //     url: 'http://192.168.1.148:8000/ai/generatetext'
+  //   }).then((response) => {
+  //     console.log(response);
+  //   }).catch((error) => {
+  //     console.log(error);
+  //   })
+  // }
+  // useEffect(() => {
+  //   getText()
+  // },[])
   return (
     <View style={styles.container}>
       <Background>
@@ -24,7 +59,11 @@ function LetsLearnScreen({ navigation }) {
           <View style={styles.sentenceRow}>
             {/* Buttons */}
             <Text style={styles.sentenceText}>I would like to eat a </Text>
-            <DropDownPicker
+            {
+              value ? value.label.split('').map((char, index) => <Animated.Text key={index} style={[styles.answer,{opacity: animationValue,transform: [{ translateX: positionValue }]}]}>{char}</Animated.Text>) : 
+              <View style={{ width: 150,height: 50,borderBottomWidth: 1,borderColor: common.color.secondary }}></View>
+            }
+            {/* <DropDownPicker
               open={open}
               value={value}
               items={items}
@@ -40,9 +79,24 @@ function LetsLearnScreen({ navigation }) {
               labelStyle={{ color: common.color.primary }}
               placeholder="Select a fruit"
               placeholderStyle={{ fontSize: 16 }}
-            />
+            /> */}
           </View>
-          <FastImage source={common.Zebra} style={{ width: 300, height: 300, marginTop: 50 }} />
+          <View style={styles.listContainer}>
+         {
+          items.map((item, index) => (
+            <Text key={index} style={styles.listLabel} onPress={() => {handlePress();setValue(item)}}>{item.label}</Text>
+          ))
+         }
+          </View>
+          {
+            value && (value.label==="Apple" ?
+            <Animated.Image source={require('../assets/images/apple.jpeg')} style={[styles.ansImg,{opacity: animationValue,transform: [{ translateY: positionValue }]}]} /> :
+            value && value.label==="Banana" ?
+            <Animated.Image source={require('../assets/images/banana.jpeg')} style={[styles.ansImg,{opacity: animationValue,transform: [{ translateY: positionValue }]}]}  /> :
+            value && value.label==="Orange" ?
+            <Animated.Image source={require('../assets/images/orange.jpeg')} style={[styles.ansImg,{opacity: animationValue,transform: [{ translateY: positionValue }]}]}  /> :"")
+          }
+          {/* <FastImage source={common.Zebra} style={{ width: 300, height: 300, marginTop: 50 }} /> */}
         </View>
       </Background>
     </View>
@@ -59,7 +113,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 200,
+    marginTop: 50,
   },
   sentenceRow: {
     flexWrap: 'wrap',
@@ -70,26 +124,67 @@ const styles = StyleSheet.create({
     width: '90%',
     backgroundColor: '#ffffffdb',
     borderRadius: 8,
-    padding: 15,
+    padding: 50,
   },
   sentenceText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: 30,
+    // fontWeight: 'bold',
+    // color: '#333',
+    fontFamily: common.font.primary,
+    color: common.color.secondary,
+    textAlign: 'center'
   },
-  dropdown: {
-    borderWidth:0,
-    backgroundColor:"transparent",
-    borderBottomWidth: 1,
-    borderColor: common.color.primary,
+  listContainer:{
+    flexDirection: 'row',
+    columnGap: 20,
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+    marginLeft: 5
   },
-  dropdownContainer: {
-    borderColor: common.color.primary,
-  },
-  containerStyle:{
+  listLabel:{
+    fontSize: 30,
+    color:"white",
+    fontFamily: common.font.primary,
+    backgroundColor: common.color.secondary,
+    textAlign: 'center',
+    padding: 10,
+    marginTop: 20,
     borderRadius: 8,
-    width: 200
+    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
+  },
+  answer:{
+    color:"white",
+    fontSize: 30,
+    fontFamily: common.font.primary,
+    backgroundColor: common.color.primary,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginLeft: 5,
+    marginTop:15
+  },
+  ansImg: {
+    width: 300,
+    height: 300,
+    marginTop: 50,
+    borderRadius: 15,
+    borderColor:"white",
+    borderWidth: 10,
   }
+  // dropdown: {
+  //   borderWidth:0,
+  //   backgroundColor:"transparent",
+  //   borderBottomWidth: 1,
+  //   borderColor: common.color.primary,
+  // },
+  // dropdownContainer: {
+  //   borderColor: common.color.primary,
+  // },
+  // containerStyle:{
+  //   borderRadius: 8,
+  //   width: 200
+  // }
 });
 
 

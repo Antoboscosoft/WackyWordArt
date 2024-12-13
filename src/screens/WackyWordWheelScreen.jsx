@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   sentenceText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: '#333',
     marginRight: 5,
     marginBottom: 10,
@@ -266,12 +266,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: 'center',
     backgroundColor: '#ffffffe8',
-    borderRadius: 8,
+    borderRadius: 10,
     padding: 15,
   },
   sentenceText: {
-    fontSize: 18,
+    fontSize: 30,
     textAlign: 'center',
+    fontFamily: common.font.primary,
+    color: common.color.secondary,
   },
   underline: {
     borderBottomWidth: 2,
@@ -282,8 +284,9 @@ const styles = StyleSheet.create({
   highlight: {
     backgroundColor: common.color.primary,
     paddingHorizontal: 5,
-    fontWeight: 'bold',
     borderRadius: 5,
+    color: '#fff',
+    fontFamily: common.font.primary,
   },
 
   wheelContainer: {

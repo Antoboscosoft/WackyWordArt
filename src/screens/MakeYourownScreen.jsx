@@ -21,11 +21,13 @@ function MakeYourownScreen({ navigation }) {
         <View style={styles.content}>
           <TextInput
             style={styles.input}
-            placeholder="Begin to create your own senetence here "
+            placeholder="Begin to create your own senetence here... "
             value={text}
             onChangeText={setText}
             multiline
+            numberOfLines={10}
             textAlignVertical="top"
+            placeholderTextColor={common.color.secondary}
           />
         </View>
         <FastImage source={common.Zebra} style={{ position: 'absolute', left: 100, bottom: 200, width: 300, height: 300 }} />
@@ -52,16 +54,18 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    minHeight: 70,
-    maxHeight: 300,
+    minHeight: 150,
+    maxHeight: 500,
     // borderWidth: 1,
-    borderColor: '#ccc',
+    // borderColor: '#ccc',
     borderRadius: 8,
     padding: 10,
-    fontSize: 16,
-    color: '#333',
+    fontSize: 20,
+    fontFamily: common.font.primary,
+    color: "#333",
     backgroundColor: '#ffffffe6',
-    marginTop: 50
+    marginTop: 50,
+    zIndex: 1
   },
 });
 
