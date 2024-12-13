@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing } from 'reac
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Header from '../components/Header';
 import Background from '../components/Background';
-import { common, playMusic, stopMusic } from '../utills/Utils';
+import useMusicPlayer, { common } from '../utills/Utils';
 import SoundPlayer from 'react-native-sound-player';
 // import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
@@ -16,6 +16,10 @@ function WackyWordWheelScreen({ navigation }) {
   const [spinning, setSpinning] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
   const thornShake = useRef(new Animated.Value(0)).current;
+
+  const usePlayMusic = useMusicPlayer();
+  console.log("usePlayMusic", usePlayMusic);
+  const { playMusic, stopMusic } = usePlayMusic;
 
   // const soundRef = useRef(
   //   new Sound('puzzle-game.mp3', Sound.MAIN_BUNDLE, (error) => {

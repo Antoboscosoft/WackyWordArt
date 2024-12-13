@@ -3,23 +3,30 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
-import { common, playMusic, stopMusic } from '../utills/Utils';
+import useMusicPlayer, { common } from '../utills/Utils';
 import LottieView from 'lottie-react-native';
 import { FadeAnime } from '../components/Animations';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import SoundPlayer from 'react-native-sound-player';
 
-function HowToPlayScreen({ navigation }) {
+function PlayScreen({ navigation }) {
   const isFocused = useIsFocused();
+
+  const usePlayMusic = useMusicPlayer();
+  console.log("usePlayMusic", usePlayMusic);
+  const { playMusic, stopMusic } = usePlayMusic;
+
 
   // Use `useFocusEffect` to handle screen focus and blur events
   useFocusEffect(
     useCallback(() => {
+      // Start music when the screen is focused
       playMusic("sakura_girl");
-      return () => {
-        stopMusic();
-      };
-    }, [])
+      // Stop music when the screen is unfocused
+      // return () => {
+      //   stopMusic();
+      // };
+    }, [isFocused])  // Dependencies are left empty to ensure the effect is not re-triggered unnecessarily
   );
 
   useEffect(() => {
@@ -41,22 +48,22 @@ function HowToPlayScreen({ navigation }) {
           </View>
           {/* Center Content Section */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.button, { columnGap: 15, paddingLeft: 10, }]} onPress={() => navigation.navigate('LetsLearnScreen')}>
+            <TouchableOpacity style={[styles.button, { columnGap: 15, paddingLeft: 10, }]} onPress={() => {navigation.navigate('LetsLearnScreen'); stopMusic()}}>
               <LottieView autoPlay loop={false} source={require('../assets/lottie/learn.json')} style={{ width: 50, height: 50 }} />
               <Text style={styles.buttonText}>Let's Learn </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, columnGap: 0, paddingLeft: 0, }]} onPress={() => navigation.navigate('WackWordArtScreen')}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, columnGap: 0, paddingLeft: 0, }]} onPress={() => {navigation.navigate('WackWordArtScreen'); stopMusic()}}>
               <LottieView autoPlay loop={false} source={require('../assets/lottie/spin.json')} style={{ width: 50, height: 50 }} />
               <Text style={styles.buttonText}>Wackey Word Wheel </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
+            <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate('FillInTheBlankScreen'); stopMusic()}}>
               <LottieView autoPlay loop={false} source={require('../assets/lottie/fillTheBlank.json')} style={{ width: 50, height: 50 }} />
               <Text style={styles.buttonText}>Fill in the blank </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary }]} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary }]} onPress={() => {navigation.navigate('MakeYourOwnScreen'); stopMusic()}}>
               <LottieView autoPlay loop={false} source={require('../assets/lottie/makeOwn.json')} style={{ width: 60, height: 70 }} />
               <Text style={styles.buttonText}>Make Your Own </Text>
             </TouchableOpacity>
@@ -126,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HowToPlayScreen;
+export default PlayScreen;

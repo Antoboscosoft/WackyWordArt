@@ -1,15 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MatirialIcon from 'react-native-vector-icons/MaterialIcons';
-import { common, playMusic } from '../utills/Utils';
+import useMusicPlayer, { common } from '../utills/Utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
     const insets = useSafeAreaInsets();
 
+    const usePlayMusic = useMusicPlayer();
+    console.log("usePlayMusic", usePlayMusic);
+    const { playMusic, stopMusic } = usePlayMusic;
+
     let checkHome = title === 'Home';
     const onChange = () => {
-        playMusic("menu");
+        // playMusic("menu");
         if (checkHome) {
             drawerRef.current.openDrawer()
         } else {
