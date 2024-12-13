@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
 import LottieView from 'lottie-react-native';
+import { FadeAnime } from '../components/Animations';
 
 function HowToPlayScreen({ navigation }) {
 
@@ -14,37 +14,38 @@ function HowToPlayScreen({ navigation }) {
             <Background>
                 {/* Header Section */}
                 <Header title="How to Play" navigation={navigation} />
+                <FadeAnime>
+                    {/* Cloud-like Design */}
+                    <View style={styles.cloud}>
+                        <FastImage source={require('../assets/images/cloud1.png')} style={styles.cloudImage} resizeMode="contain" >
+                            <Text style={styles.cloudText}>Click on the game to learn how to play!</Text>
+                        </FastImage>
+                    </View>
 
-                {/* Cloud-like Design */}
-                <View style={styles.cloud}>
-                    <FastImage source={require('../assets/images/cloud1.png')} style={styles.cloudImage} resizeMode="contain" >
-                        <Text style={styles.cloudText}>Click on the game to learn how to play!</Text>
-                    </FastImage>
-                </View>
+                    {/* Center Content Section */}
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={[styles.button, { columnGap: 15, paddingLeft: 10, }]} onPress={() => navigation.navigate('LetsLearnScreen')}>
+                            <LottieView autoPlay loop={false} source={require('../assets/lottie/learn.json')} style={{ width: 50, height: 50 }} />
+                            <Text style={styles.buttonText}>Let's Learn </Text>
+                        </TouchableOpacity>
 
-                {/* Center Content Section */}
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={[styles.button, { columnGap: 15,paddingLeft: 10,}]} onPress={() => navigation.navigate('LetsLearnScreen')}>
-                        <LottieView autoPlay loop={false} source={require('../assets/lottie/learn.json')} style={{ width: 50, height: 50 }} />
-                        <Text style={styles.buttonText}>Let's Learn </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, columnGap: 0, paddingLeft: 0, }]} onPress={() => navigation.navigate('WackWordArtScreen')}>
+                            <LottieView autoPlay loop={false} source={require('../assets/lottie/spin.json')} style={{ width: 50, height: 50 }} />
+                            <Text style={styles.buttonText}>Wackey Word Wheel </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, columnGap: 0, paddingLeft: 0, }]} onPress={() => navigation.navigate('WackWordArtScreen')}>
-                        <LottieView autoPlay loop={false} source={require('../assets/lottie/spin.json')} style={{ width: 50, height: 50 }} />
-                        <Text style={styles.buttonText}>Wackey Word Wheel </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
+                            <LottieView autoPlay loop={false} source={require('../assets/lottie/fillTheBlank.json')} style={{ width: 50, height: 50 }} />
+                            <Text style={styles.buttonText}>Fill in the blank </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FillInTheBlankScreen')}>
-                        <LottieView autoPlay loop={false} source={require('../assets/lottie/fillTheBlank.json')} style={{ width: 50, height: 50 }} />
-                        <Text style={styles.buttonText}>Fill in the blank </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary }]} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
-                        <LottieView autoPlay loop={false} source={require('../assets/lottie/makeOwn.json')} style={{ width: 60, height: 70 }} />
-                        <Text style={styles.buttonText}>Make Your Own </Text>
-                    </TouchableOpacity>
-                </View>
-                <FastImage source={require("../assets/images/zebra_left.png")} style={styles.zebraImage} />
+                        <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary }]} onPress={() => navigation.navigate('MakeYourOwnScreen')}>
+                            <LottieView autoPlay loop={false} source={require('../assets/lottie/makeOwn.json')} style={{ width: 60, height: 70 }} />
+                            <Text style={styles.buttonText}>Make Your Own </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <FastImage source={require("../assets/images/zebra_left.png")} style={styles.zebraImage} />
+                </FadeAnime>
             </Background>
         </View>
     );
@@ -101,10 +102,10 @@ const styles = StyleSheet.create({
     zebraImage: {
         position: 'absolute',
         right: -10,
-        bottom: "50%",
+        bottom: "55%",
         width: 150,
-        height: 200,
-        transform: [{ rotate: "-45deg" }],
+        height: 180,
+        transform: [{ rotate: "-50deg" }],
     },
 });
 

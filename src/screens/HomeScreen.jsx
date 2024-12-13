@@ -10,9 +10,11 @@ import Background from '../components/Background';
 import { FadeAnime } from '../components/Animations';
 import FastImage from 'react-native-fast-image';
 import LottieView from 'lottie-react-native';
+import { useIsFocused } from '@react-navigation/native';
 
 function HomeScreen({ navigation }) {
   const drawerRef = useRef(null);
+  const isFocused = useIsFocused();
 
   // Drawer Content with Icons
   const renderDrawerContent = () => (
@@ -48,33 +50,35 @@ function HomeScreen({ navigation }) {
 
   return (
     <DrawerLayout ref={drawerRef} drawerWidth={250} drawerPosition="left" renderNavigationView={renderDrawerContent} drawerType="slide">
-      <FadeAnime>
-        <View style={styles.container}>
-          <Background homeSrc={require('../assets/images/homebg.jpeg')} >
+      {isFocused &&
+        <FadeAnime>
+          <View style={styles.container}>
+            <Background homeSrc={require('../assets/images/homebg.jpeg')} >
 
-            {/* Header */}
-            <Header drawerRef={drawerRef} title={'Home'} navigation={navigation} secondIcon={'settings'} secondIconPress={() => navigation.navigate('Settings')} />
-            {/* Main section */}
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <View style={styles.button}>
-                <TouchableOpacity style={styles.combineButton} onPress={() => navigation.navigate('HowToPlayScreen')}>
-                  {/* <PlayIcon name="questioncircle" size={30} color="white" /> */}
-                  <LottieView autoPlay source={require('../assets/lottie/howToPlay.json')} style={{ width: 50, height: 50 }} />
-                  <Text style={styles.buttonText}> How to Play </Text>
-                </TouchableOpacity>
+              {/* Header */}
+              <Header drawerRef={drawerRef} title={'Home'} navigation={navigation} secondIcon={'settings'} secondIconPress={() => navigation.navigate('Settings')} />
+              {/* Main section */}
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <View style={styles.button}>
+                  <TouchableOpacity style={styles.combineButton} onPress={() => navigation.navigate('HowToPlayScreen')}>
+                    {/* <PlayIcon name="questioncircle" size={30} color="white" /> */}
+                    <LottieView autoPlay loop={false} source={require('../assets/lottie/howToPlay.json')} style={{ width: 50, height: 50 }} />
+                    <Text style={styles.buttonText}> How to Play </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.button}>
+                  <TouchableOpacity style={[styles.combineButton, { backgroundColor: common.color.primary }]} onPress={() => navigation.navigate('PlayScreen')}>
+                    {/* <PlayIcon name="play" size={30} color="white" /> */}
+                    <LottieView autoPlay source={require('../assets/lottie/play.json')} style={{ width: 50, height: 50 }} />
+                    <Text style={styles.buttonText}> Play </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={styles.button}>
-                <TouchableOpacity style={[styles.combineButton, { backgroundColor: common.color.primary }]} onPress={() => navigation.navigate('PlayScreen')}>
-                  {/* <PlayIcon name="play" size={30} color="white" /> */}
-                  <LottieView autoPlay source={require('../assets/lottie/play.json')} style={{ width: 50, height: 50 }} />
-                  <Text style={styles.buttonText}> Play </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <FastImage source={require('../assets/images/zebra_hand_raise.png')} style={{ position: 'absolute', right: 0, bottom: -10, width: 250, height: 300 }} />
-          </Background>
-        </View>
-      </FadeAnime>
+              <FastImage source={require('../assets/images/zebra_hand_raise.png')} style={{ position: 'absolute', right: 0, bottom: -10, width: 250, height: 300 }} />
+            </Background>
+          </View>
+        </FadeAnime>
+      }
     </DrawerLayout>
   );
 }

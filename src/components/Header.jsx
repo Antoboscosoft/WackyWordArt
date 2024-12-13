@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: "#ffffff",
-        fontSize: 30,
+        fontSize: 26,
         fontFamily: common.font.primary,
     },
     circle: {

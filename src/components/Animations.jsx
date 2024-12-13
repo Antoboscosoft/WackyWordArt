@@ -8,7 +8,7 @@ export const FadeAnime = ({ children }) => {
         // Start the animation
         Animated.timing(fadeAnim, {
             toValue: 1, // Final opacity
-            duration: 300, // Duration in ms
+            duration: 500, // Duration in ms
             useNativeDriver: true, // Optimize performance by using native driver
         }).start();
     }, [fadeAnim]);
