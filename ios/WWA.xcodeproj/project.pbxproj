@@ -16,6 +16,8 @@
 		7699B88040F8A987B510C191 /* libPods-WWA-WWATests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-WWA-WWATests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		BF96E500C97557530CA2E7E3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		D4F104182D0FEA3200D40A17 /* sakura_girl.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D4F104172D0FEA3200D40A17 /* sakura_girl.mp3 */; };
+		D4F1041A2D10052B00D40A17 /* puzzle_game.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D4F104192D10052B00D40A17 /* puzzle_game.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,12 +43,14 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = WWA/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-WWA-WWATests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WWA-WWATests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-WWA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWA.debug.xcconfig"; path = "Target Support Files/Pods-WWA/Pods-WWA.debug.xcconfig"; sourceTree = "<group>"; };
-		4F496694EA4E4025B6A5B174 /* Ribeye-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Ribeye-Regular.ttf"; path = "../src/assets/fonts/Ribeye-Regular.ttf"; sourceTree = "<group>"; };
+		4F496694EA4E4025B6A5B174 /* Ribeye-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Ribeye-Regular.ttf"; path = "../src/assets/fonts/Ribeye-Regular.ttf"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-WWA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWA.release.xcconfig"; path = "Target Support Files/Pods-WWA/Pods-WWA.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-WWA-WWATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWA-WWATests.debug.xcconfig"; path = "Target Support Files/Pods-WWA-WWATests/Pods-WWA-WWATests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-WWA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WWA.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = WWA/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-WWA-WWATests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWA-WWATests.release.xcconfig"; path = "Target Support Files/Pods-WWA-WWATests/Pods-WWA-WWATests.release.xcconfig"; sourceTree = "<group>"; };
+		D4F104172D0FEA3200D40A17 /* sakura_girl.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sakura_girl.mp3; sourceTree = "<group>"; };
+		D4F104192D10052B00D40A17 /* puzzle_game.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = puzzle_game.mp3; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -121,6 +125,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D4F104192D10052B00D40A17 /* puzzle_game.mp3 */,
+				D4F104172D0FEA3200D40A17 /* sakura_girl.mp3 */,
 				13B07FAE1A68108700A75B9A /* WWA */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* WWATests */,
@@ -160,7 +166,6 @@
 				4F496694EA4E4025B6A5B174 /* Ribeye-Regular.ttf */,
 			);
 			name = Resources;
-			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,6 +262,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				D4F104182D0FEA3200D40A17 /* sakura_girl.mp3 in Resources */,
+				D4F1041A2D10052B00D40A17 /* puzzle_game.mp3 in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5217E2831273443697D187AC /* Ribeye-Regular.ttf in Resources */,
 				BF96E500C97557530CA2E7E3 /* PrivacyInfo.xcprivacy in Resources */,
@@ -599,10 +606,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -671,10 +675,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
