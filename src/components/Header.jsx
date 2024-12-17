@@ -4,7 +4,7 @@ import MatirialIcon from 'react-native-vector-icons/MaterialIcons';
 import { common } from '../utills/Utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
+function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, secondIconColor = "#fff" }) {
     const insets = useSafeAreaInsets();
 
     let checkHome = title === 'Home';
@@ -29,7 +29,7 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress }) {
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={secondIconPress}>
                 <View style={[styles.circle, secondIconStyle, { borderRadius: checkHome ? 10 : 35 }]}>
-                    <MatirialIcon name={secondIcon || 'settings'} style={[styles.menu, { opacity: secondIcon ? 1 : 0 }]} />
+                    <MatirialIcon name={secondIcon || 'settings'} style={[styles.menu, { opacity: secondIcon ? 1 : 0, color: secondIconColor }]} />
                 </View>
             </TouchableOpacity>
         </View>
@@ -44,19 +44,24 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingHorizontal: 15,
         padding: 8,
-        zIndex: 1
+        zIndex: 1,
+        marginTop: 5
     },
     menu: {
         color: "#fff",
         fontSize: 30,
     },
     title: {
-        color: "#ffffff",
+        color: "#00ff1a",
         fontSize: 23,
         fontFamily: common.font.primary,
         backgroundColor: "#0000004d",
         paddingHorizontal: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        textDecorationLine: 'underline',
+        textShadowColor: "#d70297be",
+        textShadowRadius: 2,
+        textShadowOffset: { width: 2, height: 1 },
     },
     circle: {
         borderRadius: 10,
