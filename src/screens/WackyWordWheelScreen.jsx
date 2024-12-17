@@ -15,10 +15,13 @@ function WackyWordWheelScreen({ navigation }) {
   const [displayedSentence, setDisplayedSentence] = useState('');
   const [spinning, setSpinning] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
-  const thornShake = useRef(new Animated.Value(0)).current;
+  const [countdown, setCountdown] = useState(14); // Timer starts at 15 seconds
+  const thornShake = useRef(new Animated.Value(80)).current;
 
   const usePlayMusic = useMusicPlayer();
   const { playMusic, stopMusic } = usePlayMusic;
+
+  const timerRef = useRef(null); // Ref to manage the timer
 
   // const soundRef = useRef(
   //   new Sound('puzzle-game.mp3', Sound.MAIN_BUNDLE, (error) => {
@@ -71,11 +74,17 @@ function WackyWordWheelScreen({ navigation }) {
     // });
     playMusic("puzzle_game");
     setSpinning(true);
-    startThornShake();
+    setCountdown(14);
+    // startCountdown();
+    // startThornShake();
 
     const randomDegree = Math.floor(3600 + Math.random() * 360);
     const selectedIndex = Math.floor((360 - (randomDegree % 360)) / (360 / verbs.length)) % verbs.length;
 
+    // Start the countdown timer
+    startCountdown();
+
+    // Animate the wheel for 15 seconds
     Animated.timing(rotation, {
       toValue: randomDegree,
       duration: 15000,
@@ -84,14 +93,46 @@ function WackyWordWheelScreen({ navigation }) {
     }).start(() => {
       const selectedVerb = verbs[selectedIndex];
       setDisplayedSentence(selectedVerb);
+      startCountdown();
       setSpinning(false);
-      stopThornShake();
+      // stopThornShake();
       stopMusic();
       // soundRef.pause();
       rotation.setValue(randomDegree % 360);
     })
   };
 
+  const startCountdown = () => {
+    if(timerRef.current) clearInterval(timerRef.current);
+
+    timerRef.current = setInterval(() => {
+      // setCountdown((prevCountdown) => prevCountdown - 1);
+      setCountdown((prevCountdown) => 
+        {
+          if(prevCountdown <= 1){
+            clearInterval(timerRef.current);
+            return 0;
+          }
+          return prevCountdown - 1;
+        });
+    }, 1000);
+  };
+
+  // Stop the countdown timer
+  const stopCountdown = () => {
+    if(timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    // startCountdown();
+    return () => {
+      stopCountdown();
+    };
+  }, []);
+  
   const renderWheel = () => {
     const segments = verbs.length;
     const angle = 360 / segments;
@@ -118,20 +159,21 @@ function WackyWordWheelScreen({ navigation }) {
               <G key={index}>
                 <Path
                   d={`M${radius},${radius} L${x1},${y1} A${radius},${radius} 0 0,1 ${x2},${y2} z`}
-                  fill={index % 2 === 0 ? '#bdaf5e' : '#00ff59'}
+                  // fill={index % 2 === 0 ? '#91d159' : '#1d6e74'}
+                  fill={index % 2 === 0 ? '#d67221' : '#16c2cf'}
                   stroke="#fff"
                   strokeWidth={2}
                 />
                 <SvgText
                   x={radius + radius * 0.6 * Math.cos((Math.PI * (startAngle + angle / 2)) / 180)}
                   y={radius + radius * 0.6 * Math.sin((Math.PI * (startAngle + angle / 2)) / 180)}
-                  fill="#fff"
+                  fill="#ffffff"
                   fontSize={16}
                   fontFamily={common.font.primary}
                   fontWeight="bold"
                   textAnchor="middle"
                   alignmentBaseline="middle"
-                  rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
+                  // rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
                 >
                   {verb}
                 </SvgText>
@@ -144,36 +186,36 @@ function WackyWordWheelScreen({ navigation }) {
   };
 
   // Start the thorn shaking animation
-  const startThornShake = () => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(thornShake, {
-          toValue: 10, // Move right
-          duration: 200,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-        Animated.timing(thornShake, {
-          toValue: -10, // Move left
-          duration: 200,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-        Animated.timing(thornShake, {
-          toValue: 0, // Back to center
-          duration: 200,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
-  };
+  // const startThornShake = () => {
+  //   Animated.loop(
+  //     Animated.sequence([
+  //       Animated.timing(thornShake, {
+  //         toValue: 10, // Move right
+  //         duration: 200,
+  //         easing: Easing.linear,
+  //         useNativeDriver: true,
+  //       }),
+  //       Animated.timing(thornShake, {
+  //         toValue: -10, // Move left
+  //         duration: 200,
+  //         easing: Easing.linear,
+  //         useNativeDriver: true,
+  //       }),
+  //       Animated.timing(thornShake, {
+  //         toValue: 0, // Back to center
+  //         duration: 200,
+  //         easing: Easing.linear,
+  //         useNativeDriver: true,
+  //       }),
+  //     ])
+  //   ).start();
+  // };
 
 
   // Stop the thorn shake after spinning ends
-  const stopThornShake = () => {
-    thornShake.stopAnimation();
-  };
+  // const stopThornShake = () => {
+  //   thornShake.stopAnimation();
+  // };
 
   return (
     <View style={styles.container}>
@@ -192,19 +234,26 @@ function WackyWordWheelScreen({ navigation }) {
             </Text>
           </View>
 
+          {/* countdown timer display */}
+          {/* {spinning && (
+            <View style={styles.timerContainer}>
+              <Text style={styles.timerText}>Time Remaining: {countdown} s</Text>
+            </View>
+          )} */}
+
           {/* Spinning Wheel */}
           <View style={styles.wheelContainer}>
             {/* Thorn positioned statically */}
             <Animated.View
               style={[
                 styles.thorn,
-                {
-                  transform: [
-                    {
-                      translateX: thornShake
-                    },
-                  ],
-                },
+                // {
+                //   transform: [
+                //     {
+                //       translateY: thornShake
+                //     },
+                //   ],
+                // },
               ]}
             />
             <Animated.View
@@ -223,7 +272,11 @@ function WackyWordWheelScreen({ navigation }) {
             </Animated.View>
             {/* Spin Button at the center */}
             <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
+            {!spinning ? (
               <Text style={styles.spinButtonText}> {'Spin'} </Text>
+            ) : (
+              <Text style={styles.timerText}>{countdown} s</Text>
+            )}
             </TouchableOpacity>
           </View>
         </View>
@@ -273,6 +326,15 @@ const styles = StyleSheet.create({
     fontFamily: common.font.primary,
     color: common.color.secondary,
   },
+  timerContainer: {
+    marginVertical: 30,
+    alignItems: 'center',
+  },
+  timerText: {
+    fontSize: 20,
+    color: '#d67221',
+    fontWeight: 'bold',
+  },
   underline: {
     borderBottomWidth: 2,
     borderBottomColor: common.color.primary,
@@ -297,11 +359,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 80,
     height: 80,
-    backgroundColor: common.color.secondary,
+    // backgroundColor: common.color.secondary,
+    backgroundColor: '#5e0190',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 40,
     zIndex: 1,
+    borderColor: '#fff',
+    borderWidth: 2,
     // paddingVertical: 15,
     paddingHorizontal: 10,
   },
@@ -319,7 +384,7 @@ const styles = StyleSheet.create({
   },
   thorn: {
     position: 'absolute',
-    top: -15,
+    top: 93,
     left: '50%',
     transform: [{ translateX: -10 }],
     width: 20,
@@ -330,7 +395,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 15,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: '#ff0000',
+    borderBottomColor: '#faf606',
     zIndex: 1,
   },
 });
