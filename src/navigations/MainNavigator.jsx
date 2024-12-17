@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import HomeScreen from '../screens/HomeScreen';
@@ -26,7 +26,7 @@ function MainNavigator() {
 
   useEffect(() => {
     StatusBar.setHidden(true);
-    StatusBar.setTranslucent(true);
+    Platform.OS === 'android' && StatusBar.setTranslucent(true);
 
 
     setTimeout(() => {
@@ -71,13 +71,13 @@ const styles = StyleSheet.create({
   // Advertisement styles
   adContainer: {
     width: '100%',
-    height: 90,
+    height: 80,
     borderTopWidth: 3,
     borderColor: common.color.primary
   },
   adImage: {
     width: '100%',
-    height: 100,
+    height: '100%',
   },
 })
 

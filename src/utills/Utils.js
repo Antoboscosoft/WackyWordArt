@@ -16,7 +16,7 @@ const style = {
         borderWidth: 4,
         borderTopWidth: 1
     },
-    phraseSize: 23
+    phraseSize: 20
 }
 
 export const common = { color, font, style };

@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingHorizontal: 15,
         padding: 8,
+        zIndex: 1
     },
     menu: {
         color: "#fff",
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: "#ffffff",
-        fontSize: 26,
+        fontSize: 23,
         fontFamily: common.font.primary,
         backgroundColor: "#0000004d",
         paddingHorizontal: 10,
