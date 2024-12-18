@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
@@ -7,6 +7,7 @@ import useMusicPlayer, { common } from '../utills/Utils';
 import LottieView from 'lottie-react-native';
 import { FadeAnime } from '../components/Animations';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { ContextProvider } from '../navigations/MainNavigator';
 
 function PlayScreen({ navigation }) {
   const isFocused = useIsFocused();
@@ -14,22 +15,26 @@ function PlayScreen({ navigation }) {
   const usePlayMusic = useMusicPlayer();
   const { playMusic, stopMusic } = usePlayMusic;
 
+  const { musicController, setMusicControler } = useContext(ContextProvider);
+
+  console.log("musicController", musicController, setMusicControler);
+  
 
   // Use `useFocusEffect` to handle screen focus and blur events
   useFocusEffect(
     useCallback(() => {
       // Start music when the screen is focused
+      musicController == true  &&
       playMusic("sakura_girl");
       // Stop music when the screen is unfocused
       // return () => {
       //   stopMusic();
       // };
-    }, [isFocused])  // Dependencies are left empty to ensure the effect is not re-triggered unnecessarily
+    }, [musicController, isFocused])  // Dependencies are left empty to ensure the effect is not re-triggered unnecessarily
   );
 
-  useEffect(() => {
-    
-  }, [isFocused])
+
+
   return (
     isFocused &&
     <View style={styles.container}>

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
@@ -7,6 +7,7 @@ import useMusicPlayer, { common } from '../utills/Utils';
 import LottieView from 'lottie-react-native';
 import { FadeAnime } from '../components/Animations';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { ContextProvider } from '../navigations/MainNavigator';
 
 function HowToPlayScreen({ navigation }) {
     const isFocused = useIsFocused();
@@ -14,15 +15,20 @@ function HowToPlayScreen({ navigation }) {
     const usePlayMusic = useMusicPlayer();
     const { playMusic, stopMusic } = usePlayMusic;
 
+  const { musicController, setMusicControler } = useContext(ContextProvider);
+
+  console.log("musicController", musicController, setMusicControler);
+
 
     // Use `useFocusEffect` to handle screen focus and blur events
     useFocusEffect(
         useCallback(() => {
+            musicController == false  &&
             playMusic("sakura_girl");
             //   return () => {
             //     stopMusic();
             //   };
-        }, [isFocused])
+        }, [musicController])
     );
 
     return (

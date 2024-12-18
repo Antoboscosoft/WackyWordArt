@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import useMusicPlayer, { common } from '../utills/Utils';
 import SoundPlayer from 'react-native-sound-player';
+import { ContextProvider } from '../navigations/MainNavigator';
 // import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
 
@@ -20,6 +21,11 @@ function WackyWordWheelScreen({ navigation }) {
 
   const usePlayMusic = useMusicPlayer();
   const { playMusic, stopMusic } = usePlayMusic;
+
+
+  const { musicController, setMusicControler } = useContext(ContextProvider);
+
+  console.log("musicController", musicController, setMusicControler);
 
   const timerRef = useRef(null); // Ref to manage the timer
 
@@ -72,7 +78,7 @@ function WackyWordWheelScreen({ navigation }) {
     //     console.log('Playback successful');
     //   }
     // });
-    playMusic("puzzle_game");
+    musicController == true && playMusic("puzzle_game");
     setSpinning(true);
     setCountdown(14);
     // startCountdown();

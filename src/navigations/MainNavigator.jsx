@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
@@ -18,12 +18,17 @@ import SplashScreen from '../screens/SplashScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ProgressScreen from '../screens/ProgressScreen';
 
+export const ContextProvider = createContext(null);
+
 const Stack = createNativeStackNavigator();
 
 function MainNavigator() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [ musicController, setMusicControler ] = useState(null);
+
+  
   useEffect(() => {
     StatusBar.setHidden(true);
     Platform.OS === 'android' && StatusBar.setTranslucent(true);
@@ -37,6 +42,7 @@ function MainNavigator() {
   return (
     <View style={styles.container}>
       <NavigationContainer theme={DarkTheme}>
+        <ContextProvider.Provider value={{musicController, setMusicControler}}>
         <Stack.Navigator initialRouteName='Home' screenOptions={{
           headerShown: false,
           animation: 'fade',
@@ -55,6 +61,7 @@ function MainNavigator() {
           <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
           <Stack.Screen name='ProgressScreen' component={ProgressScreen} />
         </Stack.Navigator>
+        </ContextProvider.Provider>
       </NavigationContainer>
       {isLoading === false && <View style={styles.adContainer}>
         <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} />
