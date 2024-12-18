@@ -3,18 +3,18 @@ import { ImageBackground, StyleSheet, View } from 'react-native'
 
 function Background({ children, style }) {
     return (
-        <ImageBackground source={require('../assets/images/splash.jpeg')} style={[styles.backgroundImage, { ...style }]}>
+        // <ImageBackground source={require('../assets/images/splash.jpeg')} style={[styles.backgroundImage, { ...style }]}>
             <View style={styles.container} >
                 {children}
             </View>
-        </ImageBackground>
+        // </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0605035e',
+        backgroundColor: '#7105a3e9',
     },
     backgroundImage: {
         width: '100%',

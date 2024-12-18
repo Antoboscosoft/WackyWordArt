@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
@@ -15,16 +15,16 @@ function HowToPlayScreen({ navigation }) {
     const usePlayMusic = useMusicPlayer();
     const { playMusic, stopMusic } = usePlayMusic;
 
-  const { musicController, setMusicControler } = useContext(ContextProvider);
+    const { musicController, setMusicControler } = useContext(ContextProvider);
 
-  console.log("musicController", musicController, setMusicControler);
+    console.log("musicController", musicController, setMusicControler);
 
 
     // Use `useFocusEffect` to handle screen focus and blur events
     useFocusEffect(
         useCallback(() => {
-            musicController == false  &&
-            playMusic("sakura_girl");
+            musicController == false &&
+                playMusic("sakura_girl");
             //   return () => {
             //     stopMusic();
             //   };
@@ -34,32 +34,34 @@ function HowToPlayScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <Background>
-                {/* Header Section */}
-                <Header title="How to Play" navigation={navigation} />
                 <FadeAnime>
-                    <FastImage source={require("../assets/images/howToPlay.png")} style={styles.cloudImage} resizeMode='contain' />
-                    {/* Center Content Section */}
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={[styles.button, { columnGap: 15}]} onPress={() => { navigation.navigate('LetsLearnScreen'); stopMusic() }}>
-                            <LottieView autoPlay loop={false} source={require('../assets/lottie/learn.json')} style={{ width: 50, height: 50 }} />
-                            <Text style={styles.buttonText}>Let's Learn </Text>
-                        </TouchableOpacity>
+                    {/* Header Section */}
+                    <Header title="How to Play" navigation={navigation} />
+                    <ScrollView>
+                        <FastImage source={require("../assets/images/howToPlay.png")} style={styles.cloudImage} resizeMode='contain' />
+                        {/* Center Content Section */}
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity style={[styles.button, { columnGap: 15 }]} onPress={() => { navigation.navigate('LetsLearnScreen'); stopMusic() }}>
+                                <LottieView autoPlay loop={false} source={require('../assets/lottie/learn.json')} style={{ width: 50, height: 50 }} />
+                                <Text style={[styles.buttonText, { textShadowColor: common.color.secondary }]}>Let's Learn </Text>
+                            </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, columnGap: 0, paddingLeft: 0, }]} onPress={() => { navigation.navigate('WackWordArtScreen'); stopMusic() }}>
-                            <LottieView autoPlay loop={false} source={require('../assets/lottie/spin.json')} style={{ width: 50, height: 50 }} />
-                            <Text style={styles.buttonText}>Wackey Word Wheel </Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, columnGap: 0, paddingLeft: 0, }]} onPress={() => { navigation.navigate('WackWordArtScreen'); stopMusic() }}>
+                                <LottieView autoPlay loop={false} source={require('../assets/lottie/spin.json')} style={{ width: 50, height: 50 }} />
+                                <Text style={styles.buttonText}>Wackey Word Wheel </Text>
+                            </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('FillInTheBlankScreen'); stopMusic() }}>
-                            <LottieView autoPlay loop={false} source={require('../assets/lottie/fillTheBlank.json')} style={{ width: 50, height: 50 }} />
-                            <Text style={styles.buttonText}>Fill in the blank </Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('FillInTheBlankScreen'); stopMusic() }}>
+                                <LottieView autoPlay loop={false} source={require('../assets/lottie/fillTheBlank.json')} style={{ width: 50, height: 50 }} />
+                                <Text style={[styles.buttonText, { textShadowColor: common.color.secondary }]}>Fill in the Blank </Text>
+                            </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, paddingLeft: 0 }]} onPress={() => { navigation.navigate('MakeYourOwnScreen'); stopMusic() }}>
-                            <LottieView autoPlay loop={false} source={require('../assets/lottie/makeOwn.json')} style={{ width: 60, height: 70 }} />
-                            <Text style={styles.buttonText}>Make Your Own </Text>
-                        </TouchableOpacity>
-                    </View>
+                            <TouchableOpacity style={[styles.button, { backgroundColor: common.color.secondary, paddingLeft: 0 }]} onPress={() => { navigation.navigate('MakeYourOwnScreen'); stopMusic() }}>
+                                <LottieView autoPlay loop={false} source={require('../assets/lottie/makeOwn.json')} style={{ width: 60, height: 70 }} />
+                                <Text style={styles.buttonText}>Make Your Own </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
                 </FadeAnime>
             </Background>
         </View>
@@ -69,13 +71,12 @@ function HowToPlayScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     cloudImage: {
         width: 400,
         height: 300,
         zIndex: 1,
+        alignSelf: 'flex-end'
     },
     buttonContainer: {
         flex: 1,
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 15,
+        marginBottom: 20,
         paddingLeft: 5,
         ...common.style.border
     },
@@ -96,7 +97,10 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         fontFamily: common.font.primary,
-    }
+        textShadowColor: "#d70297be",
+        textShadowRadius: 5,
+        textShadowOffset: { width: 2, height: 1 },
+    },
 });
 
 export default HowToPlayScreen;

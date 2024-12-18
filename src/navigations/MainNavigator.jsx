@@ -25,45 +25,50 @@ const Stack = createNativeStackNavigator();
 function MainNavigator() {
 
   const [isLoading, setIsLoading] = useState(true);
+  const [adBanner, setAdBanner] = useState(false);
 
-  const [ musicController, setMusicControler ] = useState(null);
+  const [musicController, setMusicControler] = useState(null);
 
-  
+
   useEffect(() => {
     StatusBar.setHidden(true);
     Platform.OS === 'android' && StatusBar.setTranslucent(true);
 
-
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
+
+    setTimeout(() => {
+      setAdBanner(true);
+    }, 3200)
   }, []);
+
 
   return (
     <View style={styles.container}>
       <NavigationContainer theme={DarkTheme}>
-        <ContextProvider.Provider value={{musicController, setMusicControler}}>
-        <Stack.Navigator initialRouteName='Home' screenOptions={{
-          headerShown: false,
-          animation: 'fade',
-          navigationBarHidden: true
-        }}>
-          <Stack.Screen name='Home' component={ isLoading ? SplashScreen : HomeScreen } />
-          <Stack.Screen name='HowToPlayScreen' component={HowToPlayScreen} />
-          <Stack.Screen name='PlayScreen' component={PlayScreen} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
+        <ContextProvider.Provider value={{ musicController, setMusicControler }}>
+          <Stack.Navigator initialRouteName='Home' screenOptions={{
+            headerShown: false,
+            animation: 'fade',
+            navigationBarHidden: true
+          }}>
+            <Stack.Screen name='Home' component={isLoading ? SplashScreen : HomeScreen} />
+            <Stack.Screen name='HowToPlayScreen' component={HowToPlayScreen} />
+            <Stack.Screen name='PlayScreen' component={PlayScreen} />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
 
-          <Stack.Screen name='LetsLearnScreen' component={LetsLearnScreen} />
-          <Stack.Screen name='WackWordArtScreen' component={WackyWordWheelScreen} />
-          <Stack.Screen name='FillInTheBlankScreen' component={FillInTheBlankScreen} />
-          <Stack.Screen name='MakeYourOwnScreen' component={MakeYourownScreen} />
+            <Stack.Screen name='LetsLearnScreen' component={LetsLearnScreen} />
+            <Stack.Screen name='WackWordArtScreen' component={WackyWordWheelScreen} />
+            <Stack.Screen name='FillInTheBlankScreen' component={FillInTheBlankScreen} />
+            <Stack.Screen name='MakeYourOwnScreen' component={MakeYourownScreen} />
 
-          <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
-          <Stack.Screen name='ProgressScreen' component={ProgressScreen} />
-        </Stack.Navigator>
+            <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
+            <Stack.Screen name='ProgressScreen' component={ProgressScreen} />
+          </Stack.Navigator>
         </ContextProvider.Provider>
       </NavigationContainer>
-      {isLoading === false && <View style={styles.adContainer}>
+      {isLoading === false && <View style={[styles.adContainer, { borderTopWidth: adBanner ? 3 : 0, borderColor: common.color.primary }]}>
         <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} />
       </View>}
     </View>

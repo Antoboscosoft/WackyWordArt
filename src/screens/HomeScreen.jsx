@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { DrawerLayout } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -170,24 +170,26 @@ function HomeScreen({ navigation }) {
             <Background>
               {/* Header */}
               <Header drawerRef={drawerRef} title={'Home'} navigation={navigation} secondIcon={'settings'} secondIconPress={() => navigation.navigate('Settings')} />
-              {/* Main section */}
-              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View style={styles.button}>
-                  <TouchableOpacity style={styles.combineButton} onPress={() => navigation.navigate('HowToPlayScreen')}>
-                    {/* <PlayIcon name="questioncircle" size={30} color="white" /> */}
-                    <LottieView autoPlay loop={false} source={require('../assets/lottie/howToPlay.json')} style={{ width: 50, height: 50 }} />
-                    <Text style={styles.buttonText}> How to Play </Text>
-                  </TouchableOpacity>
+              <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ zIndex: 1 }}>
+                {/* Main section */}
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                  <View style={styles.button}>
+                    <TouchableOpacity style={styles.combineButton} onPress={() => navigation.navigate('HowToPlayScreen')}>
+                      {/* <PlayIcon name="questioncircle" size={30} color="white" /> */}
+                      <LottieView autoPlay loop={false} source={require('../assets/lottie/howToPlay.json')} style={{ width: 50, height: 50 }} />
+                      <Text style={styles.buttonText}> How to Play </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.button}>
+                    <TouchableOpacity style={[styles.combineButton, { backgroundColor: common.color.primary }]} onPress={() => navigation.navigate('PlayScreen')}>
+                      {/* <PlayIcon name="play" size={30} color="white" /> */}
+                      <LottieView autoPlay source={require('../assets/lottie/play.json')} style={{ width: 50, height: 50 }} />
+                      <Text style={styles.buttonText}> Play </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View style={styles.button}>
-                  <TouchableOpacity style={[styles.combineButton, { backgroundColor: common.color.primary }]} onPress={() => navigation.navigate('PlayScreen')}>
-                    {/* <PlayIcon name="play" size={30} color="white" /> */}
-                    <LottieView autoPlay source={require('../assets/lottie/play.json')} style={{ width: 50, height: 50 }} />
-                    <Text style={styles.buttonText}> Play </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <FastImage source={require('../assets/images/zebra_hand_raise.png')} style={{ position: 'absolute', right: 0, bottom: -10, width: 250, height: 300 }} />
+              </ScrollView>
+              <FastImage source={require('../assets/images/zebra_hand_raise.png')} style={{ position: 'absolute', right: 0, bottom: -10, width: 220, height: 270 }} />
             </Background>
           </View>
         </FadeAnime>

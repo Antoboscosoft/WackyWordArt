@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing, ScrollView } from 'react-native';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import useMusicPlayer, { common } from '../utills/Utils';
 import SoundPlayer from 'react-native-sound-player';
 import { ContextProvider } from '../navigations/MainNavigator';
+import { FadeAnime } from '../components/Animations';
 // import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
 
@@ -45,8 +46,8 @@ function WackyWordWheelScreen({ navigation }) {
   //   };
   // }, []);
   // console.log('soundRef', soundRef, "Spinning : ----", spinning);
-  
-// when entering ino the page it will play the sound:
+
+  // when entering ino the page it will play the sound:
   // useEffect(() => {
   //   const sound = new Sound('barbie_girl.mp3', Sound.MAIN_BUNDLE, (error) => {
   //     if (error) {
@@ -59,7 +60,7 @@ function WackyWordWheelScreen({ navigation }) {
   //       });
   //     }
   //   });
-  
+
   //   return () => {
   //     sound.release();
   //   };
@@ -109,24 +110,23 @@ function WackyWordWheelScreen({ navigation }) {
   };
 
   const startCountdown = () => {
-    if(timerRef.current) clearInterval(timerRef.current);
+    if (timerRef.current) clearInterval(timerRef.current);
 
     timerRef.current = setInterval(() => {
       // setCountdown((prevCountdown) => prevCountdown - 1);
-      setCountdown((prevCountdown) => 
-        {
-          if(prevCountdown <= 1){
-            clearInterval(timerRef.current);
-            return 0;
-          }
-          return prevCountdown - 1;
-        });
+      setCountdown((prevCountdown) => {
+        if (prevCountdown <= 1) {
+          clearInterval(timerRef.current);
+          return 0;
+        }
+        return prevCountdown - 1;
+      });
     }, 1000);
   };
 
   // Stop the countdown timer
   const stopCountdown = () => {
-    if(timerRef.current) {
+    if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
@@ -138,7 +138,7 @@ function WackyWordWheelScreen({ navigation }) {
       stopCountdown();
     };
   }, []);
-  
+
   const renderWheel = () => {
     const segments = verbs.length;
     const angle = 360 / segments;
@@ -179,7 +179,7 @@ function WackyWordWheelScreen({ navigation }) {
                   fontWeight="bold"
                   textAnchor="middle"
                   alignmentBaseline="middle"
-                  // rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
+                // rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
                 >
                   {verb}
                 </SvgText>
@@ -225,68 +225,73 @@ function WackyWordWheelScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Background>
-        {/* Header Section */}
-      <Header title="Wacky Word Wheel" navigation={navigation} />
-        {/* Center Content Section */}
-        <View style={styles.content}>
-          <View style={styles.sentenceContainer}>
-            <Text style={styles.sentenceText}>
-              Every morning, I{' '}
-              <Text style={displayedSentence ? styles.highlight : styles.underline}>
-                {displayedSentence || '_____'}
-              </Text>{' '}
-              to start my day.
-            </Text>
-          </View>
+      <FadeAnime>
+        <Background>
+          {/* Header Section */}
+          <Header title="Wacky Word Wheel" navigation={navigation} />
+          <ScrollView>
+            {/* Center Content Section */}
+            <View style={styles.content}>
+              <View style={styles.sentenceContainer}>
+                <Text style={styles.sentenceText}>
+                  Every morning, I{' '}
+                  <Text style={displayedSentence ? styles.highlight : styles.underline}>
+                    {displayedSentence || '_____'}
+                  </Text>{' '}
+                  to start my day.
+                </Text>
+              </View>
 
-          {/* countdown timer display */}
-          {/* {spinning && (
+              {/* countdown timer display */}
+              {/* {spinning && (
             <View style={styles.timerContainer}>
               <Text style={styles.timerText}>Time Remaining: {countdown} s</Text>
             </View>
           )} */}
 
-          {/* Spinning Wheel */}
-          <View style={styles.wheelContainer}>
-            {/* Thorn positioned statically */}
-            <Animated.View
-              style={[
-                styles.thorn,
-                // {
-                //   transform: [
-                //     {
-                //       translateY: thornShake
-                //     },
-                //   ],
-                // },
-              ]}
-            />
-            <Animated.View
-              style={{
-                transform: [
-                  {
-                    rotate: rotation.interpolate({
-                      inputRange: [0, 360],
-                      outputRange: ['0deg', '360deg'],
-                    }),
-                  },
-                ],
-              }}
-            >
-              {renderWheel()}
-            </Animated.View>
-            {/* Spin Button at the center */}
-            <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
-            {!spinning ? (
-              <Text style={styles.spinButtonText}> {'Spin'} </Text>
-            ) : (
-              <Text style={styles.timerText}>{countdown} s</Text>
-            )}
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Background>
+              {/* Spinning Wheel */}
+              <View style={styles.wheelContainer}>
+                {/* Thorn positioned statically */}
+                <Animated.View
+                  style={[
+                    styles.thorn,
+                    // {
+                    //   transform: [
+                    //     {
+                    //       translateY: thornShake
+                    //     },
+                    //   ],
+                    // },
+                  ]}
+                />
+                <Animated.View
+                  style={{
+                    transform: [
+                      {
+                        rotate: rotation.interpolate({
+                          inputRange: [0, 360],
+                          outputRange: ['0deg', '360deg'],
+                        }),
+                      },
+                    ],
+                  }}
+                >
+                  {renderWheel()}
+                </Animated.View>
+                {/* Spin Button at the center */}
+                <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
+                  {!spinning ? (
+                    <Text style={styles.spinButtonText}> {'Spin'} </Text>
+                  ) : (
+                    <Text style={styles.timerText}>{countdown} s</Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </Background>
+
+      </FadeAnime>
     </View>
   );
 }
