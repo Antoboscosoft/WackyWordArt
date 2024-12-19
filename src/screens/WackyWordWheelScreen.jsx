@@ -7,6 +7,7 @@ import useMusicPlayer, { common } from '../utills/Utils';
 import SoundPlayer from 'react-native-sound-player';
 import { ContextProvider } from '../navigations/MainNavigator';
 import { FadeAnime } from '../components/Animations';
+import { useIsFocused } from '@react-navigation/native';
 // import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
 
@@ -222,7 +223,18 @@ function WackyWordWheelScreen({ navigation }) {
   // const stopThornShake = () => {
   //   thornShake.stopAnimation();
   // };
-
+ const isFocused=useIsFocused();
+  const scaleValue = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if(isFocused){
+      scaleValue.setValue(0);
+      Animated.timing(scaleValue, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start(); 
+    }
+  }, [isFocused]);
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -250,7 +262,7 @@ function WackyWordWheelScreen({ navigation }) {
           )} */}
 
               {/* Spinning Wheel */}
-              <View style={styles.wheelContainer}>
+              <Animated.View style={[styles.wheelContainer,{transform: [{scale: scaleValue}]}]}>
                 {/* Thorn positioned statically */}
                 <Animated.View
                   style={[
@@ -286,7 +298,7 @@ function WackyWordWheelScreen({ navigation }) {
                     <Text style={styles.timerText}>{countdown} s</Text>
                   )}
                 </TouchableOpacity>
-              </View>
+              </Animated.View>
             </View>
           </ScrollView>
         </Background>
