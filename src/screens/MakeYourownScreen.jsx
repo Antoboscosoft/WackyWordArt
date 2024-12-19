@@ -1,6 +1,5 @@
-import React from 'react'
-import { ScrollView, View } from 'react-native'
-import FastImage from 'react-native-fast-image';
+import React, { useRef,useEffect } from 'react'
+import { ScrollView, View,Animated } from 'react-native'
 import { StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { TextInput } from 'react-native';
@@ -8,11 +7,33 @@ import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
 import { FadeAnime } from '../components/Animations';
+import { useIsFocused } from '@react-navigation/native';
 
 function MakeYourownScreen({ navigation }) {
 
   const [text, setText] = useState('');
 
+  const isFocused = useIsFocused();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(30)).current; 
+    useEffect(() => {
+        if(isFocused){
+        fadeAnim.setValue(0);
+        translateX.setValue(30);
+        Animated.parallel([
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(translateX, {
+            toValue: 0,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+        ]).start();
+    }
+      }, [fadeAnim, translateX,isFocused]);
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -35,7 +56,7 @@ function MakeYourownScreen({ navigation }) {
             </View>
           </ScrollView>
         </Background>
-        <FastImage source={require('../assets/images/makeOwn.png')} style={styles.zebraImage} resizeMode='contain' />
+        <Animated.Image source={require('../assets/images/makeOwn.png')} style={[styles.zebraImage, { opacity: fadeAnim, transform: [{ translateX }] }]} resizeMode='contain' />
       </FadeAnime>
     </View>
   )

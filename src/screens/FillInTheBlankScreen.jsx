@@ -1,13 +1,13 @@
-import React from 'react'
-import { ScrollView, Text, View } from 'react-native';
+import React, { useEffect, useRef } from 'react'
+import { Animated, ScrollView, Text, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { TextInput } from 'react-native';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
-import FastImage from 'react-native-fast-image';
 import { FadeAnime } from '../components/Animations';
+import { useIsFocused } from '@react-navigation/native';
 
 function FillInTheBlankScreen({ navigation }) {
 
@@ -18,6 +18,18 @@ function FillInTheBlankScreen({ navigation }) {
   const [verb, setVerb] = useState('');
   const [thing, setThing] = useState('');
   const [weatherAdjective, setWeatherAdjective] = useState('');
+  const isFocused=useIsFocused();
+  const scaleValue = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if(isFocused){
+      scaleValue.setValue(0);
+      Animated.timing(scaleValue, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start(); 
+    }
+  }, [isFocused]);
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -84,7 +96,7 @@ function FillInTheBlankScreen({ navigation }) {
             </View>
           </ScrollView>
         </Background>
-        <FastImage source={require('../assets/images/fill.png')} style={styles.zebraImage} resizeMode='contain' />
+        <Animated.Image source={require('../assets/images/fill.png')} style={[styles.zebraImage,{transform: [{ scale: scaleValue }]}]} resizeMode='contain' />
       </FadeAnime>
     </View>
   )
