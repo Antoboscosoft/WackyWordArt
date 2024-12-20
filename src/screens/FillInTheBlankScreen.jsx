@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     color: common.color.primary,
     // minWidth: 50,
     // maxWidth: 1000,
-    textAlign: 'center',
+    // textAlign: 'center',
     paddingHorizontal: 20,
     paddingVertical: -20
   },

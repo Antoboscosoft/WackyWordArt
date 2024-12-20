@@ -63,7 +63,6 @@ function HowToPlayScreen({ navigation }) {
         useRef(new Animated.Value(0)).current,
       ];
       useEffect(() => {
-        if(isFocused){
         animations.forEach(animation => animation.setValue(0));
         Animated.stagger(300,
           animations.map(animation =>
@@ -74,8 +73,7 @@ function HowToPlayScreen({ navigation }) {
             })
           )
         ).start();
-    }
-      }, [isFocused]);
+      }, []);
     return (
         <View style={styles.container}>
             <Background>

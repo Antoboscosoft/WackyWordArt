@@ -28,8 +28,8 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, sec
             </TouchableOpacity>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={secondIconPress}>
-                <View style={[styles.circle, secondIconStyle, { borderRadius: checkHome ? 10 : 35 }]}>
-                    <MatirialIcon name={secondIcon || 'settings'} style={[styles.menu, { opacity: secondIcon ? 1 : 0, color: secondIconColor }]} />
+                <View style={[styles.circle, secondIconStyle, {opacity: secondIcon ? 1 : 0, borderRadius: checkHome ? 10 : 35 }]}>
+                    <MatirialIcon name={secondIcon || 'settings'} style={[styles.menu, { color: secondIconColor }]} />
                 </View>
             </TouchableOpacity>
         </View>
