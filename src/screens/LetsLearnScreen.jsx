@@ -1,20 +1,25 @@
 import React, { useState,useRef, useEffect } from 'react'
-import { StyleSheet, Text, View,  Animated} from 'react-native'
+import { StyleSheet, Text, View,  Animated,Alert, ScrollView} from 'react-native'
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import { common } from '../utills/Utils';
-import DropDownPicker from 'react-native-dropdown-picker';
-// import axios from 'axios';
+import axios from 'axios';
+import { useIsFocused } from '@react-navigation/native';
+import { FadeAnime } from '../components/Animations';
+import LottieView from 'lottie-react-native';
 
 function LetsLearnScreen({ navigation }) {
-  const [open, setOpen] = useState(false);
+  const isFocused = useIsFocused();
   const [value, setValue] = useState();
-  const [items, setItems] = useState([
-    { label: 'Apple', value: 'apple' },
-    { label: 'Banana', value: 'banana' },
-    { label: 'Orange', value: 'orange' },
-  ]);
+  // var ques="The  {adjective}  pirate  quickly  {verb}  across the deck."
+  // "fearless", "clumsy", "drunken",  "stumbled", "scurried", "leaped"
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading1, setIsLoading1] = useState(false);
+  const [items, setItems] = useState([]);
+  const [question,setQuestion] = useState()
+  // const [count,setCount]=useState(1)
+  const [image,setImage] = useState()
   const animationValue = useRef(new Animated.Value(0)).current;
   const positionValue = useRef(new Animated.Value(50)).current;
 
@@ -35,70 +40,127 @@ function LetsLearnScreen({ navigation }) {
     ]).start();
   };
 
-  // const getText = () => {
-  //   console.log('get text');
-  //   axios({
-  //     method: 'GET',
-  //     url: 'http://192.168.1.148:8000/ai/generatetext'
-  //   }).then((response) => {
-  //     console.log(response);
-  //   }).catch((error) => {
-  //     console.log(error);
-  //   })
-  // }
-  // useEffect(() => {
-  //   getText()
-  // },[])
+  const getText = () => {
+    setItems([])
+    setQuestion()
+    setImage()
+    setValue()
+    setIsLoading(true)
+    axios({
+      method: 'GET',
+      url: 'http://172.105.54.28:8000/ai/generatetext',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }).then((response) => {
+      if(response.data.status===true){
+        setQuestion(response?.data?.data?.phrase?.split(' '))        
+        setItems(response?.data?.data?.options)
+      }
+    }).catch((error) => {
+      console.log(error);
+    }).finally(() => {
+      setIsLoading(false)
+    })
+  }
+  const getImage = (data) => {
+    setIsLoading1(true)
+    axios({
+      method: 'POST',
+      url:'http://172.105.54.28:8000/ai/generateimage',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // data: { "prompt": data }
+      data: { "prompt": question.join(" ").replace(/{.*?}/, data)}
+    }).then((response) => {
+      if(response.data.status===true){
+        setImage(response.data.image)
+      }
+      else{
+        setIsLoading1(false)
+        Alert.alert('Error',"Failed to generate image")
+      }      
+    }).catch((error) => {
+      setIsLoading1(false)
+      Alert.alert('Error',"Failed to generate image")
+      console.log(error);
+    })
+  }
+  const handleClick=(item)=>{
+    setValue(item.trimStart())
+    handlePress();
+    getImage(item.trimStart())
+    // var answer=[...value]
+    // answer.push({"value":item.trimStart(),"added":false})
+    // var ques=[...question]
+    // for(let i=0;i<ques.length;i++){
+    //   if(ques[i].includes('{')){
+    //     if(answer.length >= count && answer[count-1].added===false){
+    //       ques[i]=answer[count-1]?.value
+    //       answer[count-1].added=true
+    //       setCount(count+1)
+    //     }
+    //   }
+    // }      
+    // setQuestion(ques)
+    // setValue(answer)
+    // handlePress();
+    // if(!ques?.some((item) => item.includes('{'))){
+    // getImage(ques.join(" "))
+    // }
+  }
+  useEffect(() => {
+    if(isFocused){
+      getText()
+    }
+  },[isFocused])
+  
   return (
     <View style={styles.container}>
+      <FadeAnime>
       <Background>
         {/* Header Section */}
       <Header title="Let's Learn" navigation={navigation} />
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ zIndex: 1 }}>
         {/* Center Content Section */}
+        {
+          isLoading ? 
+          <View>
+            <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={[styles.loading,{ width: 100, height: 100 }]}/>
+            </View>:
         <View style={styles.content}>
           <View style={styles.sentenceRow}>
             {/* Buttons */}
-            <Text style={styles.sentenceText}>I would like to eat a </Text>
+            {/* <Text style={styles.sentenceText}>{question?.map((word, index) =>(value?.length>0 && value?.find(item => word===item?.value)) ? <Animated.Text key={index} style={[styles.answer,{opacity: animationValue,transform: [{ translateX: positionValue }]}]}>{word}</Animated.Text>: <Text key={index} style={(question?.length>0 && word?.includes('{')) ? styles.sentenceTextHighlight : ''}>{word} </Text>)} </Text> */}
+            <Text style={styles.sentenceText}>{question?.map((word, index) =><Text key={index} style={(question?.length>0 && word?.includes('{')) ? styles.sentenceTextHighlight : ''}>{word} </Text>)} </Text>
+            <View style={{flexDirection: 'row',flexWrap: 'wrap',alignItems: 'center',justifyContent: 'center'}}>
             {
-              value ? value.label.split('').map((char, index) => <Animated.Text key={index} style={[styles.answer,{opacity: animationValue,transform: [{ translateX: positionValue }]}]}>{char}</Animated.Text>) : 
-              <View style={{ width: 150,height: 50,borderBottomWidth: 1,borderColor: common.color.secondary }}></View>
+              value && value.split('').map((char, index) =><Animated.Text key={index} style={[styles.answer,{opacity: animationValue,transform: [{ translateX: positionValue }]}]}>{char}</Animated.Text>)
             }
-            {/* <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              multiple={false}
-              maxHeight={300}
-              containerStyle={styles.containerStyle}
-              dropDownContainerStyle={styles.dropdownContainer}
-              style={styles.dropdown}
-              selectedItemLabelStyle={{ color: common.color.primary }}
-              labelStyle={{ color: common.color.primary }}
-              placeholder="Select a fruit"
-              placeholderStyle={{ fontSize: 16 }}
-            /> */}
+            </View>
           </View>
           <View style={styles.listContainer}>
          {
           items.map((item, index) => (
-            <Text key={index} style={styles.listLabel} onPress={() => {handlePress();setValue(item)}}>{item.label}</Text>
+            <Text key={index} style={styles.listLabel} onPress={() => {handleClick(item)}}>{item}</Text>
           ))
          }
           </View>
           {
-            value && (value.label==="Apple" ?
-            <Animated.Image source={require('../assets/images/apple.jpeg')} style={[styles.ansImg,{opacity: animationValue,transform: [{ translateY: positionValue }]}]} /> :
-            value && value.label==="Banana" ?
-            <Animated.Image source={require('../assets/images/banana.jpeg')} style={[styles.ansImg,{opacity: animationValue,transform: [{ translateY: positionValue }]}]}  /> :
-            value && value.label==="Orange" ?
-            <Animated.Image source={require('../assets/images/orange.jpeg')} style={[styles.ansImg,{opacity: animationValue,transform: [{ translateY: positionValue }]}]}  /> :"")
+            (!image && value )?
+            <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={[styles.loading,{ width: 100, height: 100 }]}/>:
+            image &&
+            <View style={{ width: "60%", height: "40%", marginTop: 50}}>
+            <FastImage source={{uri:image}} style={styles.ansImg} onLoadEnd={() => setIsLoading1(false)} onError={() => setIsLoading1(false)} />
+            {isLoading1 && <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')}  style={{position:"absolute", top:'30%', left:'30%',width: 100, height: 100, zIndex: 1}} />}
+          </View>
           }
-          {/* <FastImage source={common.Zebra} style={{ width: 300, height: 300, marginTop: 50 }} /> */}
         </View>
+        }
+        </ScrollView>
       </Background>
+      </FadeAnime>
     </View>
   )
 }
@@ -124,13 +186,16 @@ const styles = StyleSheet.create({
     width: '90%',
     backgroundColor: '#ffffffdb',
     borderRadius: 8,
-    padding: 50,
+    padding: 20,
   },
   sentenceText: {
     fontSize: common.style.phraseSize,
     fontFamily: common.font.primary,
     color: common.color.secondary,
     textAlign: 'center'
+  },
+  sentenceTextHighlight:{
+    color: common.color.primary,
   },
   listContainer:{
     flexDirection: 'row',
@@ -163,26 +228,19 @@ const styles = StyleSheet.create({
     marginTop:15
   },
   ansImg: {
-    width: "60%",
-    height: "40%",
-    marginTop: 50,
+    width: "100%",
+    height: "100%",
+    // marginTop: 50,
     borderRadius: 15,
     borderColor:"white",
     borderWidth: 10,
+  },
+  loading:{
+    height:50,
+    width:50,
+    alignSelf: 'center',
+    marginTop: 50
   }
-  // dropdown: {
-  //   borderWidth:0,
-  //   backgroundColor:"transparent",
-  //   borderBottomWidth: 1,
-  //   borderColor: common.color.primary,
-  // },
-  // dropdownContainer: {
-  //   borderColor: common.color.primary,
-  // },
-  // containerStyle:{
-  //   borderRadius: 8,
-  //   width: 200
-  // }
 });
 
 
