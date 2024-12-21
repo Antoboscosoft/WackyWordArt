@@ -18,7 +18,7 @@ function WackyWordWheelScreen({ navigation }) {
   const [displayedSentence, setDisplayedSentence] = useState('');
   const [spinning, setSpinning] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
-  const [countdown, setCountdown] = useState(14); // Timer starts at 15 seconds
+  const [countdown, setCountdown] = useState(10); // Timer starts at 15 seconds
   const thornShake = useRef(new Animated.Value(80)).current;
 
   const usePlayMusic = useMusicPlayer();
@@ -82,7 +82,7 @@ function WackyWordWheelScreen({ navigation }) {
     // });
     musicController == true && playMusic("puzzle_game");
     setSpinning(true);
-    setCountdown(14);
+    setCountdown(10);
     // startCountdown();
     // startThornShake();
 
@@ -95,7 +95,7 @@ function WackyWordWheelScreen({ navigation }) {
     // Animate the wheel for 15 seconds
     Animated.timing(rotation, {
       toValue: randomDegree,
-      duration: 15000,
+      duration: 10000,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
     }).start(() => {
