@@ -9,12 +9,11 @@ import { useIsFocused } from '@react-navigation/native';
 import { FadeAnime } from '../components/Animations';
 import LottieView from 'lottie-react-native';
 import { ContextProvider } from '../navigations/MainNavigator';
-// import { SafeAreaView } from 'react-native-safe-area-context';
 import {BannerAd, BannerAdSize,RewardedAd, RewardedAdEventType} from 'react-native-google-mobile-ads';
 
-const rewarded = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
-  keywords: ['fashion', 'clothing'],
-});
+// const rewarded = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
+//   keywords: ['fashion', 'clothing'],
+// });
 
 function LetsLearnScreen({ navigation }) {
   const isFocused = useIsFocused();
@@ -57,8 +56,8 @@ function LetsLearnScreen({ navigation }) {
     setIsLoading(true)
     axios({
       method: 'GET',
-      // url: 'http://172.105.54.28:8000/ai/generatetext',
-      url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generatetext',
+      url: 'http://172.105.54.28:8000/ai/generatetext',
+      // url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generatetext',
       headers: {
         'Content-Type': 'application/json',
       }
@@ -77,8 +76,8 @@ function LetsLearnScreen({ navigation }) {
     setIsLoading1(true)
     axios({
       method: 'POST',
-      // url:'http://172.105.54.28:8000/ai/generateimage',
-      url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generateimage',
+      url:'http://172.105.54.28:8000/ai/generateimage',
+      // url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generateimage',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -89,10 +88,12 @@ function LetsLearnScreen({ navigation }) {
         setImage(response.data.image)
       }
       else{
+        setDisplayAd(false)
         setIsLoading1(false)
         Alert.alert('Error',"Failed to generate image")
       }      
     }).catch((error) => {
+      setDisplayAd(false)
       setIsLoading1(false)
       Alert.alert('Error',"Failed to generate image")
       console.log(error);
@@ -105,7 +106,7 @@ function LetsLearnScreen({ navigation }) {
   const generateImg=()=>{
     setDisplayAd(true)
     setDisplayFooter(false)
-    rewarded.show();
+    // rewarded.show();
     getImage(value)
   }
   useEffect(() => {
@@ -114,34 +115,34 @@ function LetsLearnScreen({ navigation }) {
     }
   },[isFocused])
   
-  const [loaded, setLoaded] = useState(false);
+  // const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
-      setLoaded(true);
-    });
-    const unsubscribeEarned = rewarded.addAdEventListener(
-      RewardedAdEventType.EARNED_REWARD,
-      reward => {
-        setDisplayAd(false)
-        console.log('User earned reward of ', reward);
-      },
-    );
+  // useEffect(() => {
+  //   const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
+  //     setLoaded(true);
+  //   });
+  //   const unsubscribeEarned = rewarded.addAdEventListener(
+  //     RewardedAdEventType.EARNED_REWARD,
+  //     reward => {
+  //       setDisplayAd(false)
+  //       console.log('User earned reward of ', reward);
+  //     },
+  //   );
 
-    // Start loading the rewarded ad straight away
-    rewarded.load();
+  //   // Start loading the rewarded ad straight away
+  //   rewarded.load();
 
-    // Unsubscribe from events on unmount
-    return () => {
-      unsubscribeLoaded();
-      unsubscribeEarned();
-    };
-  }, []);
+  //   // Unsubscribe from events on unmount
+  //   return () => {
+  //     unsubscribeLoaded();
+  //     unsubscribeEarned();
+  //   };
+  // }, []);
 
-  // No advert ready to show yet
-  if (!loaded) {
-    return null;
-  }
+  // // No advert ready to show yet
+  // if (!loaded) {
+  //   return null;
+  // }
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -179,7 +180,7 @@ function LetsLearnScreen({ navigation }) {
             displayAd ? 
             <View> 
               <Text style={styles.wait}>Please wait...</Text>
-              {/* <View>
+              <View>
                 <BannerAd
                   size={BannerAdSize.MEDIUM_RECTANGLE}
                   // unitId="ca-app-pub-2014852868779854/9546612752"  
@@ -191,7 +192,7 @@ function LetsLearnScreen({ navigation }) {
                     console.error('Advert failed to load: ', error);
                   }}
                 />
-              </View> */}
+              </View>
             </View> : null
           }
           </View>
@@ -202,7 +203,7 @@ function LetsLearnScreen({ navigation }) {
             <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={[styles.loading,{ width: 100, height: 100 }]}/>:
             image &&
             <View style={{ width: "60%", height: "40%", marginTop: 50}}>
-            <FastImage source={{uri:image}} style={styles.ansImg} onLoadEnd={() => setIsLoading1(false)} onError={() => setIsLoading1(false)} />
+            <FastImage source={{uri:image}} style={styles.ansImg} onLoadEnd={() => {setIsLoading1(false),setDisplayAd(false)}} onError={() => {setIsLoading1(false),setDisplayAd(false)}} />
             {isLoading1 && <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')}  style={{position:"absolute", top:'30%', left:'30%',width: 100, height: 100, zIndex: 1}} />}
           </View>
           }
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
   sentenceText: {
     fontSize: common.style.phraseSize,
     fontFamily: common.font.primary,
-    color: common.color.secondary,
+    color: "black",
     textAlign: 'center'
   },
   sentenceTextHighlight:{
@@ -310,11 +311,13 @@ const styles = StyleSheet.create({
     textShadowColor: "#d70297be",
     textShadowRadius: 5,
     textShadowOffset: { width: 2, height: 1 },
+    paddingHorizontal: 5
   },
   wait: {
     textAlign: 'center',
-    color: '#fff',
+    color: 'black',
     fontSize: 18,
+    marginBottom: 10,
     fontFamily: common.font.primary,
     textShadowRadius: 5,
     textShadowOffset: { width: 2, height: 1 },
