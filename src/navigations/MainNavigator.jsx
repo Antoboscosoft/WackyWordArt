@@ -28,6 +28,7 @@ function MainNavigator() {
   const [adBanner, setAdBanner] = useState(false);
 
   const [musicController, setMusicControler] = useState(null);
+  const [displayFooter,setDisplayFooter]=useState(true)
 
 
   useEffect(() => {
@@ -47,7 +48,7 @@ function MainNavigator() {
   return (
     <View style={styles.container}>
       <NavigationContainer theme={DarkTheme}>
-        <ContextProvider.Provider value={{ musicController, setMusicControler }}>
+        <ContextProvider.Provider value={{ musicController, setMusicControler,displayFooter,setDisplayFooter }}>
           <Stack.Navigator initialRouteName='Home' screenOptions={{
             headerShown: false,
             animation: 'fade',
@@ -68,7 +69,7 @@ function MainNavigator() {
           </Stack.Navigator>
         </ContextProvider.Provider>
       </NavigationContainer>
-      {isLoading === false && <View style={[styles.adContainer, { borderTopWidth: adBanner ? 3 : 0, borderColor: common.color.primary }]}>
+      {(isLoading === false && displayFooter) && <View style={[styles.adContainer, { borderTopWidth: adBanner ? 3 : 0, borderColor: common.color.primary }]}>
         <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} />
       </View>}
     </View>

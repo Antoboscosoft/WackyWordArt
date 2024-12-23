@@ -1,5 +1,5 @@
-import React, { useState,useRef, useEffect } from 'react'
-import { StyleSheet, Text, View,  Animated,Alert, ScrollView} from 'react-native'
+import React, { useState,useRef, useEffect, useContext } from 'react'
+import { StyleSheet, Text, View,  Animated,Alert, ScrollView, TouchableOpacity} from 'react-native'
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
@@ -8,6 +8,13 @@ import axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
 import { FadeAnime } from '../components/Animations';
 import LottieView from 'lottie-react-native';
+import { ContextProvider } from '../navigations/MainNavigator';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+import {BannerAd, BannerAdSize,RewardedAd, RewardedAdEventType} from 'react-native-google-mobile-ads';
+
+const rewarded = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
+  keywords: ['fashion', 'clothing'],
+});
 
 function LetsLearnScreen({ navigation }) {
   const isFocused = useIsFocused();
@@ -20,6 +27,8 @@ function LetsLearnScreen({ navigation }) {
   const [question,setQuestion] = useState()
   // const [count,setCount]=useState(1)
   const [image,setImage] = useState()
+  const [displayAd,setDisplayAd] = useState()
+  const {setDisplayFooter}=useContext(ContextProvider)
   const animationValue = useRef(new Animated.Value(0)).current;
   const positionValue = useRef(new Animated.Value(50)).current;
 
@@ -48,7 +57,8 @@ function LetsLearnScreen({ navigation }) {
     setIsLoading(true)
     axios({
       method: 'GET',
-      url: 'http://172.105.54.28:8000/ai/generatetext',
+      // url: 'http://172.105.54.28:8000/ai/generatetext',
+      url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generatetext',
       headers: {
         'Content-Type': 'application/json',
       }
@@ -67,7 +77,8 @@ function LetsLearnScreen({ navigation }) {
     setIsLoading1(true)
     axios({
       method: 'POST',
-      url:'http://172.105.54.28:8000/ai/generateimage',
+      // url:'http://172.105.54.28:8000/ai/generateimage',
+      url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generateimage',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -90,25 +101,12 @@ function LetsLearnScreen({ navigation }) {
   const handleClick=(item)=>{
     setValue(item.trimStart())
     handlePress();
-    getImage(item.trimStart())
-    // var answer=[...value]
-    // answer.push({"value":item.trimStart(),"added":false})
-    // var ques=[...question]
-    // for(let i=0;i<ques.length;i++){
-    //   if(ques[i].includes('{')){
-    //     if(answer.length >= count && answer[count-1].added===false){
-    //       ques[i]=answer[count-1]?.value
-    //       answer[count-1].added=true
-    //       setCount(count+1)
-    //     }
-    //   }
-    // }      
-    // setQuestion(ques)
-    // setValue(answer)
-    // handlePress();
-    // if(!ques?.some((item) => item.includes('{'))){
-    // getImage(ques.join(" "))
-    // }
+  }
+  const generateImg=()=>{
+    setDisplayAd(true)
+    setDisplayFooter(false)
+    rewarded.show();
+    getImage(value)
   }
   useEffect(() => {
     if(isFocused){
@@ -116,6 +114,34 @@ function LetsLearnScreen({ navigation }) {
     }
   },[isFocused])
   
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
+      setLoaded(true);
+    });
+    const unsubscribeEarned = rewarded.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      reward => {
+        setDisplayAd(false)
+        console.log('User earned reward of ', reward);
+      },
+    );
+
+    // Start loading the rewarded ad straight away
+    rewarded.load();
+
+    // Unsubscribe from events on unmount
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+    };
+  }, []);
+
+  // No advert ready to show yet
+  if (!loaded) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -142,13 +168,37 @@ function LetsLearnScreen({ navigation }) {
           </View>
           <View style={styles.listContainer}>
          {
+          !value ?
           items.map((item, index) => (
             <Text key={index} style={styles.listLabel} onPress={() => {handleClick(item)}}>{item}</Text>
           ))
+          :
+          image ? null:
+          <View><TouchableOpacity style={styles.button} onPress={() => {generateImg()}}><Text style={styles.buttonText}>{displayAd ? "Generating Image" : "Generate Image"}</Text></TouchableOpacity>
+          {
+            displayAd ? 
+            <View> 
+              <Text style={styles.wait}>Please wait...</Text>
+              {/* <View>
+                <BannerAd
+                  size={BannerAdSize.MEDIUM_RECTANGLE}
+                  // unitId="ca-app-pub-2014852868779854/9546612752"  
+                  unitId='ca-app-pub-3940256099942544/9214589741'
+                  onAdLoaded={() => {
+                    // console.log('Advert loaded');
+                  }}
+                  onAdFailedToLoad={error => {
+                    console.error('Advert failed to load: ', error);
+                  }}
+                />
+              </View> */}
+            </View> : null
+          }
+          </View>
          }
           </View>
           {
-            (!image && value )?
+            (!image && value && displayAd===false)?
             <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={[styles.loading,{ width: 100, height: 100 }]}/>:
             image &&
             <View style={{ width: "60%", height: "40%", marginTop: 50}}>
@@ -240,7 +290,35 @@ const styles = StyleSheet.create({
     width:50,
     alignSelf: 'center',
     marginTop: 50
-  }
+  },
+  button:{
+    // width: '100%',
+    height: 50,
+    backgroundColor: common.color.secondary,
+    borderRadius: 25,
+    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // padding: 5,
+    ...common.style.border
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontFamily: common.font.primary,
+    textShadowColor: "#d70297be",
+    textShadowRadius: 5,
+    textShadowOffset: { width: 2, height: 1 },
+  },
+  wait: {
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 18,
+    fontFamily: common.font.primary,
+    textShadowRadius: 5,
+    textShadowOffset: { width: 2, height: 1 },
+  },
 });
 
 

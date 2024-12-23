@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MatirialIcon from 'react-native-vector-icons/MaterialIcons';
 import { common } from '../utills/Utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ContextProvider } from '../navigations/MainNavigator';
 
 function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, secondIconColor = "#fff" }) {
     const insets = useSafeAreaInsets();
-
+    const {setDisplayFooter}=useContext(ContextProvider)
     let checkHome = title === 'Home';
     const onChange = () => {
         // playMusic("menu");
@@ -14,6 +15,9 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, sec
             drawerRef.current.openDrawer()
         } else {
             navigation.goBack();
+        }
+        if(title="Let's Learn"){
+            setDisplayFooter(true)
         }
     }
     let secondIconStyle = (secondIcon || checkHome) ? {} : { backgroundColor: 'transparent', borderWidth: 0 }
