@@ -294,7 +294,9 @@ const styles = StyleSheet.create({
   },
   button:{
     // width: '100%',
-    height: 50,
+    // height: 50,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     backgroundColor: common.color.secondary,
     borderRadius: 25,
     marginBottom: 20,
@@ -308,9 +310,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     fontFamily: common.font.primary,
-    textShadowColor: "#d70297be",
-    textShadowRadius: 5,
-    textShadowOffset: { width: 2, height: 1 },
+    // textShadowColor: "#d70297be",
+    // textShadowRadius: 5,
+    // textShadowOffset: { width: 2, height: 1 },
     paddingHorizontal: 5
   },
   wait: {

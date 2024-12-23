@@ -209,6 +209,8 @@ const styles = StyleSheet.create({
   combineButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    width: '65%',
     backgroundColor: common.color.secondary,
     borderRadius: 35,
     paddingHorizontal: 7,
