@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     fontSize: common.style.phraseSize,
     textAlign: 'center',
     fontFamily: common.font.primary,
-    color: common.color.secondary,
+    color: "#000",
   },
   timerContainer: {
     marginVertical: 30,

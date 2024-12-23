@@ -7,7 +7,7 @@ const color = {
 }
 
 const font = {
-    primary: "Ribeye-Regular"
+    // primary: "Ribeye-Regular"
 }
 
 const style = {

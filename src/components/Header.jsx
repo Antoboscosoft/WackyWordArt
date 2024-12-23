@@ -5,7 +5,7 @@ import { common } from '../utills/Utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ContextProvider } from '../navigations/MainNavigator';
 
-function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, secondIconColor = "#fff" }) {
+function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, secondIconColor = "#000000" }) {
     const insets = useSafeAreaInsets();
     const {setDisplayFooter}=useContext(ContextProvider)
     let checkHome = title === 'Home';
@@ -49,33 +49,34 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         padding: 8,
         zIndex: 1,
-        marginTop: 5
+        // marginTop: 5,
+        backgroundColor: "#c4c4c4"
     },
     menu: {
-        color: "#fff",
+        color: "#000000",
         fontSize: 30,
     },
     title: {
-        color: "#00ff1a",
+        color: "#000",
         fontSize: 23,
         fontFamily: common.font.primary,
-        backgroundColor: "#0000004d",
+        // backgroundColor: "#0000004d",
         paddingHorizontal: 10,
         borderRadius: 10,
-        textDecorationLine: 'underline',
-        textShadowColor: "#d70297be",
-        textShadowRadius: 2,
-        textShadowOffset: { width: 2, height: 1 },
+        // textDecorationLine: 'underline',
+        // textShadowColor: "#d70297be",
+        // textShadowRadius: 2,
+        // textShadowOffset: { width: 2, height: 1 },
     },
     circle: {
-        borderRadius: 10,
+        // borderRadius: 10,
         padding: 3,
-        backgroundColor: common.color.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 2,
-        borderTopWidth: 1,
-        borderColor: '#ffffff83'
+        // backgroundColor: common.color.primary,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // borderWidth: 2,
+        // borderTopWidth: 1,
+        // borderColor: '#ffffff83'
     },
 })
 

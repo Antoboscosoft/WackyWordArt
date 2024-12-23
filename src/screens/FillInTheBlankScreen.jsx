@@ -30,6 +30,8 @@ function FillInTheBlankScreen({ navigation }) {
       }).start(); 
     }
   }, [isFocused]);
+
+  const placeHolderColor= "'#cdcdcd'";
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -45,7 +47,7 @@ function FillInTheBlankScreen({ navigation }) {
                   <TextInput
                     style={styles.input}
                     placeholder="place"
-                    placeholderTextColor={'#fdd0a7'}
+                    placeholderTextColor={placeHolderColor}
                     value={place}
                     onChangeText={setPlace}
                   />
@@ -53,17 +55,17 @@ function FillInTheBlankScreen({ navigation }) {
                   <TextInput
                     style={styles.input}
                     placeholder="adjective"
-                    placeholderTextColor={'#fdd0a7'}
+                    placeholderTextColor={placeHolderColor}
                     value={adjective}
                     onChangeText={setAdjective}
                   />
-                  <TextInput style={styles.input} placeholder="friend or pet" placeholderTextColor={'#fdd0a7'} value={friendOrPet} onChangeText={setFriendOrPet}
+                  <TextInput style={styles.input} placeholder="friend or pet" placeholderTextColor={placeHolderColor} value={friendOrPet} onChangeText={setFriendOrPet}
                   />
                   , carrying a
                   <TextInput
                     style={styles.input}
                     placeholder="noun"
-                    placeholderTextColor={'#fdd0a7'}
+                    placeholderTextColor={placeHolderColor}
                     value={noun}
                     onChangeText={setNoun}
                   />
@@ -71,7 +73,7 @@ function FillInTheBlankScreen({ navigation }) {
                   <TextInput
                     style={styles.input}
                     placeholder="verb"
-                    placeholderTextColor={'#fdd0a7'}
+                    placeholderTextColor={placeHolderColor}
                     value={verb}
                     onChangeText={setVerb}
                   />
@@ -79,7 +81,7 @@ function FillInTheBlankScreen({ navigation }) {
                   <TextInput
                     style={styles.input}
                     placeholder="thing"
-                    placeholderTextColor={'#fdd0a7'}
+                    placeholderTextColor={placeHolderColor}
                     value={thing}
                     onChangeText={setThing}
                   />
@@ -87,7 +89,7 @@ function FillInTheBlankScreen({ navigation }) {
                   <TextInput
                     style={styles.input}
                     placeholder="adjective"
-                    placeholderTextColor={'#fdd0a7'}
+                    placeholderTextColor={placeHolderColor}
                     value={weatherAdjective}
                     onChangeText={setWeatherAdjective}
                   />
@@ -130,9 +132,11 @@ const styles = StyleSheet.create({
   },
   sentenceText: {
     fontSize: common.style.phraseSize,
-    color: common.color.secondary,
+    // color: common.color.secondary,
     fontFamily: common.font.primary,
     marginHorizontal: 20,
+    letterSpacing: 1,
+    lineHeight: 35
   },
   input: {
     borderBottomWidth: 1,

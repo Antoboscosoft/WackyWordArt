@@ -14,7 +14,7 @@ function Background({ children, style }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#7105a3e9',
+        backgroundColor: '#fbfef7e9',
     },
     backgroundImage: {
         width: '100%',
