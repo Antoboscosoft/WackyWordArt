@@ -1,5 +1,5 @@
-import React, { useRef,useEffect } from 'react'
-import { ScrollView, View,Animated } from 'react-native'
+import React, { useRef, useEffect } from 'react'
+import { ScrollView, View, Animated, KeyboardAvoidingView, Platform } from 'react-native'
 import { StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { TextInput } from 'react-native';
@@ -15,46 +15,48 @@ function MakeYourownScreen({ navigation }) {
 
   const isFocused = useIsFocused();
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateX = useRef(new Animated.Value(30)).current; 
-    useEffect(() => {
-        if(isFocused){
-        fadeAnim.setValue(0);
-        translateX.setValue(30);
-        Animated.parallel([
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(translateX, {
-            toValue: 0,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-        ]).start();
+  const translateX = useRef(new Animated.Value(30)).current;
+  useEffect(() => {
+    if (isFocused) {
+      fadeAnim.setValue(0);
+      translateX.setValue(30);
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateX, {
+          toValue: 0,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ]).start();
     }
-      }, [fadeAnim, translateX,isFocused]);
+  }, [fadeAnim, translateX, isFocused]);
   return (
     <View style={styles.container}>
       <FadeAnime>
         <Background>
-          {/* Header Section */}
-          <Header title="Make Your Own" navigation={navigation} />
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ zIndex: 1 }}>
-            {/* Center Content Section */}
-            <View style={styles.content}>
-              <TextInput
-                style={styles.input}
-                placeholder="Begin to create your own senetence here... "
-                value={text}
-                onChangeText={setText}
-                multiline
-                // numberOfLines={10}
-                textAlignVertical="top"
-                placeholderTextColor={'#097e868f'}
-              />
-            </View>
-          </ScrollView>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} >
+            {/* Header Section */}
+            <Header title="Make Your Own" navigation={navigation} />
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ zIndex: 1 }} keyboardShouldPersistTaps='handled' keyboardDismissMode='onDrag'>
+              {/* Center Content Section */}
+              <View style={styles.content}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Begin to create your own senetence here... "
+                  value={text}
+                  onChangeText={setText}
+                  multiline
+                  // numberOfLines={10}
+                  textAlignVertical="top"
+                  placeholderTextColor={'#097e868f'}
+                />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </Background>
         <Animated.Image source={require('../assets/images/makeOwn.png')} style={[styles.zebraImage, { opacity: fadeAnim, transform: [{ translateX }] }]} resizeMode='contain' />
       </FadeAnime>
