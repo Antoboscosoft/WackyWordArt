@@ -69,7 +69,8 @@ function LetsLearnScreen({navigation}) {
     setIsLoading(true);
     axios({
       method: 'GET',
-      url: 'http://172.105.54.28:8000/ai/generatetext',
+      // url: 'http://172.105.54.28:8000/ai/generatetext',
+      url: 'http://172.105.54.28:8000/freeai/generatetext',
       // url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generatetext',
       headers: {
         'Content-Type': 'application/json',
@@ -92,7 +93,8 @@ function LetsLearnScreen({navigation}) {
     setIsLoading1(true);
     axios({
       method: 'POST',
-      url: 'http://172.105.54.28:8000/ai/generateimage',
+      // url: 'http://172.105.54.28:8000/ai/generateimage',
+      url: 'http://172.105.54.28:8000/freeai/generateimage',
       // url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generateimage',
       headers: {
         'Content-Type': 'application/json',
@@ -218,6 +220,18 @@ function LetsLearnScreen({navigation}) {
                           {char}
                         </Animated.Text>
                       ))}
+                      {/* {value && (
+                        <TouchableOpacity
+                          style={styles.cancelButton}
+                          onPress={() => {
+                            setValue(null);
+                            // setItems([]);
+                            setImage();
+                            // getText();
+                          }}>
+                            <Text style={styles.cancelButtonText}>✖</Text>
+                          </TouchableOpacity>
+                      )} */}
                   </View>
                 </View>
                 <View style={styles.listContainer}>
@@ -341,6 +355,22 @@ const styles = StyleSheet.create({
   },
   sentenceTextHighlight: {
     color: common.color.primary,
+  },
+  cancelButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#ff0000', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: -16,
+    top: -10,
+  },
+  cancelButtonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   listContainer: {
     flexDirection: 'row',

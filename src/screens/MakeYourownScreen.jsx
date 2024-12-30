@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 17,
     fontFamily: common.font.primary,
-    color: "#006c21",
+    // color: "#006c21",
     backgroundColor: '#ffffffe6',
     marginTop: 50,
     zIndex: 1,
