@@ -93,8 +93,8 @@ function LetsLearnScreen({navigation}) {
     setIsLoading1(true);
     axios({
       method: 'POST',
-      // url: 'http://172.105.54.28:8000/ai/generateimage',
-      url: 'http://172.105.54.28:8000/freeai/generateimage',
+      url: 'http://172.105.54.28:8000/ai/generateimage',
+      // url: 'http://172.105.54.28:8000/freeai/generateimage',
       // url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generateimage',
       headers: {
         'Content-Type': 'application/json',
