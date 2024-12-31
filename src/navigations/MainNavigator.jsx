@@ -40,9 +40,9 @@ function MainNavigator() {
       setIsLoading(false);
     }, 3000);
 
-    setTimeout(() => {
-      setAdBanner(true);
-    }, 3200)
+    // setTimeout(() => {
+    //   setAdBanner(true);
+    // }, 3200)
   }, []);
 
 
@@ -70,9 +70,12 @@ function MainNavigator() {
           </Stack.Navigator>
         </ContextProvider.Provider>
       </NavigationContainer>
-      {(isLoading === false && displayFooter) && <View style={[styles.adContainer, { borderTopWidth: adBanner ? 3 : 0, borderColor: common.color.primary }]}>
-        {/* <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} /> */}
+      {(isLoading === false && displayFooter) && <View style={[adBanner ? styles.adContainer : null, { borderTopWidth: adBanner ? 3 : 0, borderColor: common.color.primary }]}>
+        <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} />
         <BannerAd size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} unitId="ca-app-pub-3940256099942544/9214589741"
+        onAdLoaded={() => {
+          setAdBanner(true)
+        }}
           onAdFailedToLoad={error => {
             console.error('Advert failed to load: ', error);
           }} />
@@ -89,14 +92,14 @@ const styles = StyleSheet.create({
   // Advertisement styles
   adContainer: {
     width: '100%',
-    height: 80,
+    // height: 80,
     borderTopWidth: 3,
     borderColor: common.color.primary
   },
-  adImage: {
-    width: '100%',
-    height: '100%',
-  },
+  // adImage: {
+  //   width: '100%',
+  //   height: '100%',
+  // },
 })
 
 export default MainNavigator
