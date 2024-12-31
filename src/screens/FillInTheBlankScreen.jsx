@@ -36,6 +36,7 @@ function FillInTheBlankScreen({ navigation }) {
     <View style={styles.container}>
       <FadeAnime>
         <Background>
+         {/* <KeyboardAvoidingView> */}
           {/* Header Section */}
           <Header title="Fill in the Blank" navigation={navigation} />
           <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ zIndex: 1 }}>
@@ -43,15 +44,16 @@ function FillInTheBlankScreen({ navigation }) {
             <View style={styles.content}>
               <View style={styles.sentenceRow}>
                 {/* Buttons */}
-                <Text style={styles.sentenceText}>On a sunny afternoon, I walked to the
+                <Text style={styles.sentenceText}>On a sunny afternoon, I walked to the </Text>
+                  <View style={{ flexDirection: 'row' }}>
                   <TextInput
                     style={styles.input}
                     placeholder="place"
                     placeholderTextColor={placeHolderColor}
                     value={place}
                     onChangeText={setPlace}
-                  />
-                  with my
+                  /></View>
+                  <Text style={styles.sentenceText}> with my </Text>
                   <TextInput
                     style={styles.input}
                     placeholder="adjective"
@@ -61,7 +63,8 @@ function FillInTheBlankScreen({ navigation }) {
                   />
                   <TextInput style={styles.input} placeholder="friend or pet" placeholderTextColor={placeHolderColor} value={friendOrPet} onChangeText={setFriendOrPet}
                   />
-                  , carrying a
+                  <Text>,</Text>
+                  <Text style={styles.sentenceText}> carrying a </Text>
                   <TextInput
                     style={styles.input}
                     placeholder="noun"
@@ -69,7 +72,8 @@ function FillInTheBlankScreen({ navigation }) {
                     value={noun}
                     onChangeText={setNoun}
                   />
-                  , and we decided to
+                  <Text>,</Text>
+                  <Text style={styles.sentenceText}> and we decided to </Text>
                   <TextInput
                     style={styles.input}
                     placeholder="verb"
@@ -77,7 +81,7 @@ function FillInTheBlankScreen({ navigation }) {
                     value={verb}
                     onChangeText={setVerb}
                   />
-                  near the
+                  <Text style={styles.sentenceText}> near the </Text>
                   <TextInput
                     style={styles.input}
                     placeholder="thing"
@@ -85,7 +89,8 @@ function FillInTheBlankScreen({ navigation }) {
                     value={thing}
                     onChangeText={setThing}
                   />
-                  , enjoying the
+                  <Text style={styles.sentenceText}>,</Text>
+                  <Text style={styles.sentenceText}> enjoying the </Text>
                   <TextInput
                     style={styles.input}
                     placeholder="adjective"
@@ -93,7 +98,7 @@ function FillInTheBlankScreen({ navigation }) {
                     value={weatherAdjective}
                     onChangeText={setWeatherAdjective}
                   />
-                  weather. </Text>
+                 <Text style={styles.sentenceText}> weather. </Text>
               </View>
             </View>
           </ScrollView>
@@ -121,16 +126,26 @@ const styles = StyleSheet.create({
   },
   sentenceRow: {
     flexWrap: 'wrap',
-    columnGap: 5,
+    // columnGap: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
     backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 10,
+    padding: 15,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   sentenceText: {
+    textOverflow: 'clip',
     fontSize: common.style.phraseSize,
     // color: common.color.secondary,
     fontFamily: common.font.primary,
@@ -144,8 +159,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: common.font.primary,
     color: common.color.primary,
-    // minWidth: 50,
-    // maxWidth: 1000,
+    minWidth: 50,
+    maxWidth: 'auto',
     // textAlign: 'center',
     paddingHorizontal: 20,
     paddingVertical: -20
