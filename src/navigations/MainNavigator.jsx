@@ -17,6 +17,7 @@ import { common } from '../utills/Utils';
 import SplashScreen from '../screens/SplashScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ProgressScreen from '../screens/ProgressScreen';
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 export const ContextProvider = createContext(null);
 
@@ -70,7 +71,11 @@ function MainNavigator() {
         </ContextProvider.Provider>
       </NavigationContainer>
       {(isLoading === false && displayFooter) && <View style={[styles.adContainer, { borderTopWidth: adBanner ? 3 : 0, borderColor: common.color.primary }]}>
-        <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} />
+        {/* <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} /> */}
+        <BannerAd size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} unitId="ca-app-pub-3940256099942544/9214589741"
+          onAdFailedToLoad={error => {
+            console.error('Advert failed to load: ', error);
+          }} />
       </View>}
     </View>
   )
