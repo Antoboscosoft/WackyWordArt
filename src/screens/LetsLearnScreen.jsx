@@ -18,15 +18,15 @@ import {FadeAnime} from '../components/Animations';
 import LottieView from 'lottie-react-native';
 import {ContextProvider} from '../navigations/MainNavigator';
 import {
-  BannerAd,
-  BannerAdSize,
+  // BannerAd,
+  // BannerAdSize,
   RewardedAd,
   RewardedAdEventType,
 } from 'react-native-google-mobile-ads';
 
-// const rewarded = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
-//   keywords: ['fashion', 'clothing'],
-// });
+const rewarded = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
+  keywords: ['fashion', 'clothing'],
+});
 
 function LetsLearnScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -106,13 +106,13 @@ function LetsLearnScreen({navigation}) {
         if (response.data.status === true) {
           setImage(response.data.image);
         } else {
-          setDisplayAd(false);
+          // setDisplayAd(false);
           setIsLoading1(false);
           Alert.alert('Error', 'Failed to generate image');
         }
       })
       .catch(error => {
-        setDisplayAd(false);
+        // setDisplayAd(false);
         setIsLoading1(false);
         Alert.alert('Error', 'Failed to generate image');
         console.log(error);
@@ -125,7 +125,7 @@ function LetsLearnScreen({navigation}) {
   const generateImg = () => {
     setDisplayAd(true);
     setDisplayFooter(false);
-    // rewarded.show();
+    rewarded.show();
     getImage(value);
   };
   useEffect(() => {
@@ -134,34 +134,34 @@ function LetsLearnScreen({navigation}) {
     }
   }, [isFocused]);
 
-  // const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
-  // useEffect(() => {
-  //   const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
-  //     setLoaded(true);
-  //   });
-  //   const unsubscribeEarned = rewarded.addAdEventListener(
-  //     RewardedAdEventType.EARNED_REWARD,
-  //     reward => {
-  //       setDisplayAd(false)
-  //       console.log('User earned reward of ', reward);
-  //     },
-  //   );
+  useEffect(() => {
+    const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
+      setLoaded(true);
+    });
+    const unsubscribeEarned = rewarded.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      reward => {
+        setDisplayAd(false)
+        console.log('User earned reward of ', reward);
+      },
+    );
 
-  //   // Start loading the rewarded ad straight away
-  //   rewarded.load();
+    // Start loading the rewarded ad straight away
+    rewarded.load();
 
-  //   // Unsubscribe from events on unmount
-  //   return () => {
-  //     unsubscribeLoaded();
-  //     unsubscribeEarned();
-  //   };
-  // }, []);
+    // Unsubscribe from events on unmount
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+    };
+  }, []);
 
-  // // No advert ready to show yet
-  // if (!loaded) {
-  //   return null;
-  // }
+  // No advert ready to show yet
+  if (!loaded) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -248,6 +248,8 @@ function LetsLearnScreen({navigation}) {
                     ))
                   ) : image ? null : (
                     <View>
+                      {
+                        displayAd !==false &&
                       <TouchableOpacity
                         style={styles.button}
                         onPress={() => {
@@ -257,10 +259,11 @@ function LetsLearnScreen({navigation}) {
                           {displayAd ? 'Generating Image' : 'Generate Image'}
                         </Text>
                       </TouchableOpacity>
+                      }
                       {displayAd ? (
                         <View>
                           <Text style={styles.wait}>Please wait...</Text>
-                          <View>
+                          {/* <View>
                             <BannerAd
                               size={BannerAdSize.MEDIUM_RECTANGLE}
                               // unitId="ca-app-pub-2014852868779854/9546612752"
@@ -272,7 +275,7 @@ function LetsLearnScreen({navigation}) {
                                 console.error('Advert failed to load: ', error);
                               }}
                             />
-                          </View>
+                          </View> */}
                         </View>
                       ) : null}
                     </View>
@@ -292,10 +295,10 @@ function LetsLearnScreen({navigation}) {
                         source={{uri: image}}
                         style={styles.ansImg}
                         onLoadEnd={() => {
-                          setIsLoading1(false), setDisplayAd(false);
+                          setIsLoading1(false)
                         }}
                         onError={() => {
-                          setIsLoading1(false), setDisplayAd(false);
+                          setIsLoading1(false)
                         }}
                       />
                       {isLoading1 && (
