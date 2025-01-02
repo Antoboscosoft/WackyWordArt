@@ -17,7 +17,7 @@ import { common } from '../utills/Utils';
 import SplashScreen from '../screens/SplashScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ProgressScreen from '../screens/ProgressScreen';
-import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize,RewardedAd, RewardedAdEventType } from 'react-native-google-mobile-ads';
 
 export const ContextProvider = createContext(null);
 
@@ -30,6 +30,9 @@ function MainNavigator() {
 
   const [musicController, setMusicControler] = useState(null);
   const [displayFooter,setDisplayFooter]=useState(true)
+  const [rewardedAd, setRewardedAd] = useState(null);
+  const [isAdLoaded, setIsAdLoaded] = useState(false);
+  const [displayAd, setDisplayAd] = useState();
 
 
   useEffect(() => {
@@ -45,11 +48,35 @@ function MainNavigator() {
     // }, 3200)
   }, []);
 
+  useEffect(() => {
+    const ad = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
+      keywords: ['fashion', 'clothing'],
+    });
+
+    const unsubscribeLoaded = ad.addAdEventListener(RewardedAdEventType.LOADED, () => {
+      setIsAdLoaded(true);
+      setRewardedAd(ad);
+    });
+
+    const unsubscribeEarned = ad.addAdEventListener(RewardedAdEventType.EARNED_REWARD, reward => {
+      setDisplayAd(false)
+      console.log('User earned reward of ', reward);
+    });
+
+    // Start loading the ad
+    ad.load();
+
+    // Cleanup listeners on unmount
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+    };
+  }, [isAdLoaded===false]);
 
   return (
     <View style={styles.container}>
       <NavigationContainer theme={DarkTheme}>
-        <ContextProvider.Provider value={{ musicController, setMusicControler,displayFooter,setDisplayFooter }}>
+        <ContextProvider.Provider value={{ musicController, setMusicControler,displayFooter,setDisplayFooter,rewardedAd, setRewardedAd,isAdLoaded, setIsAdLoaded,displayAd, setDisplayAd }}>
           <Stack.Navigator initialRouteName='Home' screenOptions={{
             headerShown: false,
             animation: 'fade',

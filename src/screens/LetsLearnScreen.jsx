@@ -20,13 +20,13 @@ import {ContextProvider} from '../navigations/MainNavigator';
 import {
   // BannerAd,
   // BannerAdSize,
-  RewardedAd,
-  RewardedAdEventType,
+  // RewardedAd,
+  // RewardedAdEventType,
 } from 'react-native-google-mobile-ads';
 
-const rewarded = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
-  keywords: ['fashion', 'clothing'],
-});
+// const rewarded = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
+//   keywords: ['fashion', 'clothing'],
+// });
 
 function LetsLearnScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -38,9 +38,9 @@ function LetsLearnScreen({navigation}) {
   const [items, setItems] = useState([]);
   const [question, setQuestion] = useState();
   // const [count,setCount]=useState(1)
-  const [image, setImage] = useState();
-  const [displayAd, setDisplayAd] = useState();
-  const {setDisplayFooter} = useContext(ContextProvider);
+  const [image, setImage] = useState({value:null,error:false});
+  // const [displayAd, setDisplayAd] = useState();
+  const {setDisplayFooter, rewardedAd, isAdLoaded, displayAd, setDisplayAd } = useContext(ContextProvider);
   const animationValue = useRef(new Animated.Value(0)).current;
   const positionValue = useRef(new Animated.Value(50)).current;
 
@@ -64,7 +64,7 @@ function LetsLearnScreen({navigation}) {
   const getText = () => {
     setItems([]);
     setQuestion();
-    setImage();
+    setImage({value:null,error:false});
     setValue();
     setIsLoading(true);
     axios({
@@ -93,8 +93,8 @@ function LetsLearnScreen({navigation}) {
     setIsLoading1(true);
     axios({
       method: 'POST',
-      url: 'http://172.105.54.28:8000/ai/generateimage',
-      // url: 'http://172.105.54.28:8000/freeai/generateimage',
+      // url: 'http://172.105.54.28:8000/ai/generateimage',
+      url: 'http://172.105.54.28:8000/freeai/generateimage',
       // url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generateimage',
       headers: {
         'Content-Type': 'application/json',
@@ -104,15 +104,18 @@ function LetsLearnScreen({navigation}) {
     })
       .then(response => {
         if (response.data.status === true) {
-          setImage(response.data.image);
+          // setImage(response.data.image);
+          setImage({value:response.data.image,error:false})
         } else {
-          // setDisplayAd(false);
+          setImage({value:null,error:true})
+          setDisplayAd(false);
           setIsLoading1(false);
           Alert.alert('Error', 'Failed to generate image');
         }
       })
       .catch(error => {
-        // setDisplayAd(false);
+        setImage({value:null,error:true})
+        setDisplayAd(false);
         setIsLoading1(false);
         Alert.alert('Error', 'Failed to generate image');
         console.log(error);
@@ -125,7 +128,12 @@ function LetsLearnScreen({navigation}) {
   const generateImg = () => {
     setDisplayAd(true);
     setDisplayFooter(false);
-    rewarded.show();
+    // rewarded.show();
+    if (isAdLoaded && rewardedAd) {
+      rewardedAd.show();
+    } else {
+      console.log('Ad not loaded yet');
+    }
     getImage(value);
   };
   useEffect(() => {
@@ -134,34 +142,34 @@ function LetsLearnScreen({navigation}) {
     }
   }, [isFocused]);
 
-  const [loaded, setLoaded] = useState(false);
+  // const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
-      setLoaded(true);
-    });
-    const unsubscribeEarned = rewarded.addAdEventListener(
-      RewardedAdEventType.EARNED_REWARD,
-      reward => {
-        setDisplayAd(false)
-        console.log('User earned reward of ', reward);
-      },
-    );
+  // useEffect(() => {
+  //   const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
+  //     setLoaded(true);
+  //   });
+  //   const unsubscribeEarned = rewarded.addAdEventListener(
+  //     RewardedAdEventType.EARNED_REWARD,
+  //     reward => {
+  //       setDisplayAd(false)
+  //       console.log('User earned reward of ', reward);
+  //     },
+  //   );
 
-    // Start loading the rewarded ad straight away
-    rewarded.load();
+  //   // Start loading the rewarded ad straight away
+  //   rewarded.load();
 
-    // Unsubscribe from events on unmount
-    return () => {
-      unsubscribeLoaded();
-      unsubscribeEarned();
-    };
-  }, []);
+  //   // Unsubscribe from events on unmount
+  //   return () => {
+  //     unsubscribeLoaded();
+  //     unsubscribeEarned();
+  //   };
+  // }, []);
 
-  // No advert ready to show yet
-  if (!loaded) {
-    return null;
-  }
+  // // No advert ready to show yet
+  // if (!loaded) {
+  //   return null;
+  // }
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -246,15 +254,13 @@ function LetsLearnScreen({navigation}) {
                         {item}
                       </Text>
                     ))
-                  ) : image ? null : (
+                  ) : image?.value ? null : (
                     <View>
                       {
                         displayAd !==false &&
                       <TouchableOpacity
                         style={styles.button}
-                        onPress={() => {
-                          generateImg();
-                        }}>
+                        onPress={() => {displayAd ? null: generateImg();}}>
                         <Text style={styles.buttonText}>
                           {displayAd ? 'Generating Image' : 'Generate Image'}
                         </Text>
@@ -281,24 +287,26 @@ function LetsLearnScreen({navigation}) {
                     </View>
                   )}
                 </View>
-                {!image && value && displayAd === false ? (
+                {(!image?.value && !image?.error && value && displayAd === false) ? (
                   <LottieView
-                    autoPlay
+                    autoPlay                    
                     loop={true}
                     source={require('../assets/lottie/textLoading.json')}
                     style={[styles.loading, {width: 100, height: 100}]}
                   />
                 ) : (
-                  image && (
+                  image?.value && (
                     <View style={{width: '60%', height: '40%', marginTop: 50}}>
                       <FastImage
-                        source={{uri: image}}
+                        source={{uri: image?.value}}
                         style={styles.ansImg}
                         onLoadEnd={() => {
                           setIsLoading1(false)
+                          setDisplayAd(false);
                         }}
                         onError={() => {
                           setIsLoading1(false)
+                          setDisplayAd(false);
                         }}
                       />
                       {isLoading1 && (
