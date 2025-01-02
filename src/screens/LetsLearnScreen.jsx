@@ -12,34 +12,20 @@ import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
 import {common} from '../utills/Utils';
-import axios from 'axios';
 import {useIsFocused} from '@react-navigation/native';
 import {FadeAnime} from '../components/Animations';
 import LottieView from 'lottie-react-native';
 import {ContextProvider} from '../navigations/MainNavigator';
-import {
-  // BannerAd,
-  // BannerAdSize,
-  // RewardedAd,
-  // RewardedAdEventType,
-} from 'react-native-google-mobile-ads';
-
-// const rewarded = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
-//   keywords: ['fashion', 'clothing'],
-// });
+import { getService ,postService} from '../APIServices/services';
 
 function LetsLearnScreen({navigation}) {
   const isFocused = useIsFocused();
   const [value, setValue] = useState();
-  // var ques="The  {adjective}  pirate  quickly  {verb}  across the deck."
-  // "fearless", "clumsy", "drunken",  "stumbled", "scurried", "leaped"
   const [isLoading, setIsLoading] = useState(false);
   const [isLoading1, setIsLoading1] = useState(false);
   const [items, setItems] = useState([]);
   const [question, setQuestion] = useState();
-  // const [count,setCount]=useState(1)
   const [image, setImage] = useState({value:null,error:false});
-  // const [displayAd, setDisplayAd] = useState();
   const {setDisplayFooter, rewardedAd, isAdLoaded, displayAd, setDisplayAd } = useContext(ContextProvider);
   const animationValue = useRef(new Animated.Value(0)).current;
   const positionValue = useRef(new Animated.Value(50)).current;
@@ -67,53 +53,30 @@ function LetsLearnScreen({navigation}) {
     setImage({value:null,error:false});
     setValue();
     setIsLoading(true);
-    axios({
-      method: 'GET',
-      // url: 'http://172.105.54.28:8000/ai/generatetext',
-      url: 'http://172.105.54.28:8000/freeai/generatetext',
-      // url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generatetext',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => {
-        if (response.data.status === true) {
-          setQuestion(response?.data?.data?.phrase?.split(' '));
-          setItems(response?.data?.data?.options);
+    getService('/generatetext').then(response => {        
+        if (response.status === true) {
+          setQuestion(response?.data?.phrase?.split(' '));
+          setItems(response?.data?.options);
         }
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log(error);
-      })
-      .finally(() => {
+      }).finally(() => {
         setIsLoading(false);
       });
   };
   const getImage = data => {
     setIsLoading1(true);
-    axios({
-      method: 'POST',
-      // url: 'http://172.105.54.28:8000/ai/generateimage',
-      url: 'http://172.105.54.28:8000/freeai/generateimage',
-      // url:'https://m4rh4wg8-8000.inc1.devtunnels.ms/ai/generateimage',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // data: { "prompt": data }
-      data: {prompt: question.join(' ').replace(/{.*?}/, data)},
-    })
-      .then(response => {
-        if (response.data.status === true) {
-          // setImage(response.data.image);
-          setImage({value:response.data.image,error:false})
+    let val={prompt: question.join(' ').replace(/{.*?}/, data)}
+    postService("/generateimage",val).then(response => {
+        if (response.status === true) {
+          setImage({value:response.image,error:false})
         } else {
           setImage({value:null,error:true})
           setDisplayAd(false);
           setIsLoading1(false);
           Alert.alert('Error', 'Failed to generate image');
         }
-      })
-      .catch(error => {
+      }).catch(error => {
         setImage({value:null,error:true})
         setDisplayAd(false);
         setIsLoading1(false);
@@ -128,11 +91,10 @@ function LetsLearnScreen({navigation}) {
   const generateImg = () => {
     setDisplayAd(true);
     setDisplayFooter(false);
-    // rewarded.show();
     if (isAdLoaded && rewardedAd) {
       rewardedAd.show();
     } else {
-      console.log('Ad not loaded yet');
+      Alert.alert("Ad not loaded");
     }
     getImage(value);
   };
@@ -142,34 +104,6 @@ function LetsLearnScreen({navigation}) {
     }
   }, [isFocused]);
 
-  // const [loaded, setLoaded] = useState(false);
-
-  // useEffect(() => {
-  //   const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
-  //     setLoaded(true);
-  //   });
-  //   const unsubscribeEarned = rewarded.addAdEventListener(
-  //     RewardedAdEventType.EARNED_REWARD,
-  //     reward => {
-  //       setDisplayAd(false)
-  //       console.log('User earned reward of ', reward);
-  //     },
-  //   );
-
-  //   // Start loading the rewarded ad straight away
-  //   rewarded.load();
-
-  //   // Unsubscribe from events on unmount
-  //   return () => {
-  //     unsubscribeLoaded();
-  //     unsubscribeEarned();
-  //   };
-  // }, []);
-
-  // // No advert ready to show yet
-  // if (!loaded) {
-  //   return null;
-  // }
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -192,8 +126,6 @@ function LetsLearnScreen({navigation}) {
             ) : (
               <View style={styles.content}>
                 <View style={styles.sentenceRow}>
-                  {/* Buttons */}
-                  {/* <Text style={styles.sentenceText}>{question?.map((word, index) =>(value?.length>0 && value?.find(item => word===item?.value)) ? <Animated.Text key={index} style={[styles.answer,{opacity: animationValue,transform: [{ translateX: positionValue }]}]}>{word}</Animated.Text>: <Text key={index} style={(question?.length>0 && word?.includes('{')) ? styles.sentenceTextHighlight : ''}>{word} </Text>)} </Text> */}
                   <Text style={styles.sentenceText}>
                     {question?.map((word, index) => (
                       <Text
@@ -228,18 +160,6 @@ function LetsLearnScreen({navigation}) {
                           {char}
                         </Animated.Text>
                       ))}
-                      {/* {value && (
-                        <TouchableOpacity
-                          style={styles.cancelButton}
-                          onPress={() => {
-                            setValue(null);
-                            // setItems([]);
-                            setImage();
-                            // getText();
-                          }}>
-                            <Text style={styles.cancelButtonText}>✖</Text>
-                          </TouchableOpacity>
-                      )} */}
                   </View>
                 </View>
                 <View style={styles.listContainer}>
@@ -269,19 +189,6 @@ function LetsLearnScreen({navigation}) {
                       {displayAd ? (
                         <View>
                           <Text style={styles.wait}>Please wait...</Text>
-                          {/* <View>
-                            <BannerAd
-                              size={BannerAdSize.MEDIUM_RECTANGLE}
-                              // unitId="ca-app-pub-2014852868779854/9546612752"
-                              unitId="ca-app-pub-3940256099942544/9214589741"
-                              onAdLoaded={() => {
-                                // console.log('Advert loaded');
-                              }}
-                              onAdFailedToLoad={error => {
-                                console.error('Advert failed to load: ', error);
-                              }}
-                            />
-                          </View> */}
                         </View>
                       ) : null}
                     </View>
@@ -416,7 +323,6 @@ const styles = StyleSheet.create({
   ansImg: {
     width: '100%',
     height: '100%',
-    // marginTop: 50,
     borderRadius: 15,
     borderColor: 'white',
     borderWidth: 10,
@@ -428,8 +334,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   button: {
-    // width: '100%',
-    // height: 50,
     paddingHorizontal: 10,
     paddingVertical: 8,
     backgroundColor: common.color.secondary,
@@ -438,16 +342,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    // padding: 5,
     ...common.style.border,
   },
   buttonText: {
     color: '#fff',
     fontSize: 20,
     fontFamily: common.font.primary,
-    // textShadowColor: "#d70297be",
-    // textShadowRadius: 5,
-    // textShadowOffset: { width: 2, height: 1 },
     paddingHorizontal: 5,
   },
   wait: {
