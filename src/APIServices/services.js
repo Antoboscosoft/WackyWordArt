@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosinstance"
 
-export const get = async (url) => {
+export const getService = async (url) => {
     try {
         const response = await axiosInstance.get(url);
         return response.data;
@@ -9,7 +9,7 @@ export const get = async (url) => {
     }
 }
 
-export const post = async (url, data) => {
+export const postService = async (url, data) => {
     try {
         const response = await axiosInstance.post(url, data);
         return response.data;
