@@ -165,8 +165,8 @@ function HomeScreen({ navigation }) {
   return (
     <DrawerLayout ref={drawerRef} drawerWidth={250} drawerPosition="left" renderNavigationView={renderDrawerContent} drawerType="slide">
       {isFocused &&
-        <FadeAnime>
-          <View style={styles.container}>
+        <View style={styles.container}>
+          <FadeAnime>
             <Background>
               {/* Header */}
               <Header drawerRef={drawerRef} title={'Home'} navigation={navigation} secondIcon={'settings'} secondIconPress={() => navigation.navigate('Settings')} />
@@ -191,8 +191,8 @@ function HomeScreen({ navigation }) {
               </ScrollView>
               <FastImage source={require('../assets/images/zebra_hand_raise.png')} style={{ position: 'absolute', right: 0, bottom: -10, width: 220, height: 270 }} />
             </Background>
-          </View>
-        </FadeAnime>
+          </FadeAnime>
+        </View>
       }
     </DrawerLayout>
   );

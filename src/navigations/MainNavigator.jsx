@@ -1,8 +1,8 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, createContext, useRef } from 'react';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import { Animated, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 
 import HomeScreen from '../screens/HomeScreen';
 import PlayScreen from '../screens/PlayScreen';
@@ -17,22 +17,28 @@ import { common } from '../utills/Utils';
 import SplashScreen from '../screens/SplashScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ProgressScreen from '../screens/ProgressScreen';
-import { BannerAd, BannerAdSize,RewardedAd, RewardedAdEventType } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, RewardedAd, RewardedAdEventType } from 'react-native-google-mobile-ads';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const ContextProvider = createContext(null);
 
 const Stack = createNativeStackNavigator();
 
 function MainNavigator() {
+  const insets = useSafeAreaInsets();
 
   const [isLoading, setIsLoading] = useState(true);
   const [adBanner, setAdBanner] = useState(false);
 
   const [musicController, setMusicControler] = useState(null);
-  const [displayFooter,setDisplayFooter]=useState(true)
+  const [displayFooter, setDisplayFooter] = useState(true)
   const [rewardedAd, setRewardedAd] = useState(null);
   const [isAdLoaded, setIsAdLoaded] = useState(false);
   const [displayAd, setDisplayAd] = useState();
+
+  const [isNetworkConnected, setIsNetworkConnected] = useState(false);
+  const [showNetwork, setShowNetwork] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
 
   useEffect(() => {
@@ -43,9 +49,6 @@ function MainNavigator() {
       setIsLoading(false);
     }, 3000);
 
-    // setTimeout(() => {
-    //   setAdBanner(true);
-    // }, 3200)
   }, []);
 
   useEffect(() => {
@@ -71,12 +74,63 @@ function MainNavigator() {
       unsubscribeLoaded();
       unsubscribeEarned();
     };
-  }, [isAdLoaded===false]);
+  }, [isAdLoaded === false, isNetworkConnected]);
+
+  // For network alert message
+  const fadeIn = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 1500,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  // Hide network error when connected
+  useEffect(() => {
+    if (isNetworkConnected){
+      setTimeout(() => {
+        setShowNetwork(false);
+      }, 2000);
+    }
+  }, [isNetworkConnected]);
+
+  // Network error
+  useEffect(() => {
+    // Subscribe
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (state.isConnected) {
+        setIsNetworkConnected(true);
+        fadeOut();        
+      } else {
+        setIsNetworkConnected(false);
+        setShowNetwork(true);  //To show network error msg
+        fadeIn();
+      }
+    });
+
+    return () => {
+      // Unsubscribe
+      unsubscribe();
+    }
+  }, [])
+
+  const networkBackground= isNetworkConnected ? "#0eb638" : "#da0808"
 
   return (
     <View style={styles.container}>
+      {isLoading === false && showNetwork && <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, paddingTop: insets.top + insets.top / 2, padding: 8, zIndex: 1, backgroundColor: networkBackground, opacity: fadeAnim }}>
+        <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>{isNetworkConnected ? 'You are connected to the internet' : 'Check your internet connection'}</Text>
+      </Animated.View>}
       <NavigationContainer theme={DarkTheme}>
-        <ContextProvider.Provider value={{ musicController, setMusicControler,displayFooter,setDisplayFooter,rewardedAd, setRewardedAd,isAdLoaded, setIsAdLoaded,displayAd, setDisplayAd }}>
+        <ContextProvider.Provider value={{ musicController, setMusicControler, displayFooter, setDisplayFooter, rewardedAd, setRewardedAd, isAdLoaded, setIsAdLoaded, displayAd, setDisplayAd }}>
           <Stack.Navigator initialRouteName='Home' screenOptions={{
             headerShown: false,
             animation: 'fade',
@@ -98,11 +152,11 @@ function MainNavigator() {
         </ContextProvider.Provider>
       </NavigationContainer>
       {(isLoading === false && displayFooter) && <View style={[adBanner ? styles.adContainer : null, { borderTopWidth: adBanner ? 3 : 0, borderColor: common.color.primary }]}>
-        <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} />
+        {/* <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} /> */}
         <BannerAd size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} unitId="ca-app-pub-3940256099942544/9214589741"
-        onAdLoaded={() => {
-          setAdBanner(true)
-        }}
+          onAdLoaded={() => {
+            setAdBanner(true)
+          }}
           onAdFailedToLoad={error => {
             console.error('Advert failed to load: ', error);
           }} />
@@ -119,9 +173,9 @@ const styles = StyleSheet.create({
   // Advertisement styles
   adContainer: {
     width: '100%',
-    // height: 80,
     borderTopWidth: 3,
-    borderColor: common.color.primary
+    borderColor: common.color.primary,
+    backgroundColor: "#fbfef7e9"
   },
   // adImage: {
   //   width: '100%',
