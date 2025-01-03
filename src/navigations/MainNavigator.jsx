@@ -31,7 +31,6 @@ function MainNavigator() {
   const [adBanner, setAdBanner] = useState(false);
 
   const [musicController, setMusicControler] = useState(null);
-  const [displayFooter, setDisplayFooter] = useState(true)
   const [rewardedAd, setRewardedAd] = useState(null);
   const [isAdLoaded, setIsAdLoaded] = useState(false);
   const [displayAd, setDisplayAd] = useState();
@@ -130,7 +129,7 @@ function MainNavigator() {
         <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>{isNetworkConnected ? 'You are connected to the internet' : 'Check your internet connection'}</Text>
       </Animated.View>}
       <NavigationContainer theme={DarkTheme}>
-        <ContextProvider.Provider value={{ musicController, setMusicControler, displayFooter, setDisplayFooter, rewardedAd, setRewardedAd, isAdLoaded, setIsAdLoaded, displayAd, setDisplayAd }}>
+        <ContextProvider.Provider value={{ musicController, setMusicControler, rewardedAd, setRewardedAd, isAdLoaded, setIsAdLoaded, displayAd, setDisplayAd }}>
           <Stack.Navigator initialRouteName='Home' screenOptions={{
             headerShown: false,
             animation: 'fade',
@@ -151,7 +150,7 @@ function MainNavigator() {
           </Stack.Navigator>
         </ContextProvider.Provider>
       </NavigationContainer>
-      {(isLoading === false && displayFooter) && <View style={[adBanner ? styles.adContainer : null, { borderTopWidth: adBanner ? 3 : 0, borderColor: common.color.primary }]}>
+      {isLoading === false && <View style={[adBanner ? styles.adContainer : null, { borderTopWidth: adBanner ? 3 : 0, borderColor: common.color.primary }]}>
         {/* <FastImage style={styles.adImage} resizeMode="cover" source={require('../assets/images/ads.png')} /> */}
         <BannerAd size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} unitId="ca-app-pub-3940256099942544/9214589741"
           onAdLoaded={() => {

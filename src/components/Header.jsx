@@ -7,7 +7,7 @@ import { ContextProvider } from '../navigations/MainNavigator';
 
 function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, secondIconColor = "#000000" }) {
     const insets = useSafeAreaInsets();
-    const {setDisplayFooter,setRewardedAd,setIsAdLoaded,setDisplayAd}=useContext(ContextProvider)
+    const {setRewardedAd,setIsAdLoaded,setDisplayAd}=useContext(ContextProvider)
     let checkHome = title === 'Home';
     const onChange = () => {
         // playMusic("menu");
@@ -17,7 +17,6 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, sec
             navigation.goBack();
         }
         if(title="Let's Learn"){
-            setDisplayFooter(true)
             setRewardedAd(null)
             setIsAdLoaded(false)
             setDisplayAd()

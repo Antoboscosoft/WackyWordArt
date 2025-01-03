@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '65%',
+    width: '60%',
     backgroundColor: common.color.secondary,
     borderRadius: 35,
     paddingHorizontal: 7,
@@ -220,6 +220,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     fontFamily: common.font.primary,
+    textShadowColor: "#d70297be",
+    textShadowRadius: 5,
+    textShadowOffset: { width: 2, height: 1 },
   },
   // Drawer styles
   drawerContainer: {

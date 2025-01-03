@@ -26,7 +26,7 @@ function LetsLearnScreen({navigation}) {
   const [items, setItems] = useState([]);
   const [question, setQuestion] = useState();
   const [image, setImage] = useState({value:null,error:false});
-  const {setDisplayFooter, rewardedAd, isAdLoaded, displayAd, setDisplayAd } = useContext(ContextProvider);
+  const {rewardedAd, isAdLoaded, displayAd, setDisplayAd } = useContext(ContextProvider);
   const animationValue = useRef(new Animated.Value(0)).current;
   const positionValue = useRef(new Animated.Value(50)).current;
 
@@ -90,7 +90,6 @@ function LetsLearnScreen({navigation}) {
   };
   const generateImg = () => {
     setDisplayAd(true);
-    setDisplayFooter(false);
     if (isAdLoaded && rewardedAd) {
       rewardedAd.show();
     } else {
