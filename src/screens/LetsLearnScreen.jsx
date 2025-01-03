@@ -77,13 +77,13 @@ function LetsLearnScreen({navigation}) {
           setImage({value:null,error:true})
           // setDisplayAd(false);
           setIsLoading1(false);
-          Alert.alert('Error', 'Failed to generate image');
+          // Alert.alert('Error', 'Failed to generate image');
         }
       }).catch(error => {
         setImage({value:null,error:true})
         // setDisplayAd(false);
         setIsLoading1(false);
-        !RewardedAd.isOpened && Alert.alert('Error', 'Failed to generate image');
+        // Alert.alert('Error', 'Failed to generate image');
         console.log(error);
       });
   };
