@@ -17,7 +17,7 @@ import { common } from '../utills/Utils';
 import SplashScreen from '../screens/SplashScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ProgressScreen from '../screens/ProgressScreen';
-import { BannerAd, BannerAdSize, RewardedAd, RewardedAdEventType } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, RewardedAd, RewardedAdEventType, useRewardedAd } from 'react-native-google-mobile-ads';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const ContextProvider = createContext(null);
@@ -31,14 +31,15 @@ function MainNavigator() {
   const [adBanner, setAdBanner] = useState(false);
 
   const [musicController, setMusicControler] = useState(null);
-  const [rewardedAd, setRewardedAd] = useState(null);
-  const [isAdLoaded, setIsAdLoaded] = useState(false);
-  const [displayAd, setDisplayAd] = useState();
+  // const [rewardedAd, setRewardedAd] = useState(null);
+  // const [isAdLoaded, setIsAdLoaded] = useState(false);
+  // const [displayAd, setDisplayAd] = useState();
 
   const [isNetworkConnected, setIsNetworkConnected] = useState(false);
   const [showNetwork, setShowNetwork] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  const RewardedAd = useRewardedAd("ca-app-pub-3940256099942544/5224354917");
 
   useEffect(() => {
     StatusBar.setHidden(true);
@@ -51,30 +52,33 @@ function MainNavigator() {
   }, []);
 
   useEffect(() => {
-    const ad = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
-      keywords: ['fashion', 'clothing'],
-    });
+    // const ad = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
+    //   keywords: ['fashion', 'clothing'],
+    // });
 
-    const unsubscribeLoaded = ad.addAdEventListener(RewardedAdEventType.LOADED, () => {
-      setIsAdLoaded(true);
-      setRewardedAd(ad);
-    });
+    // const unsubscribeLoaded = ad.addAdEventListener(RewardedAdEventType.LOADED, () => {
+    //   setIsAdLoaded(true);
+    //   setRewardedAd(ad);
+    // });
 
-    const unsubscribeEarned = ad.addAdEventListener(RewardedAdEventType.EARNED_REWARD, reward => {
-      setDisplayAd(false)
-      console.log('User earned reward of ', reward);
-    });
+    // const unsubscribeEarned = ad.addAdEventListener(RewardedAdEventType.EARNED_REWARD, reward => {
+    //   setDisplayAd(false)
+    //   console.log('User earned reward of ', reward);
+    // });
 
-    // Start loading the ad
-    ad.load();
+    // // Start loading the ad
+    // ad.load();
 
-    // Cleanup listeners on unmount
-    return () => {
-      unsubscribeLoaded();
-      unsubscribeEarned();
-    };
-  }, [isAdLoaded === false, isNetworkConnected]);
-
+    // // Cleanup listeners on unmount
+    // return () => {
+    //   unsubscribeLoaded();
+    //   unsubscribeEarned();
+    // };
+    console.log("is_ad loads",RewardedAd.isLoaded);
+    
+    RewardedAd.isLoaded === false && RewardedAd.load();
+  }, [RewardedAd.isLoaded, isNetworkConnected]);
+  
   // For network alert message
   const fadeIn = () => {
     Animated.timing(fadeAnim, {
@@ -129,7 +133,7 @@ function MainNavigator() {
         <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>{isNetworkConnected ? 'You are connected to the internet' : 'Check your internet connection'}</Text>
       </Animated.View>}
       <NavigationContainer theme={DarkTheme}>
-        <ContextProvider.Provider value={{ musicController, setMusicControler, rewardedAd, setRewardedAd, isAdLoaded, setIsAdLoaded, displayAd, setDisplayAd }}>
+        <ContextProvider.Provider value={{musicController, setMusicControler, RewardedAd}}>
           <Stack.Navigator initialRouteName='Home' screenOptions={{
             headerShown: false,
             animation: 'fade',

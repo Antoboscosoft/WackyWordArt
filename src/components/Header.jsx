@@ -7,7 +7,7 @@ import { ContextProvider } from '../navigations/MainNavigator';
 
 function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, secondIconColor = "#000000" }) {
     const insets = useSafeAreaInsets();
-    const {setRewardedAd,setIsAdLoaded,setDisplayAd}=useContext(ContextProvider)
+    // const {setRewardedAd,setIsAdLoaded,setDisplayAd}=useContext(ContextProvider)
     let checkHome = title === 'Home';
     const onChange = () => {
         // playMusic("menu");
@@ -16,11 +16,11 @@ function Header({ title, drawerRef, navigation, secondIcon, secondIconPress, sec
         } else {
             navigation.goBack();
         }
-        if(title="Let's Learn"){
-            setRewardedAd(null)
-            setIsAdLoaded(false)
-            setDisplayAd()
-        }
+        // if(title="Let's Learn"){
+        //     setRewardedAd(null)
+        //     setIsAdLoaded(false)
+        //     setDisplayAd()
+        // }
     }
     let secondIconStyle = (secondIcon || checkHome) ? {} : { backgroundColor: 'transparent', borderWidth: 0 }
     return (

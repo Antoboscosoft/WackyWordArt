@@ -6,6 +6,7 @@ export const getService = async (url) => {
         return response.data;
     } catch (error) {
         console.log("error in get", error);
+        throw error
     }
 }
 
@@ -15,5 +16,6 @@ export const postService = async (url, data) => {
         return response.data;
     } catch (error) {
         console.log("error in post", error);
+        throw error
     }
 }

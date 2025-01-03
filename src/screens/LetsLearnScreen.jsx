@@ -7,6 +7,7 @@ import {
   Alert,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
@@ -26,7 +27,8 @@ function LetsLearnScreen({navigation}) {
   const [items, setItems] = useState([]);
   const [question, setQuestion] = useState();
   const [image, setImage] = useState({value:null,error:false});
-  const {rewardedAd, isAdLoaded, displayAd, setDisplayAd } = useContext(ContextProvider);
+  const {RewardedAd, rewardedAd, isAdLoaded, setDisplayAd } = useContext(ContextProvider);
+
   const animationValue = useRef(new Animated.Value(0)).current;
   const positionValue = useRef(new Animated.Value(50)).current;
 
@@ -65,6 +67,7 @@ function LetsLearnScreen({navigation}) {
       });
   };
   const getImage = data => {
+    setImage({value:null,error:false})
     setIsLoading1(true);
     let val={prompt: question.join(' ').replace(/{.*?}/, data)}
     postService("/generateimage",val).then(response => {
@@ -72,15 +75,15 @@ function LetsLearnScreen({navigation}) {
           setImage({value:response.image,error:false})
         } else {
           setImage({value:null,error:true})
-          setDisplayAd(false);
+          // setDisplayAd(false);
           setIsLoading1(false);
           Alert.alert('Error', 'Failed to generate image');
         }
       }).catch(error => {
         setImage({value:null,error:true})
-        setDisplayAd(false);
+        // setDisplayAd(false);
         setIsLoading1(false);
-        Alert.alert('Error', 'Failed to generate image');
+        !RewardedAd.isOpened && Alert.alert('Error', 'Failed to generate image');
         console.log(error);
       });
   };
@@ -89,14 +92,23 @@ function LetsLearnScreen({navigation}) {
     handlePress();
   };
   const generateImg = () => {
-    setDisplayAd(true);
-    if (isAdLoaded && rewardedAd) {
-      rewardedAd.show();
+    // setDisplayAd(true);
+    if (RewardedAd.isLoaded) {
+      RewardedAd.show();
+      getImage(value);
     } else {
       Alert.alert("Ad not loaded");
     }
-    getImage(value);
   };
+  
+  // Show error message after ad closed
+  useEffect(() => {
+    if(isFocused && !RewardedAd.isOpened &&image.error){
+        Alert.alert('Error', 'Failed to generate image');
+    }
+  }, [RewardedAd.isOpened, image.error]);
+  
+
   useEffect(() => {
     if (isFocused) {
       getText();
@@ -109,83 +121,44 @@ function LetsLearnScreen({navigation}) {
         <Background>
           {/* Header Section */}
           <Header title="Let's Learn" navigation={navigation} />
-          <ScrollView
-            contentContainerStyle={{flexGrow: 1, paddingBottom: 15}}
-            style={{zIndex: 1}}>
+          <ScrollView contentContainerStyle={{flexGrow: 1, paddingBottom: 15}} style={{zIndex: 1}}>
             {/* Center Content Section */}
             {isLoading ? (
               <View>
-                <LottieView
-                  autoPlay
-                  loop={true}
-                  source={require('../assets/lottie/textLoading.json')}
-                  style={[styles.loading, {width: 100, height: 100}]}
-                />
+                <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={[styles.loading, {width: 100, height: 100}]}/>
               </View>
             ) : (
               <View style={styles.content}>
                 <View style={styles.sentenceRow}>
                   <Text style={styles.sentenceText}>
                     {question?.map((word, index) => (
-                      <Text
-                        key={index}
-                        style={
-                          question?.length > 0 && word?.includes('{')
-                            ? styles.sentenceTextHighlight
-                            : ''
-                        }>
+                      <Text key={index} style={ question?.length > 0 && word?.includes('{') ? styles.sentenceTextHighlight  : '' }>
                         {word}{' '}
                       </Text>
                     ))}{' '}
                   </Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    {value &&
-                      value.split('').map((char, index) => (
-                        <Animated.Text
-                          key={index}
-                          style={[
-                            styles.answer,
-                            {
-                              opacity: animationValue,
-                              transform: [{translateX: positionValue}],
-                            },
-                          ]}>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+                    {value && value.split('').map((char, index) => (
+                        <Animated.Text  key={index} style={[ styles.answer, { opacity: animationValue, transform: [{translateX: positionValue}], },]}>
                           {char}
                         </Animated.Text>
                       ))}
                   </View>
                 </View>
                 <View style={styles.listContainer}>
-                  {!value ? (
-                    items.map((item, index) => (
-                      <Text
-                        key={index}
-                        style={styles.listLabel}
-                        onPress={() => {
-                          handleClick(item);
-                        }}>
+                  {!value ? (items.map((item, index) => (
+                      <Text key={index} style={styles.listLabel} onPress={() => handleClick(item)}>
                         {item}
                       </Text>
                     ))
                   ) : image?.value ? null : (
                     <View>
-                      {
-                        displayAd !==false &&
-                      <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {displayAd ? null: generateImg();}}>
+                      <TouchableOpacity   style={styles.button} onPress={() => {isLoading1 ? null: generateImg();}}>
                         <Text style={styles.buttonText}>
-                          {displayAd ? 'Generating Image' : 'Generate Image'}
+                          {isLoading1 ? 'Generating Image' : 'Generate Image'}
                         </Text>
                       </TouchableOpacity>
-                      }
-                      {displayAd ? (
+                      {isLoading1 ? (
                         <View>
                           <Text style={styles.wait}>Please wait...</Text>
                         </View>
@@ -193,41 +166,23 @@ function LetsLearnScreen({navigation}) {
                     </View>
                   )}
                 </View>
-                {(!image?.value && !image?.error && value && displayAd === false) ? (
-                  <LottieView
-                    autoPlay                    
-                    loop={true}
-                    source={require('../assets/lottie/textLoading.json')}
-                    style={[styles.loading, {width: 100, height: 100}]}
-                  />
-                ) : (
-                  image?.value && (
+                {(!image?.value && !image?.error && value && isLoading1) ? (
+                  <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={[styles.loading, {width: 100, height: 100}]} />
+                ) : ( image?.value && (
                     <View style={{width: '60%', height: '40%', marginTop: 50}}>
-                      <FastImage
-                        source={{uri: image?.value}}
-                        style={styles.ansImg}
+                      <Image source={{uri: image?.value}} style={styles.ansImg}
                         onLoadEnd={() => {
                           setIsLoading1(false)
-                          setDisplayAd(false);
+                          // setDisplayAd(false);
                         }}
                         onError={() => {
                           setIsLoading1(false)
-                          setDisplayAd(false);
+                          // setDisplayAd(false);
                         }}
                       />
                       {isLoading1 && (
-                        <LottieView
-                          autoPlay
-                          loop={true}
-                          source={require('../assets/lottie/textLoading.json')}
-                          style={{
-                            position: 'absolute',
-                            top: '30%',
-                            left: '30%',
-                            width: 100,
-                            height: 100,
-                            zIndex: 1,
-                          }}
+                        <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')}
+                          style={{ position: 'absolute',top: '30%', left: '30%',  width: 100,  height: 100, zIndex: 1, }}
                         />
                       )}
                     </View>
