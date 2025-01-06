@@ -38,10 +38,10 @@ function MakeYourownScreen({ navigation }) {
     <View style={styles.container}>
       <FadeAnime>
         <Background>
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} >
+          <KeyboardAvoidingView behavior={'padding'} >
             {/* Header Section */}
             <Header title="Make Your Own" navigation={navigation} />
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ zIndex: 1 }} keyboardShouldPersistTaps='handled' keyboardDismissMode='onDrag'>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ zIndex: 1 }} keyboardShouldPersistTaps='handled' keyboardDismissMode='on-drag'>
               {/* Center Content Section */}
               <View style={styles.content}>
                 <TextInput
