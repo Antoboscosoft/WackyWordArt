@@ -46,7 +46,7 @@ function FillInTheBlankScreen({ navigation }) {
     setIsEditing(true);
   };
 
-  const getInputWidth = (text) => {
+  const getInputWidth = (text, placeholder) => {
     // cal 1:
     // const minWidth = 100;
     // const maxWidth = 300;
@@ -55,14 +55,28 @@ function FillInTheBlankScreen({ navigation }) {
     // return Math.min(calculatedWidth, maxWidth);
 
     // cal 2:
-    const basewidth = 100;
-    const additionalwidth = 9;
-    const widthPerCharacter = 10;
+    // const basewidth = 100;
+    // const additionalwidth = 9;
+    // const widthPerCharacter = 10;
+    // const textLength = text.length;
+    // // If the text length exceeds 8 characters, add width
+    // const calculatedWidth = textLength > additionalwidth ?
+    //   basewidth + (textLength - additionalwidth) * widthPerCharacter
+    //   : basewidth; // Keeps the base width for lengths <= 8
+    // const maxWidth = 250; // Set your desired maximum width
+    // return Math.min(calculatedWidth, maxWidth);
+
+
+    // cal 3:
+    const baseWidth = 120; // Minimum width for the input field
+    const widthPerCharacter = 12; // Width added per character in the text
+    const placeholderLength = placeholder ? placeholder.length : 0;
     const textLength = text.length;
-    // If the text length exceeds 8 characters, add width
-    const calculatedWidth = textLength > additionalwidth ?
-      basewidth + (textLength - additionalwidth) * widthPerCharacter
-      : basewidth; // Keeps the base width for lengths <= 8
+
+    // Calculate width based on the text length or placeholder length
+    const calculatedWidth = Math.max(baseWidth, Math.max(textLength, placeholderLength) * widthPerCharacter);
+
+    // limit the maximum width to avoid overlay wide inputs 
     const maxWidth = 250; // Set your desired maximum width
     return Math.min(calculatedWidth, maxWidth);
   };
@@ -103,20 +117,17 @@ function FillInTheBlankScreen({ navigation }) {
               <View style={styles.content}>
                 {isEditing ? (
                   <View style={styles.sentenceRow}>
-                    {/* Buttons */}
                     <Text style={styles.sentenceText}>On a sunny afternoon, I walked to the </Text>
-                    {/* <View style={{ flexDirection: 'row' }}> */}
                     <TextInput
-                      style={[styles.input, { width: getInputWidth(place) }]}
+                      style={[styles.input, { width: getInputWidth(place, 'place') }]}
                       placeholder="place"
                       placeholderTextColor={placeHolderColor}
                       value={place}
                       onChangeText={setPlace}
                     />
-                    {/* </View> */}
                     <Text style={styles.sentenceText}> with my </Text>
                     <TextInput
-                      style={[styles.input, { width: getInputWidth(adjective) }]}
+                      style={[styles.input, { width: getInputWidth(adjective, 'adjective') }]}
                       placeholder="adjective"
                       placeholderTextColor={placeHolderColor}
                       value={adjective}
@@ -124,7 +135,7 @@ function FillInTheBlankScreen({ navigation }) {
                     />
                     <Text style={styles.sentenceText}>, </Text>
                     <TextInput
-                      style={[styles.input, { width: getInputWidth(friendOrPet) }]}
+                      style={[styles.input, { width: getInputWidth(friendOrPet, 'friend or pet') }]}
                       placeholder="friend or pet"
                       placeholderTextColor={placeHolderColor}
                       value={friendOrPet}
@@ -132,7 +143,7 @@ function FillInTheBlankScreen({ navigation }) {
                     />
                     <Text style={styles.sentenceText}>, carrying a </Text>
                     <TextInput
-                      style={[styles.input, { width: getInputWidth(noun) }]}
+                      style={[styles.input, { width: getInputWidth(noun, 'noun') }]}
                       placeholder="noun"
                       placeholderTextColor={placeHolderColor}
                       value={noun}
@@ -140,7 +151,7 @@ function FillInTheBlankScreen({ navigation }) {
                     />
                     <Text style={styles.sentenceText}>, and we decided to </Text>
                     <TextInput
-                      style={[styles.input, { width: getInputWidth(verb) }]}
+                      style={[styles.input, { width: getInputWidth(verb, 'verb') }]}
                       placeholder="verb"
                       placeholderTextColor={placeHolderColor}
                       value={verb}
@@ -148,7 +159,7 @@ function FillInTheBlankScreen({ navigation }) {
                     />
                     <Text style={styles.sentenceText}> near the </Text>
                     <TextInput
-                      style={[styles.input, { width: getInputWidth(thing) }]}
+                      style={[styles.input, { width: getInputWidth(thing, 'thing') }]}
                       placeholder="thing"
                       placeholderTextColor={placeHolderColor}
                       value={thing}
@@ -156,7 +167,7 @@ function FillInTheBlankScreen({ navigation }) {
                     />
                     <Text style={styles.sentenceText}>, enjoying the </Text>
                     <TextInput
-                      style={[styles.input, { width: getInputWidth(weatherAdjective) }]}
+                      style={[styles.input, { width: getInputWidth(weatherAdjective, 'weatherAdjective') }]}
                       placeholder="adjective"
                       placeholderTextColor={placeHolderColor}
                       value={weatherAdjective}
@@ -307,7 +318,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   editButtonText: {
-    color: '#fff',
+    color: '#1f1c1c',
     fontSize: 16,
     fontWeight: 'bold',
   },
