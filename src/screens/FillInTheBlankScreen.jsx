@@ -20,12 +20,14 @@ function FillInTheBlankScreen({ navigation }) {
   const [submittedSentence, setSubmittedSentence] = useState();
   const [isEditing, setIsEditing] = useState(true);
 
+  const isValue = place.trim() !== '' || adjective.trim() !== '' || friendOrPet.trim() !== '' || noun.trim() !== '' || verb.trim() !== '' || thing.trim() !== '' || weatherAdjective.trim() !== '';
+
   useEffect(() => {
     if (isFocused) {
       scaleValue.setValue(0);
       Animated.timing(scaleValue, {
         toValue: 1,
-        duration: 1000,
+        duration: 1200,
         useNativeDriver: true,
       }).start();
     }
@@ -34,40 +36,35 @@ function FillInTheBlankScreen({ navigation }) {
   const placeHolderColor = "'#cdcdcd'";
 
   const handleSubmit = useCallback(() => {
+    // Helper function to format values
+    const formatValue = (value) => 
+    // {
+    //   return value && value.trim() !== '' ? `<span style="text-decoration: underline;">${value}</span>` : '________';
+    // };
+    (value && value.trim() !== '' ? value : '________')
     // const sentence = `On a sunny afternoon, I walked to the ${place} with my ${adjective} friend or pet, carrying a ${noun}, and we decided to ${verb} ${thing}. It was a ${weatherAdjective} day.`;
-    const sentence = `On a sunny afternoon, I walked to the ${place} with my ${adjective} ${friendOrPet}, carrying a ${noun}, and we decided to ${verb} near the ${thing}, enjoying the ${weatherAdjective} weather.`;
+    const sentence = `On a sunny afternoon, I walked to the ${formatValue(place)} with my ${formatValue(adjective)} ${formatValue(friendOrPet)}, carrying a ${formatValue(noun)}, and we decided to ${formatValue(verb)} near the ${formatValue(thing)}, enjoying the ${formatValue(weatherAdjective)} weather.`;
     // navigation.navigate('ResultScreen', { sentence });
     setSubmittedSentence(sentence);
     setIsEditing(false);
   }, [place, adjective, friendOrPet, noun, verb, thing, weatherAdjective]);
 
+  const handleClear = () => {
+    setPlace('');
+    setAdjective('');
+    setFriendOrPet('');
+    setNoun('');
+    setVerb('');
+    setThing('');
+    setWeatherAdjective('');
+  };
+
   const handleEdit = () => {
-    // setSubmittedSentence(null);
     setIsEditing(true);
+    setSubmittedSentence('');
   };
 
   const getInputWidth = (text, placeholder) => {
-    // cal 1:
-    // const minWidth = 100;
-    // const maxWidth = 300;
-    // const textLength = text.length;
-    // const calculatedWidth = minWidth + (textLength * 10);
-    // return Math.min(calculatedWidth, maxWidth);
-
-    // cal 2:
-    // const basewidth = 100;
-    // const additionalwidth = 9;
-    // const widthPerCharacter = 10;
-    // const textLength = text.length;
-    // // If the text length exceeds 8 characters, add width
-    // const calculatedWidth = textLength > additionalwidth ?
-    //   basewidth + (textLength - additionalwidth) * widthPerCharacter
-    //   : basewidth; // Keeps the base width for lengths <= 8
-    // const maxWidth = 250; // Set your desired maximum width
-    // return Math.min(calculatedWidth, maxWidth);
-
-
-    // cal 3:
     const baseWidth = 120; // Minimum width for the input field
     const widthPerCharacter = 12; // Width added per character in the text
     const placeholderLength = placeholder ? placeholder.length : 0;
@@ -81,21 +78,19 @@ function FillInTheBlankScreen({ navigation }) {
     return Math.min(calculatedWidth, maxWidth);
   };
 
-  //  // Function to calculate the width of the input based on text length
-  //  const getInputWidth = (text) => {
-  //   const baseWidth = 100; // width for up to 8 characters
-  //   const additionalWidth = 10; // character length where it starts extending
-  //   const widthPerCharacter = 10; // extra width per character beyond 8 characters
-  //   const textLength = text.length;
+  const renderSentence = (sentence) => {
+    const words = sentence.split('');
+    return words.map((word, index) => {
+      // check if the word is a underlined placeholder or an entered word
+      const isUnderlined = word !== '________';
+      return (
+        <Text key={index} style={{ textDecorationLine: isUnderlined ? 'underline' : 'none' }}>
+          {word}
+        </Text>
+      )
+    })
+  };
 
-  //   // If the text length exceeds 8 characters, add width
-  //   const calculatedWidth = textLength > additionalWidth 
-  //     ? baseWidth + (textLength - additionalWidth) * widthPerCharacter
-  //     : baseWidth; // Keeps the base width for lengths <= 8
-
-  //   const maxWidth = 250; // maximum width for the input
-  //   return Math.min(calculatedWidth, maxWidth); // Ensures it doesn't exceed the max width
-  // };
 
   return (
     <View style={styles.container}>
@@ -106,17 +101,10 @@ function FillInTheBlankScreen({ navigation }) {
             <Header title="Fill in the Blank" navigation={navigation} />
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ zIndex: 1 }}>
 
-              {/* Top Right Edit Button */}
-              {/* {!isEditing && (
-              <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-                <Text style={styles.editText}>Edit</Text>
-              </TouchableOpacity>
-            )} */}
-
               {/* Center Content Section */}
               <View style={styles.content}>
-                {isEditing ? (
-                  <View style={styles.sentenceRow}>
+                {isEditing &&
+                  <View style={[styles.sentenceRow, styles.topLeftBorder]}>
                     <Text style={styles.sentenceText}>On a sunny afternoon, I walked to the </Text>
                     <TextInput
                       style={[styles.input, { width: getInputWidth(place, 'place') }]}
@@ -175,34 +163,35 @@ function FillInTheBlankScreen({ navigation }) {
                     />
                     <Text style={styles.sentenceText}> weather. </Text>
                   </View>
-                ) : (
-                  <View style={styles.resultContainer}>
-                    <Text style={styles.resultText}>{submittedSentence}</Text>
+                }
+                {!isEditing &&
+                  <View style={[styles.resultContainer, styles.topLeftBorder]}>
+                    <Text style={styles.resultText}>
+                    {submittedSentence}
+                      {/* {renderSentence(submittedSentence)} */}
+                      {/* <span dangerouslySetInnerHTML={{ __html: submittedSentence }} /> */}
+                    </Text>
                     <TouchableOpacity onPress={handleEdit} style={styles.editButton}>
                       <Text style={styles.editButtonText}>Edit</Text>
                     </TouchableOpacity>
                   </View>
+                }
+
+                {isEditing && (
+                  <View style={styles.buttonContainer} >
+                    <TouchableOpacity style={[styles.clearButton, { opacity: isValue ? 1 : 0.5 }]} disabled={!isValue} onPress={handleClear} >
+                      <Text style={styles.clearButtonText}> Clear </Text>
+                    </TouchableOpacity>
+                  </View>
                 )}
 
-                {/* {isEditing && (
-              <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-                <Text style={styles.submitButtonText}>Submit</Text>
-              </TouchableOpacity>
-            )} */}
                 {isEditing && (
                   <View style={styles.buttonContainer}>
-                    <Button title='Submit' onPress={handleSubmit} color={common.color.primary} />
+                    <TouchableOpacity style={styles.submitButton} onPress={handleSubmit} >
+                      <Text style={styles.submitButtonText}> Submit </Text>
+                    </TouchableOpacity>
                   </View>
                 )}
-                {/* <View style={styles.buttonContainer}>
-                <Button title='Submit' onPress={handleSubmit} color={common.color.primary}/>
-              </View> */}
-                {/* {submittedSentence ? (
-                  <View style={styles.resultContainer}>
-                    <Text style={styles.resultText}>{submittedSentence}</Text>
-                  </View>
-              ) : null} */}
-
               </View>
             </ScrollView>
           </KeyboardAvoidingView>
@@ -286,11 +275,72 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 20,
   },
-  resultContainer: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: '#f9f9f9',
+  submitButton: {
+    position: 'absolute',
+    bottom: -12,
+    left: 88,
+    backgroundColor: common.color.primary,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // borderTopRightRadius: 10,
+    // borderBottomLeftRadius: 10,
     borderRadius: 10,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  clearButton: {
+    position: 'absolute',
+    top: -10,
+    right: 100,
+    backgroundColor: common.color.primary,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // borderTopRightRadius: 10,
+    // borderBottomLeftRadius: 10,
+    // borderTopLeftRadius: 10,
+    // borderBottomRightRadius: 10,
+    borderRadius: 10,
+  },
+  clearButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  resultContainer: {
+    // // marginTop: 20,
+    // padding: 15,
+    // // margin: 10,
+    // // backgroundColor: '#f9f9f9',
+    // backgroundColor: '#fff',
+    // borderRadius: 10,
+    // // position: 'relative',
+    // flexWrap: 'wrap',
+    // alignItems: 'flex-start',
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 5,
+    // elevation: 5,
+
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -298,29 +348,52 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 5,
-    elevation: 3,
+    elevation: 5,
+  },
+  topLeftBorder: {
+    borderTopWidth: 5,
+    borderLeftWidth: 5,
+    borderColor: common.color.primary,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   resultText: {
-    fontSize: 18,
+    // fontSize: 16,
+    fontSize: common.style.phraseSize,
     fontFamily: common.font.primary,
-    color: common.color.primary,
+    // color: common.color.primary,
+    marginBottom: 15,
     lineHeight: 30,
   },
   editButton: {
-    // position: 'absolute',
-    // top: 20,
-    // right: 20,
-    // zIndex: 10,
-    // backgroundColor: common.color.primary,
-    padding: 10,
-    // borderRadius: 5,
-    marginTop: 10,
-    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: -50,
+    // right: 'auto',
+    // middle: 'auto',
+    // left: 10,
+    marginLeft: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
+
+    // bottom: -48,
+    // right: 8,
+    // alignItems: 'center',
+    // alignContent: 'center',
+    // alignSelf: 'center',
+    // justifyContent: 'center',
+    backgroundColor: common.color.primary,
+    paddingVertical: 10, // Vertical padding for better touch area
+    paddingHorizontal: 20, // Horizontal padding
+    borderRadius: 5,
   },
   editButtonText: {
-    color: '#1f1c1c',
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
