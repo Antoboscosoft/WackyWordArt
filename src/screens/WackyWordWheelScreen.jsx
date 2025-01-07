@@ -8,28 +8,28 @@ import SoundPlayer from 'react-native-sound-player';
 import { ContextProvider } from '../navigations/MainNavigator';
 import { FadeAnime } from '../components/Animations';
 import { useIsFocused } from '@react-navigation/native';
+import { getApiservice } from '../APIServices/services';
 // import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
 
 function WackyWordWheelScreen({ navigation }) {
-  // List of verbs for the wheel
-  const verbs = ['Dance', 'Walk', 'Jog', 'Run', 'Read', 'Eat', 'Sing', 'Play'];
+  // Static List of verbs for the wheel:
+  const verbs1 = ['Dance', 'Walk', 'Jog', 'Run', 'Read', 'Eat', 'Sing', 'Play'];
+  // Dynamic List of verbs for the wheel:
+  const [verbs, setVerbs] = useState();
   // State to manage the selected verb
   const [displayedSentence, setDisplayedSentence] = useState('');
   const [spinning, setSpinning] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
   const [countdown, setCountdown] = useState(5); // Timer starts at 15 seconds
   const thornShake = useRef(new Animated.Value(80)).current;
-
+  const [phrase, setPhrase] = useState('');
   const usePlayMusic = useMusicPlayer();
   const { playMusic, stopMusic } = usePlayMusic;
 
-
   const { musicController, setMusicControler } = useContext(ContextProvider);
-
-  console.log("musicController", musicController, setMusicControler);
-
   const timerRef = useRef(null); // Ref to manage the timer
+  console.log("displayedSentence", displayedSentence);
 
   // const soundRef = useRef(
   //   new Sound('puzzle-game.mp3', Sound.MAIN_BUNDLE, (error) => {
@@ -69,10 +69,8 @@ function WackyWordWheelScreen({ navigation }) {
 
   const startSpin = () => {
     if (spinning) return;
-    // console.log('Attempting to play sound...');
 
     // soundRef.setCurrentTime(0);
-
     // soundRef.play((succuss) => {
     //   if(!succuss){
     //     console.log("Playback failed due to audio decoding errors");
@@ -101,7 +99,14 @@ function WackyWordWheelScreen({ navigation }) {
     }).start(() => {
       const selectedVerb = verbs[selectedIndex];
       setDisplayedSentence(selectedVerb);
-      startCountdown();
+      // setPhrase(prevPhrase => prevPhrase.replace('{verb}', selectedVerb));
+
+      setPhrase(prevPhrase => {
+        const partOfSpeech = prevPhrase.match(/\{[a-zA-Z]+\}/g)?.[0];
+        return prevPhrase.replace(partOfSpeech, selectedVerb);
+      });
+
+      startCountdown(); 
       setSpinning(false);
       // stopThornShake();
       stopMusic();
@@ -109,6 +114,27 @@ function WackyWordWheelScreen({ navigation }) {
       rotation.setValue(randomDegree % 360);
     })
   };
+
+  // Function to fetch data from API
+  const fetchResult = async () => {
+    setDisplayedSentence('');
+    getApiservice('/freeai/wackywheel').then(response => {
+      if (response.status === true) {
+        console.log("response", response);
+        const phraseword = response?.data?.phrase;
+        setPhrase(phraseword);
+        setVerbs(response?.data?.options);
+      }
+    }).catch(error => {
+      console.log("enum errro", error);
+    }).finally(() => {
+      setIsLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    fetchResult();
+  }, []);
 
   const startCountdown = () => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -141,14 +167,14 @@ function WackyWordWheelScreen({ navigation }) {
   }, []);
 
   const renderWheel = () => {
-    const segments = verbs.length;
+    const segments = verbs?.length;
     const angle = 360 / segments;
     const radius = 150;
 
     return (
       <Svg width={2 * radius} height={2 * radius} viewBox={`0 0 ${2 * radius} ${2 * radius}`}>
         <G rotation={-90} origin={`${radius}, ${radius}`}>
-          {verbs.map((verb, index) => {
+          {verbs?.map((verb, index) => {
             const startAngle = angle * index;
             const endAngle = startAngle + angle;
             const x1 = radius + radius * Math.cos((Math.PI * startAngle) / 180);
@@ -223,18 +249,20 @@ function WackyWordWheelScreen({ navigation }) {
   // const stopThornShake = () => {
   //   thornShake.stopAnimation();
   // };
- const isFocused=useIsFocused();
+  const isFocused = useIsFocused();
   const scaleValue = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    if(isFocused){
+    if (isFocused) {
       scaleValue.setValue(0);
       Animated.timing(scaleValue, {
         toValue: 1,
         duration: 1000,
         useNativeDriver: true,
-      }).start(); 
+      }).start();
     }
   }, [isFocused]);
+
+
   return (
     <View style={styles.container}>
       <FadeAnime>
@@ -245,12 +273,15 @@ function WackyWordWheelScreen({ navigation }) {
             {/* Center Content Section */}
             <View style={styles.content}>
               <View style={styles.sentenceContainer}>
-                <Text style={styles.sentenceText}>
+                {/* <Text style={styles.sentenceText}>
                   Every morning, I{' '}
                   <Text style={displayedSentence ? styles.highlight : styles.underline}>
                     {displayedSentence || '_____'}
                   </Text>{' '}
                   to start my day.
+                </Text> */}
+                <Text style={styles.sentenceText}>
+                  {phrase || '_____'}
                 </Text>
               </View>
 
@@ -262,7 +293,7 @@ function WackyWordWheelScreen({ navigation }) {
           )} */}
 
               {/* Spinning Wheel */}
-              <Animated.View style={[styles.wheelContainer,{transform: [{scale: scaleValue}]}]}>
+              <Animated.View style={[styles.wheelContainer, { transform: [{ scale: scaleValue }] }]}>
                 {/* Thorn positioned statically */}
                 <Animated.View
                   style={[
