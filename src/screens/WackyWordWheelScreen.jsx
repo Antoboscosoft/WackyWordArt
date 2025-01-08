@@ -224,8 +224,8 @@ function WackyWordWheelScreen({ navigation }) {
 
   const renderWheel = () => {
     const segments = verbs?.length;
-    const angle = 360 / segments;
-    const radius = 150;
+    const angle = 360 / segments; // Angle for each segment
+    const radius = 160; // Radius of the wheel
 
     return (
       <Svg width={2 * radius} height={2 * radius} viewBox={`0 0 ${2 * radius} ${2 * radius}`}>
@@ -239,10 +239,12 @@ function WackyWordWheelScreen({ navigation }) {
             const y2 = radius + radius * Math.sin((Math.PI * endAngle) / 180);
 
             // Text positioning
-            const textAngle = startAngle + (angle / 2);
+            const textAngle = startAngle + (angle / 2); // Angle for text in the middle of the segment
             const textX = radius + radius * 0.6 * Math.cos((Math.PI * textAngle) / 180);
             const textY = radius + radius * 0.6 * Math.sin((Math.PI * textAngle) / 180);
-            const textRotation = textAngle > 90 && textAngle < 270 ? textAngle + 180 : textAngle;
+            {/* const textRotation = textAngle > 90 && textAngle < 270 ? textAngle + 180 : textAngle; */}
+
+            const textRotation = textAngle > 180 ? textAngle - 180 : textAngle;
 
             return (
               <G key={index}>
@@ -254,6 +256,8 @@ function WackyWordWheelScreen({ navigation }) {
                   strokeWidth={2}
                 />
                 <SvgText
+                  // x={textX}
+                  // y={textY}
                   x={radius + radius * 0.6 * Math.cos((Math.PI * (startAngle + angle / 2)) / 180)}
                   y={radius + radius * 0.6 * Math.sin((Math.PI * (startAngle + angle / 2)) / 180)}
                   fill="#ffffff"
@@ -262,7 +266,9 @@ function WackyWordWheelScreen({ navigation }) {
                   fontWeight="bold"
                   textAnchor="middle"
                   alignmentBaseline="middle"
-                // rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
+                  style={{textAlign: 'center'}}
+                  transform={`rotate(${textRotation}, ${textX}, ${textY})`}
+                  // rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
                 >
                   {verb}
                 </SvgText>
