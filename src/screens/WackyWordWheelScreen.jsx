@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing, ScrollView, ActivityIndicator } from 'react-native';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Header from '../components/Header';
 import Background from '../components/Background';
@@ -9,6 +9,7 @@ import { ContextProvider } from '../navigations/MainNavigator';
 import { FadeAnime } from '../components/Animations';
 import { useIsFocused } from '@react-navigation/native';
 import { getApiservice } from '../APIServices/services';
+import axios from 'axios';
 // import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
 
@@ -16,20 +17,27 @@ function WackyWordWheelScreen({ navigation }) {
   // Static List of verbs for the wheel:
   const verbs1 = ['Dance', 'Walk', 'Jog', 'Run', 'Read', 'Eat', 'Sing', 'Play'];
   // Dynamic List of verbs for the wheel:
-  const [verbs, setVerbs] = useState();
+  const [verbs, setVerbs] = useState([]);
   // State to manage the selected verb
   const [displayedSentence, setDisplayedSentence] = useState('');
   const [spinning, setSpinning] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
   const [countdown, setCountdown] = useState(5); // Timer starts at 15 seconds
   const thornShake = useRef(new Animated.Value(80)).current;
+
+  const [selectedVerb, setSelectedVerb] = useState();
   const [phrase, setPhrase] = useState('');
+  const [partOfSpeech, setPartOfSpeech] = useState(null);
+  const [highlightedVerb, setHighlightedVerb] = useState(null); 
+
   const usePlayMusic = useMusicPlayer();
   const { playMusic, stopMusic } = usePlayMusic;
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
   const { musicController, setMusicControler } = useContext(ContextProvider);
   const timerRef = useRef(null); // Ref to manage the timer
-  console.log("displayedSentence", displayedSentence);
+  // console.log("displayedSentence", displayedSentence);
 
   // const soundRef = useRef(
   //   new Sound('puzzle-game.mp3', Sound.MAIN_BUNDLE, (error) => {
@@ -84,26 +92,50 @@ function WackyWordWheelScreen({ navigation }) {
     // startCountdown();
     // startThornShake();
 
+    if(selectedVerb){
+      let updatePhrase = phrase.replace(selectedVerb, `{${partOfSpeech}}`).trim();
+      setPhrase(updatePhrase);
+    }
+
+    // Before spinning the wheel, remove the selected verb from the phrase:
+    // let updatePhrase = phrase.replace(selectedVerb, "").trim();
+    // setPhrase(updatePhrase);
+    setHighlightedVerb(null);
+    setSelectedVerb("");
+
+    // Generate a random degree for the wheel
     const randomDegree = Math.floor(3600 + Math.random() * 360);
-    const selectedIndex = Math.floor((360 - (randomDegree % 360)) / (360 / verbs.length)) % verbs.length;
+    const selectedIndex = Math.floor((360 - (randomDegree % 360)) / (360 / verbs?.length)) % verbs?.length;
 
     // Start the countdown timer
     startCountdown();
 
-    // Animate the wheel for 15 seconds
+    // Animate the wheel for 5 seconds
     Animated.timing(rotation, {
       toValue: randomDegree,
       duration: 5000,
-      easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
+      easing: Easing.out(Easing.cubic),
     }).start(() => {
-      const selectedVerb = verbs[selectedIndex];
-      setDisplayedSentence(selectedVerb);
+      const newSelectedVerb = verbs[selectedIndex];
+      // const selectedVerb = selectVerb;
+      setSelectedVerb(newSelectedVerb);
+      setHighlightedVerb(newSelectedVerb);
       // setPhrase(prevPhrase => prevPhrase.replace('{verb}', selectedVerb));
 
+      // Get the part of speech placeholder type from the initial phrase (e.g., {verb})
+      const math = phrase.match(/\{([a-zA-Z]+)\}/);
+      if(math){
+        setPartOfSpeech(math[1]); // Store the part of speech type (verb, adjective, etc.)
+      }
+
+      // After the spin, update the phrase with the new selected verb
       setPhrase(prevPhrase => {
         const partOfSpeech = prevPhrase.match(/\{[a-zA-Z]+\}/g)?.[0];
-        return prevPhrase.replace(partOfSpeech, selectedVerb);
+        if(partOfSpeech){
+          return prevPhrase.replace(partOfSpeech, newSelectedVerb);
+        }
+        return prevPhrase;
       });
 
       startCountdown(); 
@@ -117,19 +149,43 @@ function WackyWordWheelScreen({ navigation }) {
 
   // Function to fetch data from API
   const fetchResult = async () => {
-    setDisplayedSentence('');
-    getApiservice('/freeai/wackywheel').then(response => {
+    setLoading(true); // Show loading indicator
+    setError(null); // Clear any previous error
+    
+    // setSelectedVerb('');
+    try{
+      const response = await getApiservice('/freeai/wackywheel');
       if (response.status === true) {
         console.log("response", response);
-        const phraseword = response?.data?.phrase;
-        setPhrase(phraseword);
-        setVerbs(response?.data?.options);
+        const {phrase, options} = response?.data;
+        setPhrase(phrase);
+        setVerbs(options);
+        setLoading(false);
+      } else {
+        throw new Error('API error...');
       }
-    }).catch(error => {
-      console.log("enum errro", error);
-    }).finally(() => {
-      setIsLoading(false);
-    });
+    } catch (error) {
+      console.log("enum error", error);
+      setError('Failed to load data. Showing default data.');
+      setPhrase("I love to {verb} every day!");
+      setVerbs(verbs1);
+    } finally {
+      setLoading(false);
+    }
+    // getApiservice('/freeai/wackywheel').then(response => {
+    //   if (response.status === true) {
+    //     console.log("response", response);
+    //     const {phrase, options} = response?.data;
+    //     setPhrase(phrase);
+    //     setVerbs(options);
+    //     setLoading(false);
+    //   }
+    // }).catch(error => {
+    //   console.log("enum error", error);
+    //   setError('Failed to load data. Please check your connection and try again.');
+    // }).finally(() => {
+    //   setLoading(false);
+    // });
   };
 
   useEffect(() => {
@@ -218,6 +274,24 @@ function WackyWordWheelScreen({ navigation }) {
     );
   };
 
+  const renderPhrase = () => {
+    const parts = phrase.split(new RegExp(`(${selectedVerb})`, 'g')); // Split the phrase by selectedVerb
+
+    return parts.map((part, index) => {
+      // If it's the verb, apply the highlightedstyle
+      if(part === selectedVerb){
+        return (
+          <Text key={index} style={{ color: 'orange', fontWeight: 'bold'}}>
+            {part}
+          </Text>
+        );
+      }
+
+      // Otherwise, render the part as normal
+      return <Text key={index}>{part}</Text>
+    });
+  };
+
   // Start the thorn shaking animation
   // const startThornShake = () => {
   //   Animated.loop(
@@ -249,6 +323,7 @@ function WackyWordWheelScreen({ navigation }) {
   // const stopThornShake = () => {
   //   thornShake.stopAnimation();
   // };
+
   const isFocused = useIsFocused();
   const scaleValue = useRef(new Animated.Value(0)).current;
   useEffect(() => {
@@ -281,16 +356,17 @@ function WackyWordWheelScreen({ navigation }) {
                   to start my day.
                 </Text> */}
                 <Text style={styles.sentenceText}>
-                  {phrase || '_____'}
+                  {/* {phrase || '_____'} */}
+                  {renderPhrase()}
                 </Text>
               </View>
 
               {/* countdown timer display */}
               {/* {spinning && (
-            <View style={styles.timerContainer}>
-              <Text style={styles.timerText}>Time Remaining: {countdown} s</Text>
-            </View>
-          )} */}
+              <View style={styles.timerContainer}>
+                <Text style={styles.timerText}>Time Remaining: {countdown} s</Text>
+              </View>
+              )} */}
 
               {/* Spinning Wheel */}
               <Animated.View style={[styles.wheelContainer, { transform: [{ scale: scaleValue }] }]}>
@@ -333,7 +409,6 @@ function WackyWordWheelScreen({ navigation }) {
             </View>
           </ScrollView>
         </Background>
-
       </FadeAnime>
     </View>
   );
@@ -361,7 +436,6 @@ const styles = StyleSheet.create({
   },
   sentenceText: {
     fontSize: 18,
-    // fontWeight: 'bold',
     color: '#333',
     marginRight: 5,
     marginBottom: 10,
