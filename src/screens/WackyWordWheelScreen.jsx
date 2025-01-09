@@ -8,8 +8,9 @@ import SoundPlayer from 'react-native-sound-player';
 import { ContextProvider } from '../navigations/MainNavigator';
 import { FadeAnime } from '../components/Animations';
 import { useIsFocused } from '@react-navigation/native';
-import { getApiservice } from '../APIServices/services';
+import { getApiservice, getService } from '../APIServices/services';
 import axios from 'axios';
+import LottieView from 'lottie-react-native';
 // import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
 
@@ -28,7 +29,7 @@ function WackyWordWheelScreen({ navigation }) {
   const [selectedVerb, setSelectedVerb] = useState();
   const [phrase, setPhrase] = useState('');
   const [partOfSpeech, setPartOfSpeech] = useState(null);
-  const [highlightedVerb, setHighlightedVerb] = useState(null); 
+  const [highlightedVerb, setHighlightedVerb] = useState(null);
 
   const usePlayMusic = useMusicPlayer();
   const { playMusic, stopMusic } = usePlayMusic;
@@ -92,7 +93,7 @@ function WackyWordWheelScreen({ navigation }) {
     // startCountdown();
     // startThornShake();
 
-    if(selectedVerb){
+    if (selectedVerb) {
       let updatePhrase = phrase.replace(selectedVerb, `{${partOfSpeech}}`).trim();
       setPhrase(updatePhrase);
     }
@@ -125,20 +126,20 @@ function WackyWordWheelScreen({ navigation }) {
 
       // Get the part of speech placeholder type from the initial phrase (e.g., {verb})
       const math = phrase.match(/\{([a-zA-Z]+)\}/);
-      if(math){
+      if (math) {
         setPartOfSpeech(math[1]); // Store the part of speech type (verb, adjective, etc.)
       }
 
       // After the spin, update the phrase with the new selected verb
       setPhrase(prevPhrase => {
         const partOfSpeech = prevPhrase.match(/\{[a-zA-Z]+\}/g)?.[0];
-        if(partOfSpeech){
+        if (partOfSpeech) {
           return prevPhrase.replace(partOfSpeech, newSelectedVerb);
         }
         return prevPhrase;
       });
 
-      startCountdown(); 
+      startCountdown();
       setSpinning(false);
       // stopThornShake();
       stopMusic();
@@ -151,13 +152,13 @@ function WackyWordWheelScreen({ navigation }) {
   const fetchResult = async () => {
     setLoading(true); // Show loading indicator
     setError(null); // Clear any previous error
-    
+
     // setSelectedVerb('');
-    try{
-      const response = await getApiservice('/freeai/wackywheel');
+    try {
+      const response = await getService('/wackywheel');
       if (response.status === true) {
         console.log("response", response);
-        const {phrase, options} = response?.data;
+        const { phrase, options } = response?.data;
         setPhrase(phrase);
         setVerbs(options);
         setLoading(false);
@@ -242,7 +243,7 @@ function WackyWordWheelScreen({ navigation }) {
             const textAngle = startAngle + (angle / 2); // Angle for text in the middle of the segment
             const textX = radius + radius * 0.6 * Math.cos((Math.PI * textAngle) / 180);
             const textY = radius + radius * 0.6 * Math.sin((Math.PI * textAngle) / 180);
-            {/* const textRotation = textAngle > 90 && textAngle < 270 ? textAngle + 180 : textAngle; */}
+            {/* const textRotation = textAngle > 90 && textAngle < 270 ? textAngle + 180 : textAngle; */ }
 
             const textRotation = textAngle > 180 ? textAngle - 180 : textAngle;
 
@@ -266,9 +267,9 @@ function WackyWordWheelScreen({ navigation }) {
                   fontWeight="bold"
                   textAnchor="middle"
                   alignmentBaseline="middle"
-                  style={{textAlign: 'center'}}
+                  style={{ textAlign: 'center' }}
                   transform={`rotate(${textRotation}, ${textX}, ${textY})`}
-                  // rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
+                // rotation={`rotate(${textRotation}, ${textX}, ${textY})`}
                 >
                   {verb}
                 </SvgText>
@@ -285,9 +286,9 @@ function WackyWordWheelScreen({ navigation }) {
 
     return parts.map((part, index) => {
       // If it's the verb, apply the highlightedstyle
-      if(part === selectedVerb){
+      if (part === selectedVerb) {
         return (
-          <Text key={index} style={{ color: 'orange', fontWeight: 'bold'}}>
+          <Text key={index} style={{ color: 'orange', fontWeight: 'bold' }}>
             {part}
           </Text>
         );
@@ -352,67 +353,75 @@ function WackyWordWheelScreen({ navigation }) {
           <Header title="Wacky Word Wheel" navigation={navigation} />
           <ScrollView>
             {/* Center Content Section */}
-            <View style={styles.content}>
-              <View style={styles.sentenceContainer}>
-                {/* <Text style={styles.sentenceText}>
+            {loading ? (
+              <View>
+                <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={[styles.loading, {width: 100, height: 100}]}/>
+              </View>
+            ) : (
+              <View style={styles.content}>
+                <View style={styles.sentenceContainer}>
+                  {/* <Text style={styles.sentenceText}>
                   Every morning, I{' '}
                   <Text style={displayedSentence ? styles.highlight : styles.underline}>
                     {displayedSentence || '_____'}
                   </Text>{' '}
                   to start my day.
                 </Text> */}
-                <Text style={styles.sentenceText}>
-                  {/* {phrase || '_____'} */}
-                  {renderPhrase()}
-                </Text>
-              </View>
+                  <Text style={styles.sentenceText}>
+                    {/* {phrase || '_____'} */}
+                    {renderPhrase()}
+                  </Text>
+                </View>
 
-              {/* countdown timer display */}
-              {/* {spinning && (
+                {/* countdown timer display */}
+                {/* {spinning && (
               <View style={styles.timerContainer}>
                 <Text style={styles.timerText}>Time Remaining: {countdown} s</Text>
               </View>
               )} */}
 
-              {/* Spinning Wheel */}
-              <Animated.View style={[styles.wheelContainer, { transform: [{ scale: scaleValue }] }]}>
-                {/* Thorn positioned statically */}
-                <Animated.View
-                  style={[
-                    styles.thorn,
-                    // {
-                    //   transform: [
-                    //     {
-                    //       translateY: thornShake
-                    //     },
-                    //   ],
-                    // },
-                  ]}
-                />
-                <Animated.View
-                  style={{
-                    transform: [
-                      {
-                        rotate: rotation.interpolate({
-                          inputRange: [0, 360],
-                          outputRange: ['0deg', '360deg'],
-                        }),
-                      },
-                    ],
-                  }}
-                >
-                  {renderWheel()}
+                {/* Spinning Wheel */}
+                <Animated.View style={[styles.wheelContainer, { transform: [{ scale: scaleValue }] }]}>
+                  {/* Thorn positioned statically */}
+                  <Animated.View
+                    style={[
+                      styles.thorn,
+                      // {
+                      //   transform: [
+                      //     {
+                      //       translateY: thornShake
+                      //     },
+                      //   ],
+                      // },
+                    ]}
+                  />
+                  <Animated.View
+                    style={{
+                      transform: [
+                        {
+                          rotate: rotation.interpolate({
+                            inputRange: [0, 360],
+                            outputRange: ['0deg', '360deg'],
+                          }),
+                        },
+                      ],
+                    }}
+                  >
+                    {renderWheel()}
+                  </Animated.View>
+                  {/* Spin Button at the center */}
+                  <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
+                    {!spinning ? (
+                      <Text style={styles.spinButtonText}> {'Spin'} </Text>
+                    ) : (
+                      <Text style={styles.timerText}>{countdown} s</Text>
+                    )}
+                  </TouchableOpacity>
                 </Animated.View>
-                {/* Spin Button at the center */}
-                <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
-                  {!spinning ? (
-                    <Text style={styles.spinButtonText}> {'Spin'} </Text>
-                  ) : (
-                    <Text style={styles.timerText}>{countdown} s</Text>
-                  )}
-                </TouchableOpacity>
-              </Animated.View>
-            </View>
+              </View>
+
+
+            )}
           </ScrollView>
         </Background>
       </FadeAnime>
@@ -423,6 +432,12 @@ function WackyWordWheelScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loading: {
+    height: 50,
+    width: 50,
+    alignSelf: 'center',
+    marginTop: 50,
   },
   // Content styles
   content: {
