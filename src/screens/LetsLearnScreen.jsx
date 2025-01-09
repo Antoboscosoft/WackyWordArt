@@ -9,10 +9,9 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
 import Background from '../components/Background';
-import {common} from '../utills/Utils';
+import {common, Loader} from '../utills/Utils';
 import {useIsFocused} from '@react-navigation/native';
 import {FadeAnime} from '../components/Animations';
 import LottieView from 'lottie-react-native';
@@ -27,7 +26,7 @@ function LetsLearnScreen({navigation}) {
   const [items, setItems] = useState([]);
   const [question, setQuestion] = useState();
   const [image, setImage] = useState({value:null,error:false});
-  const {RewardedAd, rewardedAd, isAdLoaded, setDisplayAd } = useContext(ContextProvider);
+  const {RewardedAd } = useContext(ContextProvider);
 
   const animationValue = useRef(new Animated.Value(0)).current;
   const positionValue = useRef(new Animated.Value(50)).current;
@@ -75,13 +74,11 @@ function LetsLearnScreen({navigation}) {
           setImage({value:response.image,error:false})
         } else {
           setImage({value:null,error:true})
-          // setDisplayAd(false);
           setIsLoading1(false);
           // Alert.alert('Error', 'Failed to generate image');
         }
       }).catch(error => {
         setImage({value:null,error:true})
-        // setDisplayAd(false);
         setIsLoading1(false);
         // Alert.alert('Error', 'Failed to generate image');
         console.log(error);
@@ -92,7 +89,6 @@ function LetsLearnScreen({navigation}) {
     handlePress();
   };
   const generateImg = () => {
-    // setDisplayAd(true);
     if (RewardedAd.isLoaded) {
       RewardedAd.show();
       getImage(value);
@@ -124,9 +120,7 @@ function LetsLearnScreen({navigation}) {
           <ScrollView contentContainerStyle={{flexGrow: 1, paddingBottom: 15}} style={{zIndex: 1}}>
             {/* Center Content Section */}
             {isLoading ? (
-              <View>
-                <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={[styles.loading, {width: 100, height: 100}]}/>
-              </View>
+              <Loader/>
             ) : (
               <View style={styles.content}>
                 <View style={styles.sentenceRow}>

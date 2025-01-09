@@ -3,14 +3,13 @@ import { Text, View, StyleSheet, TouchableOpacity, Animated, Easing, ScrollView,
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import Header from '../components/Header';
 import Background from '../components/Background';
-import useMusicPlayer, { common } from '../utills/Utils';
+import useMusicPlayer, { common, Loader } from '../utills/Utils';
 import SoundPlayer from 'react-native-sound-player';
 import { ContextProvider } from '../navigations/MainNavigator';
 import { FadeAnime } from '../components/Animations';
 import { useIsFocused } from '@react-navigation/native';
 import { getApiservice, getService } from '../APIServices/services';
-import axios from 'axios';
-import LottieView from 'lottie-react-native';
+
 // import Sound from 'react-native-sound';
 // import audio1 from '../assets/audios/barbie-girl.mp3';
 
@@ -157,7 +156,6 @@ function WackyWordWheelScreen({ navigation }) {
     try {
       const response = await getService('/wackywheel');
       if (response.status === true) {
-        console.log("response", response);
         const { phrase, options } = response?.data;
         setPhrase(phrase);
         setVerbs(options);
@@ -334,7 +332,7 @@ function WackyWordWheelScreen({ navigation }) {
   const isFocused = useIsFocused();
   const scaleValue = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused && verbs.length > 0) {
       scaleValue.setValue(0);
       Animated.timing(scaleValue, {
         toValue: 1,
@@ -342,7 +340,7 @@ function WackyWordWheelScreen({ navigation }) {
         useNativeDriver: true,
       }).start();
     }
-  }, [isFocused]);
+  }, [isFocused, verbs]);
 
 
   return (
@@ -351,12 +349,10 @@ function WackyWordWheelScreen({ navigation }) {
         <Background>
           {/* Header Section */}
           <Header title="Wacky Word Wheel" navigation={navigation} />
-          <ScrollView>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             {/* Center Content Section */}
             {loading ? (
-              <View>
-                <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={[styles.loading, {width: 100, height: 100}]}/>
-              </View>
+             <Loader/>
             ) : (
               <View style={styles.content}>
                 <View style={styles.sentenceContainer}>
@@ -503,6 +499,7 @@ const styles = StyleSheet.create({
     height: 300,
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 40,
   },
   spinButton: {
     position: 'absolute',

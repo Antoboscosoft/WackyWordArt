@@ -1,5 +1,8 @@
 import SoundPlayer from 'react-native-sound-player';
 import { useEffect } from 'react';
+import LottieView from 'lottie-react-native';
+import { View, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 const color = {
     primary: '#f18927',
@@ -18,14 +21,22 @@ const style = {
     },
     phraseSize: 20
 }
-
+// for common styles
 export const common = { color, font, style };
 
-const useMusicPlayer = (onComplete) => {
+// for animation loader
+export const Loader = ({backgroundColor= '#0000001e'}) => {
+    return (
+        <View style={{...StyleSheet.absoluteFill,alignItems: 'center', paddingTop: 100, zIndex: 1, backgroundColor: backgroundColor}}>
+            <FastImage source={require('../assets/images/logo.png')} resizeMode='contain' style={{ width: 100, height: 100 }} />
+            <LottieView autoPlay loop={true} source={require('../assets/lottie/textLoading.json')} style={{width: 70, height: 70}}/>
+        </View>
+    );
+}
 
+const useMusicPlayer = (onComplete) => {
     // State to keep track of the currently playing music
     let currentTrack = null;
-
 
     // Function to play the music
     const playMusic = (music, loop = true) => {
@@ -83,6 +94,4 @@ const handleMusicCompletion = (onComplete) => {
         console.log('error stopping sound', error);
     }
 }
-
-
 // export { playMusic, stopMusic, handleMusicCompletion };

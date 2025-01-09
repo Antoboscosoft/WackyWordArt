@@ -74,7 +74,7 @@ function PlayScreen({ navigation }) {
             })
           )
         ).start();
-      }, []);
+      }, [isFocused]);
   return (
     isFocused &&
     <View style={styles.container}>

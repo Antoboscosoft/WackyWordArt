@@ -17,7 +17,7 @@ import { common } from '../utills/Utils';
 import SplashScreen from '../screens/SplashScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ProgressScreen from '../screens/ProgressScreen';
-import { BannerAd, BannerAdSize, RewardedAd, RewardedAdEventType, useRewardedAd } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, useRewardedAd } from 'react-native-google-mobile-ads';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const ContextProvider = createContext(null);
@@ -51,32 +51,20 @@ function MainNavigator() {
 
   }, []);
 
-  useEffect(() => {
-    // const ad = RewardedAd.createForAdRequest("ca-app-pub-3940256099942544/5224354917", {
-    //   keywords: ['fashion', 'clothing'],
-    // });
+  useEffect(() => {   
+    const interval = setInterval(() => {
+      RewardedAd.isLoaded === false && RewardedAd.load();
+    }, 5000);
 
-    // const unsubscribeLoaded = ad.addAdEventListener(RewardedAdEventType.LOADED, () => {
-    //   setIsAdLoaded(true);
-    //   setRewardedAd(ad);
-    // });
+    if(RewardedAd.isLoaded){
+      clearInterval(interval);
+    }else{
+      RewardedAd.load();
+    }
 
-    // const unsubscribeEarned = ad.addAdEventListener(RewardedAdEventType.EARNED_REWARD, reward => {
-    //   setDisplayAd(false)
-    //   console.log('User earned reward of ', reward);
-    // });
+    return () => clearInterval(interval);
 
-    // // Start loading the ad
-    // ad.load();
 
-    // // Cleanup listeners on unmount
-    // return () => {
-    //   unsubscribeLoaded();
-    //   unsubscribeEarned();
-    // };
-    console.log("is_ad loads",RewardedAd.isLoaded);
-    
-    RewardedAd.isLoaded === false && RewardedAd.load();
   }, [RewardedAd.isLoaded, isNetworkConnected]);
   
   // For network alert message
@@ -180,10 +168,6 @@ const styles = StyleSheet.create({
     borderColor: common.color.primary,
     backgroundColor: "#fbfef7e9"
   },
-  // adImage: {
-  //   width: '100%',
-  //   height: '100%',
-  // },
 })
 
 export default MainNavigator
