@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Animated, Button, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react'
+import { Animated, KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import { StyleSheet } from 'react-native';
 import Header from '../components/Header';
 import Background from '../components/Background';
@@ -39,25 +39,24 @@ function FillInTheBlankScreen({ navigation }) {
     setIsEditing(true);
   };
 
-  // const getInputWidth = (text, placeholder) => {
-  //   const baseWidth = 120; // Minimum width for the input field
-  //   const widthPerCharacter = 12; // Width added per character in the text
-  //   const placeholderLength = placeholder ? placeholder.length : 0;
-  //   const textLength = text.length;
+  const getInputWidth = (text, placeholder) => {
+    const baseWidth = 120; // Minimum width for the input field
+    const widthPerCharacter = 12; // Width added per character in the text
+    const placeholderLength = placeholder ? placeholder.length : 0;
+    const textLength = text.length;
 
-  //   // Calculate width based on the text length or placeholder length
-  //   const calculatedWidth = Math.max(baseWidth, Math.max(textLength, placeholderLength) * widthPerCharacter);
+    // Calculate width based on the text length or placeholder length
+    const calculatedWidth = Math.max(baseWidth, Math.max(textLength, placeholderLength) * widthPerCharacter);
 
-  //   // limit the maximum width to avoid overlay wide inputs 
-  //   const maxWidth = 250; // Set your desired maximum width
-  //   return Math.min(calculatedWidth, maxWidth);
-  // };
+    // limit the maximum width to avoid overlay wide inputs 
+    const maxWidth = 250; // Set your desired maximum width
+    return Math.min(calculatedWidth, maxWidth);
+  };
 
 const getText = () => {
     setIsLoading(true);
     getService('/fillblank').then(response => {        
         if (response.status === true) {
-          console.log(response?.data?.sentence); 
           setInput(response?.data?.sentence?.match(/\{[^}]*\}|\S+|\s+/g));
           setAnswer(response?.data?.sentence?.match(/\{[^}]*\}|\S+|\s+/g));         
         }
@@ -103,8 +102,7 @@ const getText = () => {
                         item?.includes("{") ?
                           <TextInput
                             key={index}
-                            // style={[styles.input, { width: getInputWidth(place, 'place') }]}
-                            style={styles.input}
+                            style={[styles.input, { width: getInputWidth(answer[index]?.includes("{") ?"":answer[index], item) }]}
                             placeholder={item}
                             placeholderTextColor={common.color.primary}
                             value={answer[index]?.includes("{") ?null:answer[index]}
