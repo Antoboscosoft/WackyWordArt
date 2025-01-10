@@ -17,7 +17,7 @@ function FillInTheBlankScreen({ navigation }) {
   const [answer,setAnswer]=useState([]);
 
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused && !isLoading) {
       scaleValue.setValue(0);
       Animated.timing(scaleValue, {
         toValue: 1,
@@ -25,7 +25,7 @@ function FillInTheBlankScreen({ navigation }) {
         useNativeDriver: true,
       }).start();
     }
-  }, [isFocused]);
+  }, [isFocused,isLoading]);
 
   const handleSubmit=()=>{
     setIsEditing(false)
@@ -89,7 +89,7 @@ const getText = () => {
     <View style={styles.container}>
       <FadeAnime>
         <Background>
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
+          <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }}>
             {/* Header Section */}
             <Header title="Fill in the Blank" navigation={navigation} />
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ zIndex: 1 }}>
@@ -149,10 +149,13 @@ const getText = () => {
             </ScrollView>
           </KeyboardAvoidingView>
         </Background>
+        {
+        !isLoading &&
         <Animated.Image
           source={require('../assets/images/fill.png')}
           style={[styles.zebraImage, { transform: [{ scale: scaleValue }] }]}
           resizeMode='contain' />
+        }
       </FadeAnime>
     </View>
   )
@@ -167,7 +170,6 @@ const styles = StyleSheet.create({
   },
   // Content styles
   content: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
