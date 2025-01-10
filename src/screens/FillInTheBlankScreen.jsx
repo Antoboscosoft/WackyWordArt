@@ -120,7 +120,7 @@ const getText = () => {
                       answer?.map((item,index)=>(
                         item?.includes("{") ?
                         <Text key={index}>________</Text>:
-                        <Text style={styles.resultText} key={index}>{item}</Text>
+                        <Text style={[styles.resultText, { color: input[index]?.includes("{") ? common.color.primary : ''}]} key={index}>{item}</Text>
                       ))
                     }
                     <TouchableOpacity onPress={handleEdit} style={styles.editButton}>
