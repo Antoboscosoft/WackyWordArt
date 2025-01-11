@@ -129,7 +129,7 @@ function HomeScreen({ navigation }) {
             <Text style={styles.drawerItemText}>Progress</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem} onPress={() => { menuClick('Home') }}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => { navigation.navigate('LoginScreen'); }}>
             <Icon name="logout" size={25} style={styles.drawerItemIcon} />
             <Text style={styles.drawerItemText}>Logout</Text>
           </TouchableOpacity>

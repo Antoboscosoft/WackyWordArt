@@ -19,6 +19,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import ProgressScreen from '../screens/ProgressScreen';
 import { BannerAd, BannerAdSize, useRewardedAd } from 'react-native-google-mobile-ads';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import LoginPage from '../screens/LoginPage';
 
 export const ContextProvider = createContext(null);
 
@@ -127,6 +128,7 @@ function MainNavigator() {
             animation: 'fade',
             navigationBarHidden: true
           }}>
+            <Stack.Screen name='LoginScreen' component={LoginPage} />
             <Stack.Screen name='Home' component={isLoading ? SplashScreen : HomeScreen} />
             <Stack.Screen name='HowToPlayScreen' component={HowToPlayScreen} />
             <Stack.Screen name='PlayScreen' component={PlayScreen} />
